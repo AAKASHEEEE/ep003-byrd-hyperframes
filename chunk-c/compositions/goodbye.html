@@ -1,0 +1,290 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #16295A; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #334155; }
+
+  </style>
+  <div id="root" data-composition-id="goodbye" data-width="1920" data-height="1080">
+
+    <svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="gb-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="gb-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="gb-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="gb-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="gb-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="gb-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath>
+      <linearGradient id="gb-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16295A"/><stop offset=".8" stop-color="#3B5BA0"/><stop offset="1" stop-color="#F59E0B" stop-opacity=".55"/></linearGradient>
+      <linearGradient id="gb-snow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#94A3B8"/><stop offset="1" stop-color="#E2E8F0"/></linearGradient></defs>
+      <rect width="1920" height="380" fill="url(#gb-sky)"/>
+      <circle cx="0" cy="0" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="467" cy="113" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="934" cy="226" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1401" cy="39" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1868" cy="152" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="415" cy="265" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="882" cy="78" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1349" cy="191" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1816" cy="4" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="363" cy="117" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="830" cy="230" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1297" cy="43" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1764" cy="156" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="311" cy="269" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="778" cy="82" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1245" cy="195" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1712" cy="8" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="259" cy="121" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="726" cy="234" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1193" cy="47" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1660" cy="160" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="207" cy="273" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="674" cy="86" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1141" cy="199" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1608" cy="12" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="155" cy="125" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="622" cy="238" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1089" cy="51" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1556" cy="164" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="103" cy="277" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="570" cy="90" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1037" cy="203" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1504" cy="16" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="51" cy="129" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="518" cy="242" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="985" cy="55" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1452" cy="168" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1919" cy="281" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="466" cy="94" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="933" cy="207" r="1" fill="#E2E8F0" opacity=".45"/>
+      <g id="gb-sun"><circle cx="1560" cy="360" r="70" fill="#F59E0B" opacity=".35" filter="url(#gb-glowBig)"/><circle cx="1560" cy="360" r="44" fill="#FBBF24"/></g>
+      <rect y="380" width="1920" height="700" fill="url(#gb-snow)"/><line x1="0" y1="380" x2="1920" y2="380" stroke="#CBD5E1" stroke-width="2"/>
+      <line x1="960" y1="1080" x2="1240" y2="380" stroke="#94A3B8" stroke-width="3" opacity=".5"/><line x1="1500" y1="1080" x2="1240" y2="380" stroke="#94A3B8" stroke-width="3" opacity=".5"/>
+      <g id="gb-t2"><g id="gb-t2s"><g id="gb-r2">
+    <ellipse cx="0" cy="-150" rx="170" ry="60" fill="#FDE68A" opacity=".25"/>
+    <rect x="-120" y="-70" width="56" height="70" rx="12" fill="#1C1917"/><rect x="64" y="-70" width="56" height="70" rx="12" fill="#1C1917"/>
+    <line x1="-100" y1="-62" x2="-100" y2="-8" stroke="#44403C" stroke-width="4"/><line x1="-82" y1="-62" x2="-82" y2="-8" stroke="#44403C" stroke-width="4"/><line x1="82" y1="-62" x2="82" y2="-8" stroke="#44403C" stroke-width="4"/><line x1="100" y1="-62" x2="100" y2="-8" stroke="#44403C" stroke-width="4"/>
+    <rect x="-96" y="-150" width="192" height="92" rx="8" fill="#57534E" stroke="#292524" stroke-width="4"/>
+    <rect x="-70" y="-196" width="140" height="52" rx="6" fill="#44403C" stroke="#292524" stroke-width="4"/><rect x="-54" y="-188" width="108" height="30" rx="4" fill="#FDE68A" opacity=".35"/>
+    <rect x="-84" y="-128" width="168" height="40" rx="4" fill="#78350F"/><line x1="-84" y1="-108" x2="84" y2="-108" stroke="#451A03" stroke-width="3"/>
+    <circle cx="-80" cy="-74" r="11" fill="#EF4444"/><circle cx="80" cy="-74" r="11" fill="#EF4444"/>
+    <circle cx="-80" cy="-74" r="26" fill="#EF4444" opacity=".35"/><circle cx="80" cy="-74" r="26" fill="#EF4444" opacity=".35"/></g></g></g><g id="gb-t1"><g id="gb-t1s"><g id="gb-r1">
+    <ellipse cx="0" cy="-150" rx="170" ry="60" fill="#FDE68A" opacity=".25"/>
+    <rect x="-120" y="-70" width="56" height="70" rx="12" fill="#1C1917"/><rect x="64" y="-70" width="56" height="70" rx="12" fill="#1C1917"/>
+    <line x1="-100" y1="-62" x2="-100" y2="-8" stroke="#44403C" stroke-width="4"/><line x1="-82" y1="-62" x2="-82" y2="-8" stroke="#44403C" stroke-width="4"/><line x1="82" y1="-62" x2="82" y2="-8" stroke="#44403C" stroke-width="4"/><line x1="100" y1="-62" x2="100" y2="-8" stroke="#44403C" stroke-width="4"/>
+    <rect x="-96" y="-150" width="192" height="92" rx="8" fill="#57534E" stroke="#292524" stroke-width="4"/>
+    <rect x="-70" y="-196" width="140" height="52" rx="6" fill="#44403C" stroke="#292524" stroke-width="4"/><rect x="-54" y="-188" width="108" height="30" rx="4" fill="#FDE68A" opacity=".35"/>
+    <rect x="-84" y="-128" width="168" height="40" rx="4" fill="#78350F"/><line x1="-84" y1="-108" x2="84" y2="-108" stroke="#451A03" stroke-width="3"/>
+    <circle cx="-80" cy="-74" r="11" fill="#EF4444"/><circle cx="80" cy="-74" r="11" fill="#EF4444"/>
+    <circle cx="-80" cy="-74" r="26" fill="#EF4444" opacity=".35"/><circle cx="80" cy="-74" r="26" fill="#EF4444" opacity=".35"/></g></g></g>
+      <line x1="200" y1="710" x2="200" y2="400" stroke="#94A3B8" stroke-width="7"/>
+      <g id="gb-anem"><line x1="160" y1="400" x2="240" y2="400" stroke="#CBD5E1" stroke-width="4"/><line x1="200" y1="360" x2="200" y2="440" stroke="#CBD5E1" stroke-width="4"/>
+        <circle cx="160" cy="400" r="11" fill="#E2E8F0"/><circle cx="240" cy="400" r="11" fill="#E2E8F0"/><circle cx="200" cy="360" r="11" fill="#E2E8F0"/><circle cx="200" cy="440" r="11" fill="#E2E8F0"/></g>
+      <rect x="560" y="700" width="90" height="14" rx="3" fill="#5C3A21" stroke="#451A03" stroke-width="3"/><rect x="700" y="654" width="14" height="58" fill="#94A3B8"/><rect x="692" y="648" width="30" height="8" fill="#64748B"/>
+      <g transform="translate(240 276) scale(1.6)">
+    <g id="gb-by">
+      
+      <g id="gb-by-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="gb-by-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="gb-by-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="gb-by-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="7.5" fill="#5C3A21"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#A8641F" stroke="#14171F" stroke-width="4"/>
+           <circle cx="100" cy="64" r="41" fill="#D4A373"/>
+           <circle cx="100" cy="64" r="41.5" fill="none" stroke="#D4A373" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/>
+           <circle cx="100" cy="64" r="37" fill="#B98A5A"/>
+      <g id="gb-by-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#C87D32"/>
+         <g clip-path="url(#gb-torso)"><rect x="60" y="98" width="80" height="16" fill="#D4A373"/>
+           <rect x="60" y="150" width="80" height="9" fill="#3B2414"/><rect x="93" y="149" width="14" height="11" rx="2" fill="none" stroke="#B08D3C" stroke-width="2.5"/>
+           <rect x="60" y="184" width="80" height="16" fill="#D4A373"/><line x1="122" y1="114" x2="122" y2="148" stroke="#A8641F" stroke-width="3"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="gb-by-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="gb-by-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="7.5" fill="#5C3A21"/>
+          
+        </g>
+      </g>
+      <g id="gb-by-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="gb-by-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#gb-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#gb-glow)"/>
+         </g>
+         <g id="gb-by-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="gb-by-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="gb-by-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="gb-by-frost" opacity="0"></g>
+        
+        <g id="gb-by-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="gb-by-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#gb-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="gb-by-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g>
+      <rect id="gb-night" width="1920" height="1080" fill="#050811" opacity="0"/>
+    </svg>
+    <div id="gb-age" class="ui tag" style="left:560px; top:300px;">AGE: 45 YEARS OLD</div>
+    <div id="gb-sunset" class="ui tag" style="left:1180px; top:250px;">SUNSET IN ~1 MONTH (LATE APRIL)</div>
+    <div id="gb-b" class="ui ui-badge" style="left:1388px; top:108px;"><div class="hd">MARCH 28, 1934</div><div class="bd" style="font-size:40px; padding:18px 0 20px;">DAY 1 ALONE</div></div>
+    <div id="gb-near" class="ui ui-pill" style="left:192px; top:108px;"><div class="dot"></div><span>NEAREST HUMAN</span><span class="num" id="gb-near-n">0 MI</span></div>
+    <div id="gb-bridge" style="position:absolute; inset:0;"><img src="assets/bridge/b-last.png" style="position:absolute; left:0; top:0; width:1920px; height:1080px;" alt=""/></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#gb-by-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#gb-by-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#gb-by-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#gb-by-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#gb-by-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#gb-by-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#gb-by-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#gb-by-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#gb-by", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#gb-by-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 0.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 1.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 2.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 3.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 4.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 5.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 6.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 7.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 8.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 9.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 10.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 11.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 12.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 13.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 14.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 15.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 16.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 17.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 18.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 19.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 20.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 21.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 22.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 23.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 24.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 25.4);
+    tl.to("#gb-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 26.4);
+    tl.to("#gb-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 27.4);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 1.5);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 1.6);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 4.6);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 4.7);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 7.7);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 7.8);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 10.8);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 10.9);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 13.9);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 14);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 17);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 17.1);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 20.1);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 20.2);
+    tl.to("#gb-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 23.2);
+    tl.to("#gb-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 23.3);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 0.6);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 3.1);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 5.6);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 8.1);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 10.6);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 13.1);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 15.6);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 18.1);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 20.6);
+    tl.fromTo("#gb-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 23.1);
+    tl.set("#gb-bridge", { opacity: 0, visibility: "hidden" }, 0.02);
+    tl.to("#gb-anem", { rotation: 1800, svgOrigin: "200 400", duration: 26.6, ease: "none" }, 0);
+    tl.set(["#gb-age", "#gb-sunset", "#gb-b", "#gb-near"], { opacity: 0 }, 0);
+    tl.set("#gb-t1", { x: 1020, y: 1000 }, 0); tl.set("#gb-t1s", { scale: 1, svgOrigin: "0 0" }, 0);
+    tl.to("#gb-t1", { x: 1119, y: 721, duration: 1.6, ease: "none" }, 2.4); tl.to("#gb-t1s", { scale: 0.55, svgOrigin: "0 0", duration: 1.6, ease: "none" }, 2.4); tl.to("#gb-t1", { x: 1174, y: 566, duration: 2, ease: "none" }, 4); tl.to("#gb-t1s", { scale: 0.3, svgOrigin: "0 0", duration: 2, ease: "none" }, 4); tl.to("#gb-t1", { x: 1207, y: 473, duration: 2.8, ease: "none" }, 6); tl.to("#gb-t1s", { scale: 0.15, svgOrigin: "0 0", duration: 2.8, ease: "none" }, 6); tl.to("#gb-t1", { x: 1224.6, y: 423.4, duration: 2.8, ease: "none" }, 8.8); tl.to("#gb-t1s", { scale: 0.07, svgOrigin: "0 0", duration: 2.8, ease: "none" }, 8.8); tl.to("#gb-t1", { x: 1233.4, y: 398.6, duration: 1.6, ease: "none" }, 11.6); tl.to("#gb-t1s", { scale: 0.03, svgOrigin: "0 0", duration: 1.6, ease: "none" }, 11.6);
+    tl.to("#gb-t1", { opacity: 0, duration: .3 }, 13.0);
+    tl.set("#gb-t2", { x: 1460, y: 960 }, 0); tl.set("#gb-t2s", { scale: 1, svgOrigin: "0 0" }, 0);
+    tl.to("#gb-t2", { x: 1361, y: 699, duration: 1.6, ease: "none" }, 3); tl.to("#gb-t2s", { scale: 0.55, svgOrigin: "0 0", duration: 1.6, ease: "none" }, 3); tl.to("#gb-t2", { x: 1306, y: 554, duration: 2, ease: "none" }, 4.6); tl.to("#gb-t2s", { scale: 0.3, svgOrigin: "0 0", duration: 2, ease: "none" }, 4.6); tl.to("#gb-t2", { x: 1273, y: 467, duration: 2.8, ease: "none" }, 6.6); tl.to("#gb-t2s", { scale: 0.15, svgOrigin: "0 0", duration: 2.8, ease: "none" }, 6.6); tl.to("#gb-t2", { x: 1255.4, y: 420.6, duration: 2.2, ease: "none" }, 9.4); tl.to("#gb-t2s", { scale: 0.07, svgOrigin: "0 0", duration: 2.2, ease: "none" }, 9.4); tl.to("#gb-t2", { x: 1246.6, y: 397.4, duration: 1.6, ease: "none" }, 11.6); tl.to("#gb-t2s", { scale: 0.03, svgOrigin: "0 0", duration: 1.6, ease: "none" }, 11.6);
+    tl.to("#gb-t2", { opacity: 0, duration: .3 }, 13.0);
+    // the wave goodbye
+    tl.to("#gb-by-armR", { rotation: -150, duration: .4, ease: "power2.out" }, 2.6);
+    tl.to("#gb-by-foreR", { rotation: -18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 3);
+    tl.to("#gb-by-foreR", { rotation: 18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 3.4);
+    tl.to("#gb-by-foreR", { rotation: -18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 3.7);
+    tl.to("#gb-by-foreR", { rotation: 18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 4.1);
+    tl.to("#gb-by-foreR", { rotation: -18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 4.4);
+    tl.to("#gb-by-foreR", { rotation: 18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 4.8);
+    tl.to("#gb-by-foreR", { rotation: -18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 5.2);
+    tl.to("#gb-by-foreR", { rotation: 18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 5.5);
+    tl.to("#gb-by-foreR", { rotation: -18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 5.9);
+    tl.to("#gb-by-foreR", { rotation: 18, svgOrigin: "142 147", duration: .35, ease: "sine.inOut" }, 6.2);
+    tl.to("#gb-by-foreR", { rotation: 0, duration: .3 }, 6.7);
+    tl.to("#gb-by-armR", { rotation: -100, duration: 1.2, ease: "sine.inOut" }, 7.0);
+    tl.to("#gb-by-armR", { rotation: 0, duration: .8, ease: "sine.inOut" }, 13.4);
+    tl.fromTo("#gb-b", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(1.6)", immediateRender: false }, 2.3);
+    // "He was forty-five years old" / "123 miles away"
+    tl.fromTo("#gb-age", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 15.1);
+    tl.fromTo("#gb-near", { opacity: 0, scale: .6, x: -20 }, { opacity: 1, scale: 1, x: 0, duration: .25, ease: "back.out(1.6)", immediateRender: false }, 17.3);
+    { const o = { v: 0 }; tl.fromTo(o, { v: 0 }, { v: 123, duration: 2.2, ease: "power2.out", onUpdate: () => { const v = o.v; document.getElementById("gb-near-n").textContent = Math.round(v) + ' MI'; } }, 17.4); }
+    // the sun steps lower and lower, then sets; the snowfield falls into night
+    tl.to("#gb-sun", { y: 50, duration: .7, ease: "power2.inOut" }, 21.3);
+    tl.to("#gb-sun", { y: 100, duration: .7, ease: "power2.inOut" }, 22.6);
+    tl.to("#gb-sun", { y: 150, duration: .7, ease: "power2.inOut" }, 24.7);
+    tl.fromTo("#gb-sunset", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 23.6);
+    tl.to("#gb-night", { opacity: .78, duration: 3.6, ease: "sine.in" }, 22.8);
+    window.__timelines["goodbye"] = tl;
+  </script>
+</template>

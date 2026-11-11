@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Edge of Endurance — Ep 003 · Chunk J (00:00–01:35)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0B101E; }
+      #root { position: relative; width: 100%; height: 100%; font-family: Inter, sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="94.2" data-width="1920" data-height="1080">
+      <!-- J01 · the ladder, the hatch, fire and flares; the men saw a light -->
+      <div id="flare" class="clip" data-composition-id="flare" data-composition-src="compositions/flare.html"
+        data-start="0" data-duration="25.6" data-track-index="0" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:1"></div>
+      <!-- J02 · the gaunt man and the hot-soup greeting -->
+      <div id="soup" class="clip" data-composition-id="soup" data-composition-src="compositions/soup.html"
+        data-start="25.6" data-duration="38.7" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:2"></div>
+      <!-- J03 · 136 days; two months together; flown out Oct 12 -->
+      <div id="home" class="clip" data-composition-id="home" data-composition-src="compositions/home.html"
+        data-start="64.3" data-duration="29.9" data-track-index="0" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:3"></div>
+      <!-- Sound: VO + Epidemic Sound music & effects (tools/audio.mjs + cues.mjs) -->
+      <audio id="vo" class="clip" src="assets/vo/chunk-j-vo.mp3" data-start="0" data-duration="93.92" data-volume="1.6" data-track-index="30"></audio>
+      <audio id="mu-a" class="clip" src="assets/music/shadowfall.mp3" data-start="0.2" data-duration="18.4" data-media-start="150" data-volume="0.12" data-fade-in="0.6" data-fade-out="0.8" data-track-index="31"></audio>
+      <audio id="a-static" class="clip" src="assets/sfx/static.mp3" data-start="1.8" data-duration="2.6" data-volume="0.18" data-fade-in="0.3" data-fade-out="0.6" data-track-index="33"></audio>
+      <audio id="a-beep" class="clip" src="assets/sfx/morse.mp3" data-start="1.87" data-duration="1.4" data-volume="0.4" data-track-index="35"></audio>
+      <audio id="a-rung0" class="clip" src="assets/sfx/ladder.mp3" data-start="5.938" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-rung1" class="clip" src="assets/sfx/ladder.mp3" data-start="6.468" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-rung2" class="clip" src="assets/sfx/ladder.mp3" data-start="6.998" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-rung3" class="clip" src="assets/sfx/ladder.mp3" data-start="7.528" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-rung4" class="clip" src="assets/sfx/ladder.mp3" data-start="8.058" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-rung5" class="clip" src="assets/sfx/ladder.mp3" data-start="8.588" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-rung6" class="clip" src="assets/sfx/ladder.mp3" data-start="9.118" data-duration="0.4" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="a-hatch" class="clip" src="assets/sfx/thud-b.mp3" data-start="9.985" data-duration="1.2" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="a-wind" class="clip" src="assets/sfx/wind-gusts.mp3" data-start="10.2" data-duration="8.3" data-media-start="20" data-volume="0.22" data-fade-in="0.6" data-fade-out="0.8" data-track-index="34"></audio>
+      <audio id="a-ign" class="clip" src="assets/sfx/ignite.mp3" data-start="12.541" data-duration="1.2" data-volume="0.6" data-track-index="35"></audio>
+      <audio id="a-fire" class="clip" src="assets/sfx/fire.mp3" data-start="13" data-duration="5.5" data-media-start="2" data-volume="0.3" data-fade-in="0.3" data-fade-out="0.8" data-track-index="37"></audio>
+      <audio id="a-flare" class="clip" src="assets/sfx/spark.mp3" data-start="13.291" data-duration="2" data-volume="0.5" data-fade-out="0.8" data-track-index="36"></audio>
+      <audio id="a-badge" class="clip" src="assets/sfx/pop-a.mp3" data-start="18.138" data-duration="0.663" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="mu-b" class="clip" src="assets/music/bringhome.mp3" data-start="18.4" data-duration="28.8" data-volume="0.12" data-fade-in="1.4" data-fade-out="0.8" data-track-index="32"></audio>
+      <audio id="a-trac" class="clip" src="assets/sfx/tractor.mp3" data-start="18.5" data-duration="7.1" data-media-start="5" data-volume="0.24" data-fade-in="0.6" data-fade-out="0.8" data-track-index="33"></audio>
+      <audio id="a-swell" class="clip" src="assets/sfx/synth-rise.mp3" data-start="21.618" data-duration="2" data-volume="0.45" data-fade-in="0.8" data-fade-out="0.4" data-track-index="35"></audio>
+      <audio id="a-saw" class="clip" src="assets/sfx/chime.mp3" data-start="23.492" data-duration="2.322" data-volume="0.8" data-track-index="36"></audio>
+      <audio id="b-trac" class="clip" src="assets/sfx/tractor.mp3" data-start="25.6" data-duration="2.4" data-media-start="14" data-volume="0.24" data-fade-out="0.8" data-track-index="33"></audio>
+      <audio id="b-steps" class="clip" src="assets/sfx/footsteps-snow.mp3" data-start="27.8" data-duration="1.8" data-volume="0.4" data-fade-in="0.2" data-fade-out="0.4" data-track-index="34"></audio>
+      <audio id="b-ladder" class="clip" src="assets/sfx/ladder.mp3" data-start="28.588" data-duration="2" data-volume="0.4" data-track-index="35"></audio>
+      <audio id="b-t0" class="clip" src="assets/sfx/pop-b.mp3" data-start="33.467" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="b-t1" class="clip" src="assets/sfx/pop-b.mp3" data-start="35.367" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="b-t2" class="clip" src="assets/sfx/pop-b.mp3" data-start="37.517" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="b-lock" class="clip" src="assets/sfx/whoosh-med.mp3" data-start="40.191" data-duration="2.001" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="b-unlock" class="clip" src="assets/sfx/padlock.mp3" data-start="42.497" data-duration="1" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="b-card" class="clip" src="assets/sfx/chime.mp3" data-start="42.992" data-duration="2.322" data-volume="0.6" data-track-index="36"></audio>
+      <audio id="mu-c" class="clip" src="assets/music/letter.mp3" data-start="48.6" data-duration="45.6" data-volume="0.12" data-fade-in="1.6" data-fade-out="2" data-track-index="31"></audio>
+      <audio id="b-hello" class="clip" src="assets/sfx/piano-low.mp3" data-start="48.82" data-duration="4" data-volume="0.9" data-fade-out="2" data-track-index="35"></audio>
+      <audio id="b-p0" class="clip" src="assets/sfx/pop-b.mp3" data-start="56.317" data-duration="0.797" data-volume="0.55" data-track-index="35"></audio>
+      <audio id="b-p1" class="clip" src="assets/sfx/pop-b.mp3" data-start="58.317" data-duration="0.797" data-volume="0.55" data-track-index="35"></audio>
+      <audio id="b-p2" class="clip" src="assets/sfx/pop-b.mp3" data-start="60.267" data-duration="0.797" data-volume="0.55" data-track-index="35"></audio>
+      <audio id="b-host" class="clip" src="assets/sfx/chime.mp3" data-start="61.592" data-duration="2.322" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="c-count" class="clip" src="assets/sfx/counter.mp3" data-start="64.7" data-duration="2.4" data-volume="0.35" data-fade-out="0.3" data-track-index="34"></audio>
+      <audio id="c-lock" class="clip" src="assets/sfx/stamp.mp3" data-start="67.217" data-duration="0.215" data-volume="0.7" data-track-index="35"></audio>
+      <audio id="c-weak" class="clip" src="assets/sfx/buzzer.mp3" data-start="70.251" data-duration="0.5" data-volume="0.35" data-track-index="35"></audio>
+      <audio id="c-room" class="clip" src="assets/sfx/crackle.mp3" data-start="74.8" data-duration="9" data-volume="0.2" data-fade-in="0.6" data-fade-out="0.8" data-track-index="37"></audio>
+      <audio id="c-sun" class="clip" src="assets/sfx/synth-rise.mp3" data-start="79.418" data-duration="2.6" data-volume="0.4" data-fade-in="0.8" data-fade-out="0.6" data-track-index="35"></audio>
+      <audio id="c-badge" class="clip" src="assets/sfx/pop-a.mp3" data-start="83.388" data-duration="0.663" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="c-plane" class="clip" src="assets/sfx/plane.mp3" data-start="83.9" data-duration="10.3" data-media-start="2" data-volume="0.32" data-fade-in="1" data-fade-out="1.6" data-track-index="33"></audio>
+      <audio id="c-pil" class="clip" src="assets/sfx/pop-b.mp3" data-start="86.567" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="c-out" class="clip" src="assets/sfx/pop-b.mp3" data-start="89.417" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="c-trac" class="clip" src="assets/sfx/tractor.mp3" data-start="91.5" data-duration="2.7" data-media-start="20" data-volume="0.22" data-fade-in="0.4" data-fade-out="0.8" data-track-index="36"></audio>
+
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

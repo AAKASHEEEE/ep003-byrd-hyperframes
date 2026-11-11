@@ -1,0 +1,278 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #0B101E; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #64748B; }
+
+  </style>
+  <div id="root" data-composition-id="seven" data-width="1920" data-height="1080">
+
+    <div id="sv-B" style="position:absolute; inset:0; 
+    background-color: #0B101E;
+    background-image:
+      linear-gradient(rgba(0,245,212,.13) 2px, transparent 2px), linear-gradient(90deg, rgba(0,245,212,.13) 2px, transparent 2px),
+      linear-gradient(rgba(0,245,212,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,212,.06) 1px, transparent 1px);
+    background-size: 240px 240px, 240px 240px, 60px 60px, 60px 60px;"><svg class="stage" viewBox="0 0 1920 1080"><line x1="282" y1="590" x2="1638" y2="590" stroke="#475569" stroke-width="6" stroke-dasharray="18 14"/></svg>
+  <div id="sv-m0" class="e-mono" style="left:192px; top:400px; color:#00F5D4; border-color:#00F5D4;">1</div><div id="sv-m1" class="e-mono" style="left:418px; top:400px; color:#00F5D4; border-color:#00F5D4;">2</div><div id="sv-m2" class="e-mono" style="left:644px; top:400px; color:#00F5D4; border-color:#00F5D4;">3</div><div id="sv-m3" class="e-mono" style="left:870px; top:400px; color:#00F5D4; border-color:#00F5D4;">4</div><div id="sv-m4" class="e-mono" style="left:1096px; top:400px; color:#00F5D4; border-color:#00F5D4;">5</div><div id="sv-m5" class="e-mono" style="left:1322px; top:400px; color:#00F5D4; border-color:#00F5D4;">6</div><div id="sv-m6" class="e-mono" style="left:1548px; top:400px;">7</div></div>
+    <div id="sv-S" style="position:absolute; inset:0; background:#0B101E;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="sv-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="sv-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="sv-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="sv-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="sv-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="sv-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <rect y="900" width="1920" height="180" fill="#0B1222"/>
+      <g id="sv-ghost" opacity=".14"><g transform="translate(980 300) scale(1.6)"><g id="svG-room">
+    <rect width="520" height="320" fill="#5C3A21"/><line x1="0" y1="32" x2="520" y2="32" stroke="#451A03" stroke-width="2"/><line x1="0" y1="64" x2="520" y2="64" stroke="#451A03" stroke-width="2"/><line x1="0" y1="96" x2="520" y2="96" stroke="#451A03" stroke-width="2"/><line x1="0" y1="128" x2="520" y2="128" stroke="#451A03" stroke-width="2"/><line x1="0" y1="160" x2="520" y2="160" stroke="#451A03" stroke-width="2"/><line x1="0" y1="192" x2="520" y2="192" stroke="#451A03" stroke-width="2"/><line x1="0" y1="224" x2="520" y2="224" stroke="#451A03" stroke-width="2"/><line x1="0" y1="256" x2="520" y2="256" stroke="#451A03" stroke-width="2"/><line x1="0" y1="288" x2="520" y2="288" stroke="#451A03" stroke-width="2"/>
+    <rect width="520" height="12" fill="#451A03"/><rect y="314" width="520" height="12" fill="#451A03"/>
+    <g id="svG-lampG"><line x1="150" y1="12" x2="150" y2="58" stroke="#1F2937" stroke-width="3"/>
+      <circle id="svG-lampglow" cx="150" cy="72" r="70" fill="#F59E0B" opacity=".22" filter="url(#svG-bloom)"/>
+      <rect x="140" y="58" width="20" height="26" rx="5" fill="#F59E0B"/><rect x="138" y="56" width="24" height="5" fill="#1F2937"/></g>
+    <rect x="18" y="0" width="6" height="320" fill="#B98A5A"/><rect x="48" y="0" width="6" height="320" fill="#B98A5A"/><rect x="18" y="34" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="74" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="114" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="154" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="194" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="234" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="274" width="36" height="6" rx="2" fill="#B98A5A"/>
+    <rect x="70" y="236" width="132" height="14" fill="#451A03"/><rect x="74" y="250" width="8" height="70" fill="#451A03"/><rect x="190" y="250" width="8" height="70" fill="#451A03"/>
+    <rect x="72" y="214" width="128" height="24" rx="12" fill="#A47148"/><path d="M84 220 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0" fill="none" stroke="#D4A373" stroke-width="2"/>
+    <rect x="76" y="206" width="34" height="14" rx="7" fill="#E7D7BC"/>
+    <rect x="256" y="0" width="12" height="222" fill="#94A3B8"/><rect x="252" y="150" width="20" height="8" fill="#64748B"/>
+    <rect x="230" y="222" width="64" height="9" fill="#111827"/>
+    <rect x="234" y="230" width="56" height="80" rx="6" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <circle id="svG-stoveglow" cx="262" cy="262" r="46" fill="#F59E0B" opacity=".35" filter="url(#svG-bloom)"/>
+    <rect x="246" y="250" width="32" height="22" rx="3" fill="#F59E0B"/><rect x="238" y="308" width="8" height="12" fill="#0B0F17"/><rect x="278" y="308" width="8" height="12" fill="#0B0F17"/>
+    <rect x="330" y="118" width="124" height="8" fill="#451A03"/>
+    <rect x="344" y="94" width="38" height="24" rx="2" fill="#6B4226"/><path d="M364 94 L364 84 L410 52 Q420 62 416 76 L370 92 Z" fill="#B08D3C"/>
+    <rect x="404" y="100" width="40" height="18" fill="#7F1D1D"/><line x1="408" y1="104" x2="440" y2="104" stroke="#FCA5A5" stroke-width="2"/>
+    <rect x="310" y="250" width="144" height="11" fill="#6B4226"/><rect id="svG-tleg" x="316" y="261" width="9" height="59" fill="#6B4226"/><rect x="440" y="261" width="9" height="59" fill="#6B4226"/>
+    <rect x="318" y="240" width="30" height="10" rx="2" fill="#B08D3C"/><line x1="322" y1="236" x2="346" y2="232" stroke="#8A6D2F" stroke-width="4" stroke-linecap="round"/><circle cx="347" cy="231" r="5" fill="#14171F"/>
+    <rect x="356" y="196" width="58" height="54" rx="4" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <rect x="362" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/><rect x="376" y="182" width="9" height="16" rx="4" fill="#FDE68A" opacity=".55"/><rect x="390" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/>
+    <circle cx="372" cy="222" r="10" fill="#052e16"/><circle id="svG-dial" cx="372" cy="222" r="10" fill="#22C55E" opacity=".2"/><circle cx="398" cy="224" r="5" fill="#94A3B8"/><circle cx="398" cy="238" r="4" fill="#94A3B8"/>
+    <rect x="420" y="226" width="30" height="24" rx="2" fill="#475569"/><circle cx="430" cy="238" r="7" fill="#E2E8F0"/><line x1="432" y1="238" x2="446" y2="232" stroke="#DC2626" stroke-width="2"/>
+    <rect x="462" y="280" width="52" height="40" rx="4" fill="#475569" stroke="#1F2937" stroke-width="3"/><circle cx="480" cy="300" r="13" fill="#334155" stroke="#1F2937" stroke-width="3"/><rect x="500" y="262" width="7" height="20" fill="#64748B"/>
+  </g></g></g>
+      <g transform="translate(400 476) scale(1.6)">
+    <g id="sv-by">
+      
+      <g id="sv-by-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="sv-by-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="sv-by-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="sv-by-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="sv-by-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#1E293B"/>
+         <g clip-path="url(#sv-torso)"><g fill="#D4A017"><circle cx="88" cy="128" r="3.5"/><circle cx="112" cy="128" r="3.5"/><circle cx="88" cy="150" r="3.5"/><circle cx="112" cy="150" r="3.5"/><circle cx="88" cy="172" r="3.5"/><circle cx="112" cy="172" r="3.5"/></g>
+           <path d="M84 100 L100 122 L116 100" fill="#F8FAFC"/><path d="M92 100 L100 112 L108 100" fill="#14171F"/>
+           <rect x="66" y="128" width="7" height="5" fill="#DC2626"/><rect x="66" y="134" width="7" height="5" fill="#2563EB"/><rect x="66" y="140" width="7" height="5" fill="#F59E0B"/>
+           <rect x="60" y="188" width="80" height="4" fill="#D4A017"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="56" y="99" width="22" height="9" rx="3" fill="#D4A017" stroke="#14171F" stroke-width="2"/><rect x="122" y="99" width="22" height="9" rx="3" fill="#D4A017" stroke="#14171F" stroke-width="2"/></g>
+      
+      <g id="sv-by-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="sv-by-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="sv-by-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="sv-by-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#sv-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#sv-glow)"/>
+         </g>
+         <g id="sv-by-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="sv-by-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="sv-by-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="sv-by-frost" opacity="0"></g>
+        <rect x="66" y="22" width="68" height="16" rx="6" fill="#F8FAFC" stroke="#14171F" stroke-width="3"/><rect x="68" y="36" width="64" height="9" fill="#1E293B"/>
+           <path d="M70 45 Q100 56 130 45" fill="#14171F" stroke="#14171F" stroke-width="3"/><circle cx="100" cy="40" r="5" fill="#D4A017"/>
+        
+        
+        <g id="sv-by-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="sv-by-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#sv-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="sv-by-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g>
+      <g id="sv-hrt" opacity="0"><path d="M1500 520 C1500 470 1440 450 1420 495 C1400 450 1340 470 1340 520 C1340 570 1420 620 1420 640 C1420 620 1500 570 1500 520 Z" fill="#7F1D1D" stroke="#FCA5A5" stroke-width="4"/>
+        <polyline id="sv-ecg" points="1300,700 1360,700 1380,690 1400,712 1420,670 1440,716 1460,700 1540,700" fill="none" stroke="#FCA5A5" stroke-width="5" stroke-linejoin="round" opacity=".7"/></g></svg>
+      <div id="sv-t1" class="ui tag" style="left:192px; top:196px;">BYRD SURVIVED</div><div id="sv-t2" class="ui tag" style="left:192px; top:266px;">HE NEVER FULLY FORGOT THAT WINTER</div>
+      <div id="sv-hlt" class="ui tag" style="left:1260px; top:740px;">HEALTH NEVER QUITE THE SAME</div><div id="sv-t3" class="ui tag" style="left:192px; top:336px;">FOR A FEW YEARS: HE BARELY SPOKE ABOUT ADVANCE BASE</div></div>
+    <div id="sv-dim" style="position:absolute; inset:0; background:rgba(2,4,10,.7);"></div>
+    <div id="sv-book" class="ui" style="left:760px; top:250px; width:400px; height:560px; border-radius:8px 16px 16px 8px; background:linear-gradient(90deg,#0F1B3D 0,#1E2E5C 8%,#1A2950 100%); box-shadow:0 30px 80px rgba(0,0,0,.6), inset 10px 0 0 #0B142E; border:3px solid #0B142E;">
+      <div style="position:absolute; inset:22px 22px 22px 34px; border:3px solid rgba(212,160,23,.55); border-radius:6px;"></div>
+      <div id="sv-auth" style="position:absolute; left:34px; right:22px; top:330px; text-align:center; font-family:Georgia, 'Times New Roman', serif; font-size:30px; letter-spacing:.14em; color:#D4A017;">RICHARD E. BYRD</div>
+      <div id="sv-ttl" style="position:absolute; left:34px; right:22px; top:150px; text-align:center; font-family:Georgia, 'Times New Roman', serif; font-weight:700; font-size:96px; letter-spacing:.08em; color:#E8C252; text-shadow:0 2px 0 #7A5A0C;">ALONE</div>
+      <div id="sv-glint" style="position:absolute; left:0; top:0; width:120px; height:100%; background:linear-gradient(90deg, rgba(255,240,200,0), rgba(255,240,200,.35), rgba(255,240,200,0)); transform:skewX(-18deg);"></div></div>
+    <div id="sv-pub" class="ui ui-badge" style="left:1388px; top:108px;"><div class="hd">PUBLISHED</div><div class="bd" style="font-size:52px; padding:18px 0 20px;">1938</div></div>
+    <div id="sv-dock" class="ui k-dock"><span class="n" style="background:#FF7A00;">PART 7</span>WHAT 136 DAYS ALONE DID TO HIM</div>
+    <div id="sv-bridge" style="position:absolute; inset:0;"><img src="assets/bridge/j-last.png" style="position:absolute; left:0; top:0; width:1920px; height:1080px;" alt=""/></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#sv-by-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#sv-by-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#sv-by-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#sv-by-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#sv-by-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#sv-by-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#sv-by-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#sv-by-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#sv-by", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#sv-by-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 5);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 6);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 7);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 8);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 9);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 10);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 11);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 12);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 13);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 14);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 15);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 16);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 17);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 18);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 19);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 20);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 21);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 22);
+    tl.to("#sv-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 23);
+    tl.to("#sv-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 24);
+    tl.to("#sv-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 6.1);
+    tl.to("#sv-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 6.2);
+    tl.to("#sv-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 9.3);
+    tl.to("#sv-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 9.4);
+    tl.to("#sv-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 12.5);
+    tl.to("#sv-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 12.6);
+    tl.to("#sv-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 15.7);
+    tl.to("#sv-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 15.8);
+    tl.to("#sv-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 18.9);
+    tl.to("#sv-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 19);
+    tl.to("#sv-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 22.1);
+    tl.to("#sv-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 22.2);
+    tl.set("#sv-bridge", { opacity: 0, visibility: "hidden" }, 0.2);
+    tl.set("#sv-S", { autoAlpha: 0 }, 0);
+    tl.set(["#sv-dock", "#sv-t1", "#sv-t2", "#sv-t3", "#sv-hlt", "#sv-dim", "#sv-book", "#sv-pub", "#sv-auth", "#sv-ttl"], { opacity: 0 }, 0);
+    // card 7, amber
+    tl.to("#sv-m6", { color: "#FF7A00", borderColor: "#FF7A00", boxShadow: "0 0 50px #FF7A00", duration: .15 }, 0.25);
+    tl.to("#sv-m6", { scale: 1.25, duration: .25, ease: "back.out(2)" }, 0.4);
+    tl.to("#sv-m6", { x: -1608, y: -330, scale: .25, opacity: 0, duration: .45, ease: "power3.in" }, 1.1);
+    tl.fromTo("#sv-dock", { opacity: 0, scale: .6, x: -20 }, { opacity: 1, scale: 1.08, x: 0, duration: .17, ease: "power2.out", immediateRender: false }, 1.55);
+    tl.to("#sv-dock", { scale: 1, duration: .1 }, 1.72);
+    // the man who came back
+    tl.set("#sv-S", { autoAlpha: 1 }, 4.9); tl.set("#sv-B", { autoAlpha: 0 }, 4.9);
+    tl.fromTo("#sv-t1", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 5.05);
+    tl.fromTo("#sv-t2", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 6.55);
+    tl.fromTo("#sv-ghost", { opacity: 0 }, { opacity: .14, duration: 1.2, immediateRender: false }, 6.5);
+    tl.to("#sv-hrt", { opacity: 1, duration: .4 }, 9.05);
+    tl.fromTo("#sv-hlt", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 9.1);
+    tl.to("#sv-hrt", { scale: 1.06, svgOrigin: "1420 540", duration: .45, ease: "sine.inOut" }, 9.5);
+    tl.to("#sv-hrt", { scale: 1, svgOrigin: "1420 540", duration: .45, ease: "sine.inOut" }, 10);
+    tl.to("#sv-hrt", { scale: 1.06, svgOrigin: "1420 540", duration: .45, ease: "sine.inOut" }, 10.5);
+    tl.to("#sv-hrt", { scale: 1, svgOrigin: "1420 540", duration: .45, ease: "sine.inOut" }, 11);
+    tl.fromTo("#sv-t3", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 13.05);
+    tl.to("#sv-by-head", { rotation: -10, svgOrigin: "100 96", duration: .6 }, 13.2);
+    tl.set("#sv-by-lids", { scaleY: .45 }, 13.4);
+    // 1938: the book
+    tl.fromTo("#sv-pub", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(1.6)", immediateRender: false }, 17.85);
+    tl.to(["#sv-t1", "#sv-t2", "#sv-t3", "#sv-hlt"], { opacity: 0, duration: .4 }, 18.5);
+    tl.to("#sv-dim", { opacity: 1, duration: .4 }, 19.2);
+    tl.fromTo("#sv-book", { opacity: 0, y: 160, scale: .8, rotation: -6 }, { opacity: 1, y: 0, scale: 1, rotation: 0, duration: .55, ease: "power3.out", immediateRender: false }, 19.3);
+    tl.fromTo("#sv-auth", { opacity: 0 }, { opacity: 1, duration: .5, immediateRender: false }, 20.0);
+    tl.fromTo("#sv-ttl", { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: .45, ease: "power2.out", immediateRender: false }, 24.0);
+    tl.set("#sv-glint", { opacity: 0 }, 0); tl.set("#sv-glint", { opacity: 1 }, 24.2);
+    tl.fromTo("#sv-glint", { x: -160 }, { x: 460, duration: .8, ease: "power1.inOut", immediateRender: false }, 24.2);
+    window.__timelines["seven"] = tl;
+  </script>
+</template>

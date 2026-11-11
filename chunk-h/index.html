@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Edge of Endurance — Ep 003 · Chunk H (00:00–01:31)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0B101E; }
+      #root { position: relative; width: 100%; height: 100%; font-family: Inter, sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="91.3" data-width="1920" data-height="1080">
+      <!-- H01 · Part 5: the message he didn't send; a winter rescue in his mind -->
+      <div id="message" class="clip" data-composition-id="message" data-composition-src="compositions/message.html"
+        data-start="0" data-duration="33.9" data-track-index="0" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:1"></div>
+      <!-- H02 · what he sent vs what he hid -->
+      <div id="hide" class="clip" data-composition-id="hide" data-composition-src="compositions/hide.html"
+        data-start="33.9" data-duration="9.6" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:2"></div>
+      <!-- H03 · Little America notices the garbled transmissions -->
+      <div id="notice" class="clip" data-composition-id="notice" data-composition-src="compositions/notice.html"
+        data-start="43.5" data-duration="21.7" data-track-index="0" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:3"></div>
+      <!-- H04 · Dr. Thomas Poulter's meteor-trip cover story -->
+      <div id="poulter" class="clip" data-composition-id="poulter" data-composition-src="compositions/poulter.html"
+        data-start="65.2" data-duration="26.1" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080" style="z-index:4"></div>
+      <!-- Sound: VO + Epidemic Sound music & effects (tools/audio.mjs + cues.mjs) -->
+      <audio id="vo" class="clip" src="assets/vo/chunk-h-vo.mp3" data-start="0" data-duration="91.02" data-volume="1.6" data-track-index="30"></audio>
+      <audio id="mu-a" class="clip" src="assets/music/outofservice.mp3" data-start="0" data-duration="3.4" data-media-start="67.2" data-volume="0.1" data-fade-out="1.6" data-track-index="31"></audio>
+      <audio id="a-dec" class="clip" src="assets/sfx/pop-a.mp3" data-start="0.038" data-duration="0.663" data-volume="0.7" data-track-index="35"></audio>
+      <audio id="mu-b" class="clip" src="assets/music/shadowfall.mp3" data-start="3.3" data-duration="30.4" data-media-start="110" data-volume="0.12" data-fade-in="0.8" data-fade-out="0.8" data-track-index="32"></audio>
+      <audio id="a-chime" class="clip" src="assets/sfx/chime.mp3" data-start="3.392" data-duration="2.322" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="a-dock" class="clip" src="assets/sfx/pop-a.mp3" data-start="4.138" data-duration="0.663" data-volume="1" data-track-index="36"></audio>
+      <audio id="a-wind" class="clip" src="assets/sfx/wind-gusts.mp3" data-start="6.9" data-duration="14.8" data-media-start="5" data-volume="0.28" data-fade-in="0.6" data-fade-out="1" data-track-index="33"></audio>
+      <audio id="a-trac" class="clip" src="assets/sfx/tractor.mp3" data-start="7" data-duration="15" data-media-start="4" data-volume="0.26" data-fade-in="0.8" data-fade-out="0.6" data-track-index="34"></audio>
+      <audio id="a-t0" class="clip" src="assets/sfx/pop-b.mp3" data-start="13.117" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="a-t1" class="clip" src="assets/sfx/pop-b.mp3" data-start="15.717" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="a-t2" class="clip" src="assets/sfx/pop-b.mp3" data-start="19.117" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="a-ice" class="clip" src="assets/sfx/ice-crack.mp3" data-start="20.552" data-duration="2.137" data-volume="0.8" data-track-index="35"></audio>
+      <audio id="a-fz" class="clip" src="assets/sfx/ice-crack-b.mp3" data-start="21.19" data-duration="2.337" data-volume="0.6" data-track-index="36"></audio>
+      <audio id="a-stall" class="clip" src="assets/sfx/power-off.mp3" data-start="21.965" data-duration="1.2" data-volume="0.5" data-track-index="37"></audio>
+      <audio id="a-warn" class="clip" src="assets/sfx/stamp.mp3" data-start="25.617" data-duration="0.215" data-volume="0.9" data-track-index="35"></audio>
+      <audio id="a-brass" class="clip" src="assets/sfx/brass.mp3" data-start="27.878" data-duration="3.5" data-volume="0.5" data-fade-in="0.3" data-fade-out="1.2" data-track-index="35"></audio>
+      <audio id="a-ban" class="clip" src="assets/sfx/pop-a.mp3" data-start="30.038" data-duration="0.663" data-volume="0.7" data-track-index="36"></audio>
+      <audio id="mu-c" class="clip" src="assets/music/miasma.mp3" data-start="33.8" data-duration="31.4" data-media-start="40" data-volume="0.13" data-fade-in="0.6" data-fade-out="1" data-track-index="31"></audio>
+      <audio id="b-morse" class="clip" src="assets/sfx/morse.mp3" data-start="34" data-duration="9.4" data-volume="0.28" data-fade-in="0.3" data-fade-out="0.6" data-track-index="37"></audio>
+      <audio id="b-beat" class="clip" src="assets/sfx/heartbeat.mp3" data-start="34" data-duration="9.4" data-volume="0.32" data-fade-in="0.6" data-fade-out="0.8" data-track-index="38"></audio>
+      <audio id="b-w0" class="clip" src="assets/sfx/pop-b.mp3" data-start="37.967" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="b-w1" class="clip" src="assets/sfx/pop-b.mp3" data-start="39.067" data-duration="0.797" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="b-st0" class="clip" src="assets/sfx/stamp.mp3" data-start="40.517" data-duration="0.215" data-volume="0.6" data-track-index="35"></audio>
+      <audio id="b-st1" class="clip" src="assets/sfx/stamp.mp3" data-start="41.917" data-duration="0.215" data-volume="0.6" data-track-index="35"></audio>
+      <audio id="b-st2" class="clip" src="assets/sfx/stamp.mp3" data-start="42.767" data-duration="0.215" data-volume="0.6" data-track-index="35"></audio>
+      <audio id="c-sig" class="clip" src="assets/sfx/sonar.mp3" data-start="43.443" data-duration="2.4" data-volume="0.4" data-fade-out="0.8" data-track-index="35"></audio>
+      <audio id="c-static" class="clip" src="assets/sfx/static.mp3" data-start="46.5" data-duration="18.6" data-volume="0.12" data-fade-in="0.6" data-fade-out="1" data-track-index="33"></audio>
+      <audio id="c-tg0" class="clip" src="assets/sfx/telegraph.mp3" data-start="51.294" data-duration="0.6" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="c-tg1" class="clip" src="assets/sfx/telegraph.mp3" data-start="53.704" data-duration="0.6" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="c-tg2" class="clip" src="assets/sfx/telegraph.mp3" data-start="55.924" data-duration="0.6" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="c-tg3" class="clip" src="assets/sfx/telegraph.mp3" data-start="58.534" data-duration="0.6" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="c-chord" class="clip" src="assets/sfx/piano-low.mp3" data-start="62.02" data-duration="3" data-volume="0.9" data-fade-out="1.2" data-track-index="35"></audio>
+      <audio id="d-id" class="clip" src="assets/sfx/pop-a.mp3" data-start="64.938" data-duration="0.663" data-volume="0.7" data-track-index="36"></audio>
+      <audio id="mu-d" class="clip" src="assets/music/bringhome.mp3" data-start="65" data-duration="26.3" data-media-start="20" data-volume="0.11" data-fade-in="1" data-fade-out="1.6" data-track-index="32"></audio>
+      <audio id="d-bub" class="clip" src="assets/sfx/pop-b.mp3" data-start="74.667" data-duration="0.797" data-volume="0.6" data-track-index="35"></audio>
+      <audio id="d-no" class="clip" src="assets/sfx/buzzer.mp3" data-start="76.601" data-duration="0.6" data-volume="0.45" data-track-index="35"></audio>
+      <audio id="d-prop" class="clip" src="assets/sfx/whoosh-med.mp3" data-start="78.041" data-duration="2.001" data-volume="0.5" data-track-index="35"></audio>
+      <audio id="d-star" class="clip" src="assets/sfx/chime.mp3" data-start="79.192" data-duration="2.322" data-volume="0.5" data-track-index="36"></audio>
+      <audio id="d-real" class="clip" src="assets/sfx/stamp.mp3" data-start="83.817" data-duration="0.215" data-volume="0.6" data-track-index="35"></audio>
+      <audio id="d-key" class="clip" src="assets/sfx/morse.mp3" data-start="86.8" data-duration="3.6" data-volume="0.25" data-fade-in="0.2" data-fade-out="0.6" data-track-index="37"></audio>
+      <audio id="d-ok" class="clip" src="assets/sfx/pop-a.mp3" data-start="87.438" data-duration="0.663" data-volume="0.7" data-track-index="35"></audio>
+
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

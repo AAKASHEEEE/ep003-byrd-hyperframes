@@ -1,0 +1,396 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #050811; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #64748B; }
+
+  </style>
+  <div id="root" data-composition-id="outro" data-width="1920" data-height="1080">
+
+    <div id="ou-A" style="position:absolute; inset:0; background:#451A03; overflow:hidden;">
+      <svg class="stage" viewBox="0 0 1920 1080" style="filter:blur(14px);"><defs>
+    <filter id="ouR-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ouR-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ouR-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="ouR-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="ouR-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="ouR-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs><g transform="translate(-30 -60) scale(3.8)"><g id="ouR-room">
+    <rect width="520" height="320" fill="#5C3A21"/><line x1="0" y1="32" x2="520" y2="32" stroke="#451A03" stroke-width="2"/><line x1="0" y1="64" x2="520" y2="64" stroke="#451A03" stroke-width="2"/><line x1="0" y1="96" x2="520" y2="96" stroke="#451A03" stroke-width="2"/><line x1="0" y1="128" x2="520" y2="128" stroke="#451A03" stroke-width="2"/><line x1="0" y1="160" x2="520" y2="160" stroke="#451A03" stroke-width="2"/><line x1="0" y1="192" x2="520" y2="192" stroke="#451A03" stroke-width="2"/><line x1="0" y1="224" x2="520" y2="224" stroke="#451A03" stroke-width="2"/><line x1="0" y1="256" x2="520" y2="256" stroke="#451A03" stroke-width="2"/><line x1="0" y1="288" x2="520" y2="288" stroke="#451A03" stroke-width="2"/>
+    <rect width="520" height="12" fill="#451A03"/><rect y="314" width="520" height="12" fill="#451A03"/>
+    <g id="ouR-lampG"><line x1="150" y1="12" x2="150" y2="58" stroke="#1F2937" stroke-width="3"/>
+      <circle id="ouR-lampglow" cx="150" cy="72" r="70" fill="#F59E0B" opacity=".22" filter="url(#ouR-bloom)"/>
+      <rect x="140" y="58" width="20" height="26" rx="5" fill="#F59E0B"/><rect x="138" y="56" width="24" height="5" fill="#1F2937"/></g>
+    <rect x="18" y="0" width="6" height="320" fill="#B98A5A"/><rect x="48" y="0" width="6" height="320" fill="#B98A5A"/><rect x="18" y="34" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="74" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="114" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="154" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="194" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="234" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="274" width="36" height="6" rx="2" fill="#B98A5A"/>
+    <rect x="70" y="236" width="132" height="14" fill="#451A03"/><rect x="74" y="250" width="8" height="70" fill="#451A03"/><rect x="190" y="250" width="8" height="70" fill="#451A03"/>
+    <rect x="72" y="214" width="128" height="24" rx="12" fill="#A47148"/><path d="M84 220 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0" fill="none" stroke="#D4A373" stroke-width="2"/>
+    <rect x="76" y="206" width="34" height="14" rx="7" fill="#E7D7BC"/>
+    <rect x="256" y="0" width="12" height="222" fill="#94A3B8"/><rect x="252" y="150" width="20" height="8" fill="#64748B"/>
+    <rect x="230" y="222" width="64" height="9" fill="#111827"/>
+    <rect x="234" y="230" width="56" height="80" rx="6" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <circle id="ouR-stoveglow" cx="262" cy="262" r="46" fill="#F59E0B" opacity=".35" filter="url(#ouR-bloom)"/>
+    <rect x="246" y="250" width="32" height="22" rx="3" fill="#F59E0B"/><rect x="238" y="308" width="8" height="12" fill="#0B0F17"/><rect x="278" y="308" width="8" height="12" fill="#0B0F17"/>
+    <rect x="330" y="118" width="124" height="8" fill="#451A03"/>
+    <rect x="344" y="94" width="38" height="24" rx="2" fill="#6B4226"/><path d="M364 94 L364 84 L410 52 Q420 62 416 76 L370 92 Z" fill="#B08D3C"/>
+    <rect x="404" y="100" width="40" height="18" fill="#7F1D1D"/><line x1="408" y1="104" x2="440" y2="104" stroke="#FCA5A5" stroke-width="2"/>
+    <rect x="310" y="250" width="144" height="11" fill="#6B4226"/><rect id="ouR-tleg" x="316" y="261" width="9" height="59" fill="#6B4226"/><rect x="440" y="261" width="9" height="59" fill="#6B4226"/>
+    <rect x="318" y="240" width="30" height="10" rx="2" fill="#B08D3C"/><line x1="322" y1="236" x2="346" y2="232" stroke="#8A6D2F" stroke-width="4" stroke-linecap="round"/><circle cx="347" cy="231" r="5" fill="#14171F"/>
+    <rect x="356" y="196" width="58" height="54" rx="4" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <rect x="362" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/><rect x="376" y="182" width="9" height="16" rx="4" fill="#FDE68A" opacity=".55"/><rect x="390" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/>
+    <circle cx="372" cy="222" r="10" fill="#052e16"/><circle id="ouR-dial" cx="372" cy="222" r="10" fill="#22C55E" opacity=".2"/><circle cx="398" cy="224" r="5" fill="#94A3B8"/><circle cx="398" cy="238" r="4" fill="#94A3B8"/>
+    <rect x="420" y="226" width="30" height="24" rx="2" fill="#475569"/><circle cx="430" cy="238" r="7" fill="#E2E8F0"/><line x1="432" y1="238" x2="446" y2="232" stroke="#DC2626" stroke-width="2"/>
+    <rect x="462" y="280" width="52" height="40" rx="4" fill="#475569" stroke="#1F2937" stroke-width="3"/><circle cx="480" cy="300" r="13" fill="#334155" stroke="#1F2937" stroke-width="3"/><rect x="500" y="262" width="7" height="20" fill="#64748B"/>
+  </g></g><rect width="1920" height="1080" fill="#000" opacity=".45"/></svg>
+      <svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="ou-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ou-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ou-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="ou-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="ou-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="ou-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs><g transform="translate(160 616) scale(1.6)">
+    <g id="ou-by">
+      
+      <g id="ou-by-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ou-by-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ou-by-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ou-by-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="ou-by-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#1E293B"/>
+         <g clip-path="url(#ou-torso)"><g fill="#D4A017"><circle cx="88" cy="128" r="3.5"/><circle cx="112" cy="128" r="3.5"/><circle cx="88" cy="150" r="3.5"/><circle cx="112" cy="150" r="3.5"/><circle cx="88" cy="172" r="3.5"/><circle cx="112" cy="172" r="3.5"/></g>
+           <path d="M84 100 L100 122 L116 100" fill="#F8FAFC"/><path d="M92 100 L100 112 L108 100" fill="#14171F"/>
+           <rect x="66" y="128" width="7" height="5" fill="#DC2626"/><rect x="66" y="134" width="7" height="5" fill="#2563EB"/><rect x="66" y="140" width="7" height="5" fill="#F59E0B"/>
+           <rect x="60" y="188" width="80" height="4" fill="#D4A017"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="56" y="99" width="22" height="9" rx="3" fill="#D4A017" stroke="#14171F" stroke-width="2"/><rect x="122" y="99" width="22" height="9" rx="3" fill="#D4A017" stroke="#14171F" stroke-width="2"/></g>
+      
+      <g id="ou-by-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ou-by-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="ou-by-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="ou-by-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ou-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ou-glow)"/>
+         </g>
+         <g id="ou-by-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="ou-by-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="ou-by-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="ou-by-frost" opacity="0"></g>
+        <rect x="66" y="22" width="68" height="16" rx="6" fill="#F8FAFC" stroke="#14171F" stroke-width="3"/><rect x="68" y="36" width="64" height="9" fill="#1E293B"/>
+           <path d="M70 45 Q100 56 130 45" fill="#14171F" stroke="#14171F" stroke-width="3"/><circle cx="100" cy="40" r="5" fill="#D4A017"/>
+        
+        
+        <g id="ou-by-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="ou-by-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#ou-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="ou-by-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g></svg>
+      <div class="ui" style="left:0; right:0; top:60px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:36px; color:#E2E8F0;">WOULD YOU SEND THE MESSAGE — OR STAY SILENT?</div>
+      <div id="ou-a" class="ui" style="left:260px; top:140px; width:660px; padding:26px 0; border-radius:22px; background:rgba(11,16,30,.95); border:4px solid #DC2626; text-align:center;">
+      <div style="font-family:Inter, sans-serif; font-weight:800; font-size:28px; letter-spacing:.16em; color:#DC2626;">OPTION A</div><div style="margin-top:8px; font-family:'Archivo Black', sans-serif; font-size:40px; color:#fff;">SEND THE S.O.S. MESSAGE</div></div><div id="ou-b" class="ui" style="left:1000px; top:140px; width:660px; padding:26px 0; border-radius:22px; background:rgba(11,16,30,.95); border:4px solid #F59E0B; text-align:center;">
+      <div style="font-family:Inter, sans-serif; font-weight:800; font-size:28px; letter-spacing:.16em; color:#F59E0B;">OPTION B</div><div style="margin-top:8px; font-family:'Archivo Black', sans-serif; font-size:40px; color:#fff;">STAY SILENT, LIKE BYRD</div></div>
+      <div id="ou-cm" class="ui" style="left:0; right:0; top:420px; display:flex; justify-content:center; align-items:center; gap:18px; font-family:'Archivo Black', sans-serif; font-size:44px; color:#00F5D4;"><svg width="54" height="48" viewBox="0 0 54 48"><path d="M6 4 H48 Q52 4 52 8 V30 Q52 34 48 34 H22 L10 44 L12 34 H6 Q2 34 2 30 V8 Q2 4 6 4 Z" fill="#00F5D4"/><circle cx="16" cy="19" r="3.5" fill="#0B101E"/><circle cx="27" cy="19" r="3.5" fill="#0B101E"/><circle cx="38" cy="19" r="3.5" fill="#0B101E"/></svg>TELL ME IN THE COMMENTS BELOW</div></div>
+    <div id="ou-E" style="position:absolute; inset:0; background:#050811; overflow:hidden;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="ouE-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ouE-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ouE-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="ouE-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="ouE-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="ouE-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <circle cx="0" cy="0" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="331" cy="97" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="662" cy="194" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="993" cy="291" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1324" cy="388" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="1655" cy="485" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="66" cy="582" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="397" cy="679" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="728" cy="76" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1059" cy="173" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1390" cy="270" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="1721" cy="367" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="132" cy="464" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="463" cy="561" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="794" cy="658" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1125" cy="55" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1456" cy="152" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="1787" cy="249" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="198" cy="346" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="529" cy="443" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="860" cy="540" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1191" cy="637" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1522" cy="34" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="1853" cy="131" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="264" cy="228" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="595" cy="325" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="926" cy="422" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1257" cy="519" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1588" cy="616" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="1919" cy="13" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="330" cy="110" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="661" cy="207" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="992" cy="304" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1323" cy="401" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1654" cy="498" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="65" cy="595" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="396" cy="692" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="727" cy="89" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1058" cy="186" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1389" cy="283" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1720" cy="380" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="131" cy="477" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="462" cy="574" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="793" cy="671" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1124" cy="68" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1455" cy="165" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1786" cy="262" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="197" cy="359" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="528" cy="456" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="859" cy="553" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1190" cy="650" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1521" cy="47" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1852" cy="144" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="263" cy="241" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="594" cy="338" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="925" cy="435" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1256" cy="532" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1587" cy="629" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1918" cy="26" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="329" cy="123" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="660" cy="220" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="991" cy="317" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1322" cy="414" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1653" cy="511" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="64" cy="608" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="395" cy="5" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="726" cy="102" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="1057" cy="199" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1388" cy="296" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1719" cy="393" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><rect y="860" width="1920" height="220" fill="#1E293B"/><rect y="856" width="1920" height="6" fill="#94A3B8"/>
+      <g id="ou-lamp"><line x1="1180" y1="860" x2="1180" y2="700" stroke="#475569" stroke-width="6"/><circle id="ou-lg" cx="1180" cy="712" r="110" fill="#F59E0B" opacity=".4" filter="url(#ouE-bloom)"/><rect x="1166" y="700" width="28" height="34" rx="6" fill="#F59E0B"/></g>
+      <g transform="translate(850 708.5) scale(1.1)">
+    <g id="ou-sc">
+      
+      <g id="ou-sc-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ou-sc-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ou-sc-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ou-sc-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#E85D04" stroke="#14171F" stroke-width="4"/>
+           <circle cx="100" cy="64" r="41" fill="#EDE4D3"/>
+           <circle cx="100" cy="64" r="41.5" fill="none" stroke="#EDE4D3" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/>
+           <circle cx="100" cy="64" r="37" fill="#CDBFA8"/>
+      <g id="ou-sc-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="url(#ouE-parka)"/>
+         <g clip-path="url(#ouE-torso)">
+           <rect x="60" y="141" width="80" height="7" fill="#DCE4EE" opacity=".92"/>
+           <rect x="60" y="177" width="80" height="24" fill="#C94F00"/>
+         </g>
+         <line x1="100" y1="103" x2="100" y2="195" stroke="#9A3D00" stroke-width="2.5"/>
+         <rect x="69" y="155" width="19" height="14" rx="4" fill="none" stroke="#B84A00" stroke-width="2"/>
+         <rect x="112" y="155" width="19" height="14" rx="4" fill="none" stroke="#B84A00" stroke-width="2"/>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="ou-sc-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ou-sc-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+          <circle id="ou-sc-wglow" cx="153" cy="172" r="22" fill="#00F5D4" opacity="0" filter="url(#ouE-glowBig)"/>
+          <g transform="translate(153 172) rotate(-24)">
+            <rect x="-7.5" y="-5.5" width="15" height="11" rx="3" fill="#00F5D4" filter="url(#ouE-glow)"/>
+            <rect x="-7.5" y="-5.5" width="15" height="11" rx="3" fill="none" stroke="#14171F" stroke-width="2"/>
+          </g>
+        </g>
+      </g>
+      <g id="ou-sc-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="ou-sc-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ouE-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ouE-glow)"/>
+         </g>
+         <g id="ou-sc-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="ou-sc-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="ou-sc-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="ou-sc-frost" opacity="0"><polygon points="56.1,77.8 51.1,81.8 57.5,81.7" fill="#BAE6FD" opacity=".9"/><polygon points="54,66.3 48.2,69 54.4,70.5" fill="#BAE6FD" opacity=".9"/><polygon points="54.9,54.7 48.6,55.9 54.2,58.9" fill="#BAE6FD" opacity=".9"/><polygon points="58.7,43.7 52.3,43.3 57,47.6" fill="#BAE6FD" opacity=".9"/><polygon points="65,34 59,32 62.5,37.3" fill="#BAE6FD" opacity=".9"/><polygon points="73.7,26.2 68.3,22.7 70.3,28.8" fill="#BAE6FD" opacity=".9"/><polygon points="84,20.8 79.7,16.1 80.1,22.5" fill="#BAE6FD" opacity=".9"/><polygon points="95.3,18.2 92.3,12.6 91.1,18.8" fill="#BAE6FD" opacity=".9"/><polygon points="106.9,18.5 105.4,12.3 102.7,18" fill="#BAE6FD" opacity=".9"/><polygon points="118.1,21.6 118.2,15.3 114.1,20.2" fill="#BAE6FD" opacity=".9"/><polygon points="128.1,27.5 129.8,21.4 124.7,25.1" fill="#BAE6FD" opacity=".9"/><polygon points="136.3,35.7 139.5,30.2 133.6,32.5" fill="#BAE6FD" opacity=".9"/><polygon points="142.3,45.7 146.7,41.2 140.4,41.9" fill="#BAE6FD" opacity=".9"/><polygon points="145.5,56.9 151,53.6 144.7,52.8" fill="#BAE6FD" opacity=".9"/><polygon points="145.8,68.5 151.9,66.7 146,64.3" fill="#BAE6FD" opacity=".9"/><polygon points="143.2,79.8 149.6,79.6 144.5,75.8" fill="#BAE6FD" opacity=".9"/></g>
+        
+        
+        
+        <g id="ou-sc-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="ou-sc-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#ouE-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      
+    </g></g></svg>
+      <div class="ui" style="left:0; right:0; top:90px; display:flex; justify-content:center; align-items:center; gap:22px;">
+        <div style="padding:14px 30px; border-radius:16px; background:rgba(17,24,39,.95); border:3px solid #00F5D4; font-family:'Archivo Black', sans-serif; font-size:40px; color:#fff;">EDGE OF ENDURANCE</div>
+        <div style="position:relative; width:330px; height:78px;"><div id="ou-sub" style="position:absolute; inset:0; border-radius:16px; background:#FF7A00; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black', sans-serif; font-size:36px; color:#111827;">SUBSCRIBE</div>
+          <div id="ou-done" style="position:absolute; inset:0; border-radius:16px; background:#059669; display:flex; align-items:center; justify-content:center; gap:12px; font-family:'Archivo Black', sans-serif; font-size:32px; color:#fff;">✓ SUBSCRIBED <span id="ou-bell" style="display:inline-block;"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M12 3 C8 3 6 6 6 10 V15 L4 18 H20 L18 15 V10 C18 6 16 3 12 3 Z" fill="#FDE68A" stroke="#111827" stroke-width="1.5"/><circle cx="12" cy="20.5" r="2" fill="#FDE68A" stroke="#111827" stroke-width="1.2"/></svg></span></div></div></div>
+      <div id="ou-prev" class="ui" style="left:140px; width:480px; top:600px; text-align:center; font-family:Inter, sans-serif; font-weight:800; font-size:28px; letter-spacing:.12em; color:#94A3B8;">▲ PREVIOUS EPISODE</div>
+      <div id="ou-next" class="ui" style="left:1300px; width:480px; top:600px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:34px; color:#FBBF24;">▲ WATCH THIS NEXT</div>
+      <div id="ou-cold" class="ui" style="left:1300px; width:480px; top:650px; text-align:center; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#CBD5E1;">HOW PEOPLE SURVIVE THE COLD TODAY</div></div>
+    <div id="ou-black" style="position:absolute; inset:0; background:#000;"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#ou-by-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#ou-by-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#ou-by-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#ou-by-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#ou-by-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#ou-by-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#ou-by-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#ou-by-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#ou-by", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#ou-sc-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#ou-sc-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#ou-sc-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#ou-sc-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#ou-sc-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#ou-sc-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#ou-sc-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#ou-sc-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#ou-sc", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#ou-by-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#ou-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 0.2);
+    tl.to("#ou-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 1.2);
+    tl.to("#ou-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 2.2);
+    tl.to("#ou-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 3.2);
+    tl.to("#ou-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 4.2);
+    tl.to("#ou-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 5.2);
+    tl.to("#ou-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 6.2);
+    tl.to("#ou-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 7.2);
+    tl.to("#ou-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 1.3);
+    tl.to("#ou-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 1.4);
+    tl.to("#ou-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 4.1);
+    tl.to("#ou-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 4.2);
+    tl.to("#ou-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 6.9);
+    tl.to("#ou-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 7);
+    tl.set("#ou-sc-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 7.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 8.6);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 9.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 10.6);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 11.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 12.6);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 13.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 14.6);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 15.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 16.6);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 17.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 18.6);
+    tl.to("#ou-sc-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 19.6);
+    tl.to("#ou-sc-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 20.6);
+    tl.to("#ou-sc-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 8.7);
+    tl.to("#ou-sc-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 8.8);
+    tl.to("#ou-sc-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 11.7);
+    tl.to("#ou-sc-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 11.8);
+    tl.to("#ou-sc-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 14.7);
+    tl.to("#ou-sc-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 14.8);
+    tl.to("#ou-sc-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 17.7);
+    tl.to("#ou-sc-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 17.8);
+    tl.to("#ou-sc-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 20.7);
+    tl.to("#ou-sc-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 20.8);
+    tl.set("#ou-E", { autoAlpha: 0 }, 0);
+    tl.set(["#ou-a", "#ou-b", "#ou-cm", "#ou-done", "#ou-prev", "#ou-next", "#ou-cold", "#ou-black"], { opacity: 0 }, 0);
+    // the question
+    tl.fromTo("#ou-a", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(1.6)", immediateRender: false }, 1.8);
+    tl.fromTo("#ou-b", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(1.6)", immediateRender: false }, 3.55);
+    // like Byrd: he tips his cap
+    tl.to("#ou-by-armR", { rotation: -165, duration: .4, ease: "power2.out" }, 4.8); tl.to("#ou-by-foreR", { rotation: -40, duration: .4 }, 4.8);
+    tl.to("#ou-by-head", { rotation: -8, svgOrigin: "100 96", duration: .3, yoyo: true, repeat: 1 }, 5.2);
+    tl.to(["#ou-by-armR", "#ou-by-foreR"], { rotation: 0, duration: .4 }, 6.2);
+    tl.fromTo("#ou-cm", { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(1.6)", immediateRender: false }, 5.92);
+    // end screen
+    tl.set("#ou-E", { autoAlpha: 1 }, 7.5); tl.set("#ou-A", { autoAlpha: 0 }, 7.5);
+    tl.fromTo("#ou-prev", { opacity: 0 }, { opacity: 1, duration: .4, immediateRender: false }, 7.8);
+    tl.to("#ou-sub", { scale: .94, duration: .08, yoyo: true, repeat: 1 }, 13.7);
+    tl.set("#ou-done", { opacity: 1 }, 13.88); tl.set("#ou-sub", { opacity: 0 }, 13.88);
+    tl.to("#ou-bell", { rotation: 18, duration: .1, ease: "sine.inOut" }, 14);
+    tl.to("#ou-bell", { rotation: -18, duration: .1, ease: "sine.inOut" }, 14.1);
+    tl.to("#ou-bell", { rotation: 18, duration: .1, ease: "sine.inOut" }, 14.2);
+    tl.to("#ou-bell", { rotation: -18, duration: .1, ease: "sine.inOut" }, 14.3);
+    tl.to("#ou-bell", { rotation: 18, duration: .1, ease: "sine.inOut" }, 14.4);
+    tl.to("#ou-bell", { rotation: 0, duration: .1, ease: "sine.inOut" }, 14.5);
+    tl.fromTo("#ou-cold", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .3, immediateRender: false }, 16.2);
+    tl.to("#ou-sc-armR", { rotation: -125, duration: .45, ease: "power2.out" }, 19.1);
+    tl.fromTo("#ou-next", { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(1.8)", immediateRender: false }, 19.21);
+    // the lantern dims to black
+    tl.to("#ou-lg", { opacity: 0, duration: 1.0 }, 20.4);
+    tl.to("#ou-black", { opacity: 1, duration: .8, ease: "power1.in" }, 20.9);
+    window.__timelines["outro"] = tl;
+  </script>
+</template>

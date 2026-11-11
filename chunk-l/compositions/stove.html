@@ -1,0 +1,149 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #451A03; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #64748B; }
+
+  </style>
+  <div id="root" data-composition-id="stove" data-width="1920" data-height="1080">
+
+    <div id="sv-W" style="position:absolute; inset:0; background:#451A03; overflow:hidden;">
+      <div id="sv-cam" style="position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="sv-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="sv-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="sv-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="sv-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="sv-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="sv-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+        <g transform="translate(384 120) scale(2.2)"><g id="sv-room">
+    <rect width="520" height="320" fill="#5C3A21"/><line x1="0" y1="32" x2="520" y2="32" stroke="#451A03" stroke-width="2"/><line x1="0" y1="64" x2="520" y2="64" stroke="#451A03" stroke-width="2"/><line x1="0" y1="96" x2="520" y2="96" stroke="#451A03" stroke-width="2"/><line x1="0" y1="128" x2="520" y2="128" stroke="#451A03" stroke-width="2"/><line x1="0" y1="160" x2="520" y2="160" stroke="#451A03" stroke-width="2"/><line x1="0" y1="192" x2="520" y2="192" stroke="#451A03" stroke-width="2"/><line x1="0" y1="224" x2="520" y2="224" stroke="#451A03" stroke-width="2"/><line x1="0" y1="256" x2="520" y2="256" stroke="#451A03" stroke-width="2"/><line x1="0" y1="288" x2="520" y2="288" stroke="#451A03" stroke-width="2"/>
+    <rect width="520" height="12" fill="#451A03"/><rect y="314" width="520" height="12" fill="#451A03"/>
+    <g id="sv-lampG"><line x1="150" y1="12" x2="150" y2="58" stroke="#1F2937" stroke-width="3"/>
+      <circle id="sv-lampglow" cx="150" cy="72" r="70" fill="#F59E0B" opacity=".22" filter="url(#sv-bloom)"/>
+      <rect x="140" y="58" width="20" height="26" rx="5" fill="#F59E0B"/><rect x="138" y="56" width="24" height="5" fill="#1F2937"/></g>
+    <rect x="18" y="0" width="6" height="320" fill="#B98A5A"/><rect x="48" y="0" width="6" height="320" fill="#B98A5A"/><rect x="18" y="34" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="74" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="114" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="154" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="194" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="234" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="274" width="36" height="6" rx="2" fill="#B98A5A"/>
+    <rect x="70" y="236" width="132" height="14" fill="#451A03"/><rect x="74" y="250" width="8" height="70" fill="#451A03"/><rect x="190" y="250" width="8" height="70" fill="#451A03"/>
+    <rect x="72" y="214" width="128" height="24" rx="12" fill="#A47148"/><path d="M84 220 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0" fill="none" stroke="#D4A373" stroke-width="2"/>
+    <rect x="76" y="206" width="34" height="14" rx="7" fill="#E7D7BC"/>
+    <rect x="256" y="0" width="12" height="222" fill="#94A3B8"/><rect x="252" y="150" width="20" height="8" fill="#64748B"/>
+    <rect x="230" y="222" width="64" height="9" fill="#111827"/>
+    <rect x="234" y="230" width="56" height="80" rx="6" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <circle id="sv-stoveglow" cx="262" cy="262" r="46" fill="#F59E0B" opacity=".35" filter="url(#sv-bloom)"/>
+    <rect x="246" y="250" width="32" height="22" rx="3" fill="#F59E0B"/><rect x="238" y="308" width="8" height="12" fill="#0B0F17"/><rect x="278" y="308" width="8" height="12" fill="#0B0F17"/>
+    <rect x="330" y="118" width="124" height="8" fill="#451A03"/>
+    <rect x="344" y="94" width="38" height="24" rx="2" fill="#6B4226"/><path d="M364 94 L364 84 L410 52 Q420 62 416 76 L370 92 Z" fill="#B08D3C"/>
+    <rect x="404" y="100" width="40" height="18" fill="#7F1D1D"/><line x1="408" y1="104" x2="440" y2="104" stroke="#FCA5A5" stroke-width="2"/>
+    <rect x="310" y="250" width="144" height="11" fill="#6B4226"/><rect id="sv-tleg" x="316" y="261" width="9" height="59" fill="#6B4226"/><rect x="440" y="261" width="9" height="59" fill="#6B4226"/>
+    <rect x="318" y="240" width="30" height="10" rx="2" fill="#B08D3C"/><line x1="322" y1="236" x2="346" y2="232" stroke="#8A6D2F" stroke-width="4" stroke-linecap="round"/><circle cx="347" cy="231" r="5" fill="#14171F"/>
+    <rect x="356" y="196" width="58" height="54" rx="4" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <rect x="362" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/><rect x="376" y="182" width="9" height="16" rx="4" fill="#FDE68A" opacity=".55"/><rect x="390" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/>
+    <circle cx="372" cy="222" r="10" fill="#052e16"/><circle id="sv-dial" cx="372" cy="222" r="10" fill="#22C55E" opacity=".2"/><circle cx="398" cy="224" r="5" fill="#94A3B8"/><circle cx="398" cy="238" r="4" fill="#94A3B8"/>
+    <rect x="420" y="226" width="30" height="24" rx="2" fill="#475569"/><circle cx="430" cy="238" r="7" fill="#E2E8F0"/><line x1="432" y1="238" x2="446" y2="232" stroke="#DC2626" stroke-width="2"/>
+    <rect x="462" y="280" width="52" height="40" rx="4" fill="#475569" stroke="#1F2937" stroke-width="3"/><circle cx="480" cy="300" r="13" fill="#334155" stroke="#1F2937" stroke-width="3"/><rect x="500" y="262" width="7" height="20" fill="#64748B"/>
+  </g></g>
+        <rect id="sv-dim" x="-400" y="-400" width="2720" height="1880" fill="#000" opacity=".45"/>
+        <circle id="sv-hot" cx="960.4" cy="696.4" r="150" fill="#F59E0B" opacity=".45" filter="url(#sv-bloom)"/>
+        <circle class="sv-co" cx="938.4" cy="450" r="34" fill="#7E22CE" opacity="0" filter="url(#sv-soft)"/><circle class="sv-co" cx="986.4" cy="404" r="42" fill="#7E22CE" opacity="0" filter="url(#sv-soft)"/><circle class="sv-co" cx="938.4" cy="358" r="50" fill="#7E22CE" opacity="0" filter="url(#sv-soft)"/><circle class="sv-co" cx="986.4" cy="312" r="58" fill="#7E22CE" opacity="0" filter="url(#sv-soft)"/><circle class="sv-co" cx="938.4" cy="266" r="66" fill="#7E22CE" opacity="0" filter="url(#sv-soft)"/><circle class="sv-co" cx="986.4" cy="220" r="74" fill="#7E22CE" opacity="0" filter="url(#sv-soft)"/></svg></div>
+      <div id="sv-cold" class="ui" style="left:50px; top:300px; width:390px; padding:24px 0 26px; border-radius:20px; background:rgba(11,16,30,.95); border:3px solid #38BDF8; text-align:center;">
+      <svg width="120" height="120" viewBox="0 0 120 120"><g stroke="#7DD3FC" stroke-width="7" stroke-linecap="round"><line x1="60" y1="14" x2="60" y2="106" transform="rotate(0 60 60)"/><line x1="60" y1="14" x2="60" y2="106" transform="rotate(60 60 60)"/><line x1="60" y1="14" x2="60" y2="106" transform="rotate(120 60 60)"/></g></svg>
+      <div style="margin-top:8px; font-family:'Archivo Black', sans-serif; font-size:32px; color:#fff;">THE COLD OUTSIDE</div>
+      <div id="sv-cold-st" style="margin:16px auto 0; width:260px; padding:8px 0; border:4px solid #DC2626; border-radius:10px; font-family:'Archivo Black', sans-serif; font-size:26px; color:#FCA5A5; transform:rotate(-5deg);">✕ DIDN'T BEAT HIM</div></div><div id="sv-dark" class="ui" style="left:1480px; top:300px; width:390px; padding:24px 0 26px; border-radius:20px; background:rgba(11,16,30,.95); border:3px solid #64748B; text-align:center;">
+      <svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" fill="#1E293B" stroke="#64748B" stroke-width="5"/><circle cx="78" cy="48" r="36" fill="#0B101E"/></svg>
+      <div style="margin-top:8px; font-family:'Archivo Black', sans-serif; font-size:32px; color:#fff;">THE DARKNESS</div>
+      <div id="sv-dark-st" style="margin:16px auto 0; width:260px; padding:8px 0; border:4px solid #DC2626; border-radius:10px; font-family:'Archivo Black', sans-serif; font-size:26px; color:#FCA5A5; transform:rotate(-5deg);">✕ DIDN'T BEAT HIM</div></div>
+      <div id="sv-almost" class="ui tag" style="left:1120px; top:860px;">ALMOST BEAT HIM: THE WARM STOVE</div>
+      <div id="sv-th" class="ui" style="left:160px; width:1600px; top:150px; padding:26px 0; border-radius:20px; background:rgba(11,16,30,.95); border:4px solid #F59E0B; text-align:center; font-family:'Archivo Black', sans-serif; font-size:52px; color:#fff;">THE DANGER ISN'T ALWAYS <span style="color:#FBBF24;">THE OBVIOUS ONE.</span></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set(["#sv-cold", "#sv-cold-st", "#sv-dark", "#sv-dark-st", "#sv-almost", "#sv-th"], { opacity: 0 }, 0);
+    tl.set("#sv-cam", { scale: 1, x: 0, y: 0, transformOrigin: "0 0" }, 0);
+    // the cold, the darkness — neither beat him
+    tl.fromTo("#sv-cold", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .3, ease: "power2.out", immediateRender: false }, 0.22);
+    tl.fromTo("#sv-cold-st", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: .16, ease: "power3.in", immediateRender: false }, 1.4);
+    tl.fromTo("#sv-dark", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: .3, ease: "power2.out", immediateRender: false }, 2.48);
+    tl.fromTo("#sv-dark-st", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: .16, ease: "power3.in", immediateRender: false }, 3.45);
+    // the thing that almost did: push in on the small warm stove
+    tl.to(["#sv-cold", "#sv-dark"], { opacity: 0, duration: .3 }, 4.4);
+    tl.to("#sv-cam", { ...{"scale":1.45,"x":-432.6,"y":-367.7}, duration: 6.0, ease: "power1.inOut" }, 4.5);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 4.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 5);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 5.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 6);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 6.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 7);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 7.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 8);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 8.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 9);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 9.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 10);
+    tl.to("#sv-hot", { opacity: 0.7, duration: .45, ease: "sine.inOut" }, 10.5);
+    tl.to("#sv-hot", { opacity: 0.45, duration: .45, ease: "sine.inOut" }, 11);
+    tl.to(".sv-co", { opacity: .5, duration: .6, stagger: .35 }, 6.6);
+    tl.fromTo(".sv-co", { y: 20, scale: .7, transformOrigin: "50% 50%" }, { y: -60, scale: 1.2, duration: 6.0, stagger: .35, ease: "sine.out", immediateRender: false }, 6.6);
+    tl.fromTo("#sv-almost", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 7.4);
+    // the strange truth
+    tl.to("#sv-dim", { opacity: .78, duration: 1.4 }, 11.0);
+    tl.to("#sv-almost", { opacity: 0, duration: .3 }, 14.9);
+    tl.fromTo("#sv-th", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: .4, ease: "power2.out", immediateRender: false }, 15.32);
+    window.__timelines["stove"] = tl;
+  </script>
+</template>

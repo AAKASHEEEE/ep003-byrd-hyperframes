@@ -1,0 +1,480 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #030508; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #334155; }
+
+  </style>
+  <div id="root" data-composition-id="nothing" data-width="1920" data-height="1080">
+
+    <svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="wn-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="wn-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="wn-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="wn-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="wn-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="wn-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath><filter id="wn-nearBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
+      <rect width="1920" height="660" fill="#030508"/><circle cx="0" cy="0" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="409" cy="137" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="818" cy="274" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1227" cy="411" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1636" cy="548" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="125" cy="105" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="534" cy="242" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="943" cy="379" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1352" cy="516" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1761" cy="73" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="250" cy="210" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="659" cy="347" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1068" cy="484" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1477" cy="41" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1886" cy="178" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="375" cy="315" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="784" cy="452" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1193" cy="9" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1602" cy="146" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="91" cy="283" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="500" cy="420" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="909" cy="557" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1318" cy="114" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1727" cy="251" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="216" cy="388" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="625" cy="525" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1034" cy="82" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1443" cy="219" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1852" cy="356" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="341" cy="493" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="750" cy="50" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1159" cy="187" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1568" cy="324" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="57" cy="461" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="466" cy="18" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="875" cy="155" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1284" cy="292" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1693" cy="429" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="182" cy="566" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="591" cy="123" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1000" cy="260" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1409" cy="397" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1818" cy="534" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="307" cy="91" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="716" cy="228" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1125" cy="365" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1534" cy="502" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="23" cy="59" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="432" cy="196" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="841" cy="333" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1250" cy="470" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="1659" cy="27" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="148" cy="164" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="557" cy="301" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="966" cy="438" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="1375" cy="575" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1784" cy="132" r="2" fill="#E2E8F0" opacity=".45"/><circle cx="273" cy="269" r="1" fill="#E2E8F0" opacity=".45"/><circle cx="682" cy="406" r="1.5" fill="#E2E8F0" opacity=".45"/><circle cx="1091" cy="543" r="2" fill="#E2E8F0" opacity=".45"/>
+      <rect y="660" width="1920" height="420" fill="#334155"/><line x1="0" y1="660" x2="1920" y2="660" stroke="#94A3B8" stroke-width="3"/>
+      <g id="wn-hut"><line x1="140" y1="660" x2="140" y2="420" stroke="#94A3B8" stroke-width="6"/><line x1="360" y1="660" x2="360" y2="420" stroke="#94A3B8" stroke-width="6"/>
+        <path d="M140 424 Q250 455 360 424" fill="none" stroke="#CBD5E1" stroke-width="2"/>
+        <rect x="250" y="654" width="70" height="10" rx="2" fill="#5C3A21" stroke="#451A03" stroke-width="2"/><ellipse cx="285" cy="656" rx="80" ry="16" fill="#F59E0B" opacity=".35" filter="url(#wn-soft)"/>
+        <rect x="420" y="614" width="12" height="46" fill="#94A3B8"/></g>
+      <g id="wn-trees" opacity="0"><path d="M1150 660 v-30 M1090 630 L1150 460 L1210 630 Z M1105 570 L1150 430 L1195 570" fill="none" stroke="#00F5D4" stroke-width="4" stroke-dasharray="8 8"/><path d="M1290 660 v-30 M1230 630 L1290 460 L1350 630 Z M1245 570 L1290 430 L1335 570" fill="none" stroke="#00F5D4" stroke-width="4" stroke-dasharray="8 8"/><path d="M1430 660 v-30 M1370 630 L1430 460 L1490 630 Z M1385 570 L1430 430 L1475 570" fill="none" stroke="#00F5D4" stroke-width="4" stroke-dasharray="8 8"/></g><g id="wn-x1" opacity="0"><circle cx="1290" cy="540" r="52" fill="none" stroke="#DC2626" stroke-width="9"/><line x1="1254" y1="576" x2="1326" y2="504" stroke="#DC2626" stroke-width="9"/></g>
+      <g id="wn-hills" opacity="0"><polyline points="1000,660 1150,490 1260,570 1400,430 1560,600 1700,660" fill="none" stroke="#00F5D4" stroke-width="4" stroke-dasharray="8 8"/></g><g id="wn-x2" opacity="0"><circle cx="1400" cy="520" r="52" fill="none" stroke="#DC2626" stroke-width="9"/><line x1="1364" y1="556" x2="1436" y2="484" stroke="#DC2626" stroke-width="9"/></g>
+      <g id="wn-rose" opacity="0"><circle cx="1350" cy="460" r="90" fill="none" stroke="#00F5D4" stroke-width="4" stroke-dasharray="8 8"/>
+        <g id="wn-needle"><polygon points="1350,360 1366,460 1350,560 1334,460" fill="none" stroke="#00F5D4" stroke-width="4"/></g>
+        <text x="1350" y="344" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="40" fill="#00F5D4">?</text><text x="1480" y="474" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="40" fill="#00F5D4">?</text><text x="1350" y="604" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="40" fill="#00F5D4">?</text><text x="1220" y="474" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="40" fill="#00F5D4">?</text></g>
+      <g id="wn-bpos"><g transform="translate(-110.00000000000001 -291.5) scale(1.1)">
+    <g id="wn-by">
+      
+      <g id="wn-by-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="wn-by-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="wn-by-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="wn-by-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="7.5" fill="#5C3A21"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#A8641F" stroke="#14171F" stroke-width="4"/>
+           <circle cx="100" cy="64" r="41" fill="#D4A373"/>
+           <circle cx="100" cy="64" r="41.5" fill="none" stroke="#D4A373" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/>
+           <circle cx="100" cy="64" r="37" fill="#B98A5A"/>
+      <g id="wn-by-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#C87D32"/>
+         <g clip-path="url(#wn-torso)"><rect x="60" y="98" width="80" height="16" fill="#D4A373"/>
+           <rect x="60" y="150" width="80" height="9" fill="#3B2414"/><rect x="93" y="149" width="14" height="11" rx="2" fill="none" stroke="#B08D3C" stroke-width="2.5"/>
+           <rect x="60" y="184" width="80" height="16" fill="#D4A373"/><line x1="122" y1="114" x2="122" y2="148" stroke="#A8641F" stroke-width="3"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="wn-by-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="wn-by-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="7.5" fill="#5C3A21"/>
+          
+        </g>
+      </g>
+      <g id="wn-by-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="wn-by-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#wn-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#wn-glow)"/>
+         </g>
+         <g id="wn-by-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="wn-by-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="wn-by-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="wn-by-frost" opacity="0"></g>
+        
+        <g id="wn-by-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="wn-by-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#wn-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="wn-by-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g></g>
+      <linearGradient id="wn-fg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#64748B" stop-opacity=".95"/><stop offset=".7" stop-color="#64748B" stop-opacity=".6"/><stop offset="1" stop-color="#64748B" stop-opacity="0"/></linearGradient>
+      <g id="wn-fog" opacity="0"><rect width="900" height="720" fill="url(#wn-fg)"/></g>
+      <g opacity=".7"><circle id="wn-sf-f0" cx="318.9" cy="124.9" r="1.9" fill="#fff" opacity="0.5"/><circle id="wn-sf-f1" cx="1685.2" cy="1034.5" r="2.8" fill="#fff" opacity="0.5"/><circle id="wn-sf-f2" cx="33.4" cy="742.4" r="1.7" fill="#fff" opacity="0.8"/><circle id="wn-sf-f3" cx="1269" cy="454.2" r="1.8" fill="#fff" opacity="0.7"/><circle id="wn-sf-f4" cx="-120.4" cy="186.4" r="1.8" fill="#fff" opacity="0.9"/><circle id="wn-sf-f5" cx="611.6" cy="119.8" r="2.4" fill="#fff" opacity="0.5"/><circle id="wn-sf-f6" cx="1981.8" cy="-59.5" r="2.7" fill="#fff" opacity="0.9"/><circle id="wn-sf-f7" cx="1237.6" cy="714.3" r="2.9" fill="#fff" opacity="0.7"/><circle id="wn-sf-f8" cx="1470.1" cy="804.9" r="2.5" fill="#fff" opacity="0.7"/><circle id="wn-sf-f9" cx="1239.9" cy="856.6" r="1.9" fill="#fff" opacity="0.5"/><circle id="wn-sf-f10" cx="1901.2" cy="338.2" r="3" fill="#fff" opacity="0.5"/><circle id="wn-sf-f11" cx="691" cy="79.9" r="1.7" fill="#fff" opacity="0.8"/><circle id="wn-sf-f12" cx="11.1" cy="1035.9" r="2.5" fill="#fff" opacity="0.7"/><circle id="wn-sf-f13" cx="145.8" cy="837.6" r="3.1" fill="#fff" opacity="0.8"/><circle id="wn-sf-f14" cx="443.2" cy="139.6" r="2.5" fill="#fff" opacity="0.7"/><circle id="wn-sf-f15" cx="1713.8" cy="291.4" r="2.5" fill="#fff" opacity="0.8"/><circle id="wn-sf-f16" cx="1256.4" cy="890.4" r="2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f17" cx="1400.7" cy="174.6" r="1.5" fill="#fff" opacity="0.6"/><circle id="wn-sf-f18" cx="121.4" cy="364.6" r="1.9" fill="#fff" opacity="0.4"/><circle id="wn-sf-f19" cx="1251.2" cy="60.3" r="2.4" fill="#fff" opacity="0.8"/><circle id="wn-sf-f20" cx="745.5" cy="165.2" r="2.1" fill="#fff" opacity="0.5"/><circle id="wn-sf-f21" cx="506.8" cy="1029.1" r="2.2" fill="#fff" opacity="0.8"/><circle id="wn-sf-f22" cx="218.7" cy="960.6" r="2.7" fill="#fff" opacity="0.9"/><circle id="wn-sf-f23" cx="851.3" cy="819.4" r="2.9" fill="#fff" opacity="0.4"/><circle id="wn-sf-f24" cx="-72.1" cy="356.9" r="1.8" fill="#fff" opacity="0.4"/><circle id="wn-sf-f25" cx="376.6" cy="235.3" r="2.7" fill="#fff" opacity="0.5"/><circle id="wn-sf-f26" cx="1243.3" cy="75" r="2.4" fill="#fff" opacity="0.7"/><circle id="wn-sf-f27" cx="1228.6" cy="45.8" r="2.9" fill="#fff" opacity="0.7"/><circle id="wn-sf-f28" cx="1949.2" cy="-18.7" r="2.1" fill="#fff" opacity="0.7"/><circle id="wn-sf-f29" cx="551" cy="5" r="2.6" fill="#fff" opacity="0.8"/><circle id="wn-sf-f30" cx="1192.2" cy="990.2" r="3" fill="#fff" opacity="0.8"/><circle id="wn-sf-f31" cx="1386.4" cy="402.2" r="1.7" fill="#fff" opacity="0.7"/><circle id="wn-sf-f32" cx="1254.3" cy="319.3" r="2.9" fill="#fff" opacity="0.7"/><circle id="wn-sf-f33" cx="502.1" cy="953.7" r="1.9" fill="#fff" opacity="0.6"/><circle id="wn-sf-f34" cx="923.2" cy="485.2" r="2.9" fill="#fff" opacity="0.4"/><circle id="wn-sf-f35" cx="458.5" cy="22.7" r="2.1" fill="#fff" opacity="0.9"/><circle id="wn-sf-f36" cx="728.7" cy="475.5" r="2.8" fill="#fff" opacity="0.7"/><circle id="wn-sf-f37" cx="1118.5" cy="936.3" r="2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f38" cx="626.7" cy="841.2" r="2.6" fill="#fff" opacity="0.4"/><circle id="wn-sf-f39" cx="1976.5" cy="369.2" r="2.2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f40" cx="1103.7" cy="-10.6" r="2.9" fill="#fff" opacity="0.4"/><circle id="wn-sf-f41" cx="67.4" cy="715.9" r="1.7" fill="#fff" opacity="0.5"/><circle id="wn-sf-f42" cx="649.1" cy="388.9" r="2.9" fill="#fff" opacity="0.4"/><circle id="wn-sf-f43" cx="663" cy="326.2" r="2.7" fill="#fff" opacity="0.4"/><circle id="wn-sf-f44" cx="272.7" cy="219.5" r="1.8" fill="#fff" opacity="0.9"/><circle id="wn-sf-f45" cx="781.9" cy="355.3" r="1.6" fill="#fff" opacity="0.6"/><circle id="wn-sf-f46" cx="485.6" cy="703" r="3" fill="#fff" opacity="0.5"/><circle id="wn-sf-f47" cx="1865" cy="620.9" r="3" fill="#fff" opacity="0.5"/><circle id="wn-sf-f48" cx="1657" cy="1132.7" r="2.7" fill="#fff" opacity="0.4"/><circle id="wn-sf-f49" cx="207.7" cy="547.8" r="2.9" fill="#fff" opacity="0.9"/><circle id="wn-sf-f50" cx="251.3" cy="981.3" r="1.9" fill="#fff" opacity="0.6"/><circle id="wn-sf-f51" cx="456.7" cy="225.3" r="2.3" fill="#fff" opacity="0.5"/><circle id="wn-sf-f52" cx="897" cy="514.9" r="2.6" fill="#fff" opacity="0.5"/><circle id="wn-sf-f53" cx="1786.4" cy="471.7" r="1.7" fill="#fff" opacity="0.6"/><circle id="wn-sf-f54" cx="463.8" cy="899.8" r="2.5" fill="#fff" opacity="0.6"/><circle id="wn-sf-f55" cx="1168.3" cy="699.3" r="1.9" fill="#fff" opacity="0.6"/><circle id="wn-sf-f56" cx="-124.9" cy="131.3" r="2.1" fill="#fff" opacity="0.5"/><circle id="wn-sf-f57" cx="1603.6" cy="625.9" r="2.3" fill="#fff" opacity="0.7"/><circle id="wn-sf-f58" cx="-113.7" cy="1039.9" r="1.8" fill="#fff" opacity="0.5"/><circle id="wn-sf-f59" cx="1248.4" cy="659.5" r="2.1" fill="#fff" opacity="0.4"/><circle id="wn-sf-f60" cx="-71.9" cy="747" r="2" fill="#fff" opacity="0.5"/><circle id="wn-sf-f61" cx="966.1" cy="102.3" r="2.3" fill="#fff" opacity="0.9"/><circle id="wn-sf-f62" cx="2053.7" cy="621.7" r="1.8" fill="#fff" opacity="0.4"/><circle id="wn-sf-f63" cx="1997.4" cy="904.6" r="2" fill="#fff" opacity="0.6"/><circle id="wn-sf-f64" cx="40.1" cy="413.1" r="1.9" fill="#fff" opacity="0.7"/><circle id="wn-sf-f65" cx="690.3" cy="850.3" r="2.4" fill="#fff" opacity="0.4"/><circle id="wn-sf-f66" cx="1194" cy="223" r="2.3" fill="#fff" opacity="0.6"/><circle id="wn-sf-f67" cx="1056.3" cy="418.3" r="2.4" fill="#fff" opacity="0.7"/><circle id="wn-sf-f68" cx="1376.6" cy="600" r="3" fill="#fff" opacity="0.4"/><circle id="wn-sf-f69" cx="729.8" cy="620.9" r="1.5" fill="#fff" opacity="0.8"/><circle id="wn-sf-f70" cx="-9.9" cy="1064.2" r="1.5" fill="#fff" opacity="0.7"/><circle id="wn-sf-f71" cx="744.7" cy="737.3" r="1.9" fill="#fff" opacity="0.6"/><circle id="wn-sf-f72" cx="598.4" cy="425.9" r="2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f73" cx="979.9" cy="316.2" r="3" fill="#fff" opacity="0.5"/><circle id="wn-sf-f74" cx="1065.1" cy="691.6" r="2.8" fill="#fff" opacity="0.8"/><circle id="wn-sf-f75" cx="1752.2" cy="191.4" r="3.1" fill="#fff" opacity="0.6"/><circle id="wn-sf-f76" cx="427.5" cy="597.3" r="3" fill="#fff" opacity="0.4"/><circle id="wn-sf-f77" cx="1465.3" cy="352.1" r="2" fill="#fff" opacity="0.8"/><circle id="wn-sf-f78" cx="1308.6" cy="10.3" r="2.8" fill="#fff" opacity="0.8"/><circle id="wn-sf-f79" cx="109.9" cy="-35.9" r="1.6" fill="#fff" opacity="0.7"/><circle id="wn-sf-f80" cx="534.3" cy="301.9" r="2.5" fill="#fff" opacity="0.6"/><circle id="wn-sf-f81" cx="1120.7" cy="436.6" r="2.2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f82" cx="1537" cy="762.4" r="2" fill="#fff" opacity="0.7"/><circle id="wn-sf-f83" cx="651.7" cy="106.3" r="2.4" fill="#fff" opacity="0.6"/><circle id="wn-sf-f84" cx="-61.9" cy="800.4" r="2.2" fill="#fff" opacity="0.5"/><circle id="wn-sf-f85" cx="635.8" cy="811" r="3" fill="#fff" opacity="0.7"/><circle id="wn-sf-f86" cx="75.9" cy="184.4" r="2.2" fill="#fff" opacity="0.7"/><circle id="wn-sf-f87" cx="604.1" cy="1116.2" r="1.8" fill="#fff" opacity="0.7"/><circle id="wn-sf-f88" cx="1463.9" cy="717" r="2.3" fill="#fff" opacity="0.8"/><circle id="wn-sf-f89" cx="1334.8" cy="945.2" r="3" fill="#fff" opacity="0.8"/><circle id="wn-sf-f90" cx="-54.5" cy="230.5" r="1.5" fill="#fff" opacity="0.4"/><circle id="wn-sf-f91" cx="1636.3" cy="928.7" r="2.3" fill="#fff" opacity="0.8"/><circle id="wn-sf-f92" cx="447.7" cy="622.3" r="2.3" fill="#fff" opacity="0.7"/><circle id="wn-sf-f93" cx="432.5" cy="836.4" r="1.6" fill="#fff" opacity="0.7"/><circle id="wn-sf-f94" cx="960.5" cy="598.2" r="2.4" fill="#fff" opacity="0.7"/><circle id="wn-sf-f95" cx="200.7" cy="186" r="2.4" fill="#fff" opacity="0.7"/><circle id="wn-sf-f96" cx="451.5" cy="217.9" r="2.8" fill="#fff" opacity="0.9"/><circle id="wn-sf-f97" cx="903.6" cy="-32.2" r="2" fill="#fff" opacity="0.9"/><circle id="wn-sf-f98" cx="154.2" cy="872.4" r="2.3" fill="#fff" opacity="0.6"/><circle id="wn-sf-f99" cx="1567.3" cy="1128.1" r="2.3" fill="#fff" opacity="0.8"/><circle id="wn-sf-f100" cx="1896.5" cy="310.8" r="2.6" fill="#fff" opacity="0.5"/><circle id="wn-sf-f101" cx="1555.9" cy="338.3" r="2.1" fill="#fff" opacity="0.4"/><circle id="wn-sf-f102" cx="1192.9" cy="102.3" r="1.8" fill="#fff" opacity="0.7"/><circle id="wn-sf-f103" cx="288.4" cy="261.8" r="2.1" fill="#fff" opacity="0.6"/><circle id="wn-sf-f104" cx="1774.5" cy="75.1" r="1.5" fill="#fff" opacity="0.8"/><circle id="wn-sf-f105" cx="497.5" cy="950.1" r="1.9" fill="#fff" opacity="0.8"/><circle id="wn-sf-f106" cx="-14.3" cy="776.2" r="2" fill="#fff" opacity="0.6"/><circle id="wn-sf-f107" cx="629.5" cy="698.9" r="1.9" fill="#fff" opacity="0.4"/><circle id="wn-sf-f108" cx="1524.1" cy="849.8" r="1.7" fill="#fff" opacity="0.7"/><circle id="wn-sf-f109" cx="132.4" cy="-17.4" r="2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f110" cx="1129.8" cy="979.2" r="2" fill="#fff" opacity="0.4"/><circle id="wn-sf-f111" cx="933.2" cy="391.8" r="2.7" fill="#fff" opacity="0.4"/><circle id="wn-sf-f112" cx="1264.5" cy="781.6" r="2.9" fill="#fff" opacity="0.6"/><circle id="wn-sf-f113" cx="1499.9" cy="77.5" r="2.7" fill="#fff" opacity="0.5"/><circle id="wn-sf-f114" cx="1322.1" cy="-39.7" r="1.7" fill="#fff" opacity="0.8"/><circle id="wn-sf-f115" cx="718.9" cy="1002.4" r="2.7" fill="#fff" opacity="0.5"/><circle id="wn-sf-f116" cx="1263.5" cy="701.8" r="1.7" fill="#fff" opacity="0.7"/><circle id="wn-sf-f117" cx="1777.2" cy="191.4" r="1.8" fill="#fff" opacity="0.8"/><circle id="wn-sf-f118" cx="369.4" cy="-48.6" r="1.5" fill="#fff" opacity="0.5"/><circle id="wn-sf-f119" cx="562.7" cy="832.7" r="2.7" fill="#fff" opacity="0.4"/></g><g id="wn-heavy" opacity=".35"><g filter="url(#wn-nearBlur)"><circle id="wn-sn-f0" cx="1504.5" cy="1005.1" r="6.5" fill="#fff" opacity="0.4"/><circle id="wn-sn-f1" cx="358.5" cy="85.4" r="6.3" fill="#fff" opacity="0.6"/><circle id="wn-sn-f2" cx="851.4" cy="440.8" r="4.5" fill="#fff" opacity="0.6"/><circle id="wn-sn-f3" cx="1" cy="145.2" r="6.1" fill="#fff" opacity="0.8"/><circle id="wn-sn-f4" cx="1131.2" cy="973.2" r="1.9" fill="#fff" opacity="0.8"/><circle id="wn-sn-f5" cx="901.9" cy="1106.4" r="6.1" fill="#fff" opacity="0.8"/><circle id="wn-sn-f6" cx="1383" cy="139.5" r="3.7" fill="#fff" opacity="0.5"/><circle id="wn-sn-f7" cx="1503.9" cy="868.8" r="6.4" fill="#fff" opacity="0.9"/><circle id="wn-sn-f8" cx="1360.2" cy="968.8" r="3.9" fill="#fff" opacity="0.7"/><circle id="wn-sn-f9" cx="640.6" cy="335.7" r="3.8" fill="#fff" opacity="0.5"/><circle id="wn-sn-f10" cx="127" cy="1022.8" r="2.3" fill="#fff" opacity="0.6"/><circle id="wn-sn-f11" cx="355.5" cy="272.1" r="5.1" fill="#fff" opacity="0.4"/><circle id="wn-sn-f12" cx="67.2" cy="627.9" r="5.6" fill="#fff" opacity="0.6"/><circle id="wn-sn-f13" cx="61.7" cy="134.9" r="3.9" fill="#fff" opacity="0.6"/><circle id="wn-sn-f14" cx="432.1" cy="-47.6" r="5.6" fill="#fff" opacity="0.8"/><circle id="wn-sn-f15" cx="1275.1" cy="629.7" r="5.5" fill="#fff" opacity="0.8"/><circle id="wn-sn-f16" cx="1276.7" cy="860.8" r="6.4" fill="#fff" opacity="0.9"/><circle id="wn-sn-f17" cx="600" cy="501.1" r="3.4" fill="#fff" opacity="0.7"/><circle id="wn-sn-f18" cx="1113.9" cy="776.8" r="2.6" fill="#fff" opacity="0.7"/><circle id="wn-sn-f19" cx="994.4" cy="1095.5" r="2.9" fill="#fff" opacity="0.8"/><circle id="wn-sn-f20" cx="563.5" cy="84.7" r="2.8" fill="#fff" opacity="0.7"/><circle id="wn-sn-f21" cx="-139.2" cy="600.8" r="5.7" fill="#fff" opacity="0.5"/><circle id="wn-sn-f22" cx="1505.7" cy="727.8" r="4.9" fill="#fff" opacity="0.8"/><circle id="wn-sn-f23" cx="1682.1" cy="503.7" r="4.9" fill="#fff" opacity="0.4"/><circle id="wn-sn-f24" cx="1674.5" cy="453.4" r="4.4" fill="#fff" opacity="0.5"/><circle id="wn-sn-f25" cx="1550.8" cy="141.3" r="3.8" fill="#fff" opacity="0.6"/><circle id="wn-sn-f26" cx="354.4" cy="493.7" r="3.5" fill="#fff" opacity="0.5"/><circle id="wn-sn-f27" cx="577.6" cy="1082.9" r="5.2" fill="#fff" opacity="0.7"/><circle id="wn-sn-f28" cx="1810.7" cy="982.5" r="4.1" fill="#fff" opacity="0.6"/><circle id="wn-sn-f29" cx="84.1" cy="1084.4" r="3.4" fill="#fff" opacity="0.6"/><circle id="wn-sn-f30" cx="1075.1" cy="419.1" r="5.1" fill="#fff" opacity="0.4"/><circle id="wn-sn-f31" cx="1559.9" cy="134.6" r="5.2" fill="#fff" opacity="0.6"/><circle id="wn-sn-f32" cx="-133.2" cy="984.7" r="6" fill="#fff" opacity="0.4"/><circle id="wn-sn-f33" cx="185.7" cy="-22.8" r="5.6" fill="#fff" opacity="0.5"/><circle id="wn-sn-f34" cx="59.8" cy="638.6" r="6" fill="#fff" opacity="0.5"/><circle id="wn-sn-f35" cx="790.1" cy="2" r="4.9" fill="#fff" opacity="0.9"/><circle id="wn-sn-f36" cx="1258.3" cy="418.4" r="5.9" fill="#fff" opacity="0.6"/><circle id="wn-sn-f37" cx="-62.8" cy="732.6" r="6.1" fill="#fff" opacity="0.5"/><circle id="wn-sn-f38" cx="1240.7" cy="615.4" r="4.5" fill="#fff" opacity="0.4"/><circle id="wn-sn-f39" cx="1282.2" cy="953.2" r="2.1" fill="#fff" opacity="0.5"/></g></g>
+    </svg>
+    <div id="wn-risk" class="ui k-box" style="top:130px;"><div>A SIMPLE WALK = <span style="color:#DC2626;">A RISK</span></div></div>
+    <div id="wn-t1" class="ui tag" style="left:1200px; top:190px;">⊘ NO TREES</div><div id="wn-t2" class="ui tag" style="left:1200px; top:190px;">⊘ NO HILLS</div><div id="wn-t3" class="ui tag" style="left:1200px; top:190px;">⊘ NO LANDMARKS</div>
+    <div id="wn-white" class="ui tag" style="left:940px; top:190px;">WHITE NOTHING IN EVERY DIRECTION</div>
+    <div id="wn-step" class="ui tag" style="left:760px; top:300px;">STEP 1</div>
+    <div id="wn-lost" class="ui" style="left:0; right:0; top:150px; display:flex; justify-content:center;"><div class="ui-warn">⚠ HUT LOST AFTER A FEW STEPS</div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#wn-by-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#wn-by-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#wn-by-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#wn-by-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#wn-by-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#wn-by-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#wn-by-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#wn-by-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#wn-by", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#wn-by-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 0.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 1.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 2.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 3.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 4.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 5.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 6.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 7.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 8.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 9.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 10.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 11.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 12.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 13.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 14.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 15.3);
+    tl.to("#wn-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 16.3);
+    tl.to("#wn-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 17.3);
+    tl.to("#wn-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 1.4);
+    tl.to("#wn-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 1.5);
+    tl.to("#wn-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 4.4);
+    tl.to("#wn-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 4.5);
+    tl.to("#wn-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 7.4);
+    tl.to("#wn-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 7.5);
+    tl.to("#wn-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 10.4);
+    tl.to("#wn-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 10.5);
+    tl.to("#wn-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 13.4);
+    tl.to("#wn-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 13.5);
+    tl.to("#wn-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 16.4);
+    tl.to("#wn-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 16.5);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 0.5);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 3);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 5.5);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 8);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 10.5);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 13);
+    tl.fromTo("#wn-by-puff", { opacity: .75, scale: .4, x: 0, y: 0, svgOrigin: "122 86" }, { opacity: 0, scale: 2.2, x: 20, y: -14, svgOrigin: "122 86", duration: 1.2, ease: "power1.out", immediateRender: false }, 15.5);
+    tl.fromTo("#wn-sf-f0", { x: 0, y: 0 }, { x: 537.6, y: 86.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f1", { x: 0, y: 0 }, { x: 664.7, y: 192.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f2", { x: 0, y: 0 }, { x: 759.4, y: 174.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f3", { x: 0, y: 0 }, { x: 842.1, y: 116.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f4", { x: 0, y: 0 }, { x: 945.3, y: 257.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f5", { x: 0, y: 0 }, { x: 473.5, y: 154, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f6", { x: 0, y: 0 }, { x: 928, y: 215, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f7", { x: 0, y: 0 }, { x: 681.2, y: 275.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f8", { x: 0, y: 0 }, { x: 967.7, y: 211.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f9", { x: 0, y: 0 }, { x: 984.3, y: 82.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f10", { x: 0, y: 0 }, { x: 1074.9, y: 102, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f11", { x: 0, y: 0 }, { x: 895.8, y: 272.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f12", { x: 0, y: 0 }, { x: 926.9, y: 153.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f13", { x: 0, y: 0 }, { x: 515.5, y: 126.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f14", { x: 0, y: 0 }, { x: 701, y: 156.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f15", { x: 0, y: 0 }, { x: 840.4, y: 213.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f16", { x: 0, y: 0 }, { x: 467.7, y: 280, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f17", { x: 0, y: 0 }, { x: 978.8, y: 266.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f18", { x: 0, y: 0 }, { x: 898.4, y: 94.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f19", { x: 0, y: 0 }, { x: 1063.2, y: 248.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f20", { x: 0, y: 0 }, { x: 831.1, y: 100.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f21", { x: 0, y: 0 }, { x: 964.7, y: 75, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f22", { x: 0, y: 0 }, { x: 986, y: 208, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f23", { x: 0, y: 0 }, { x: 548.7, y: 164.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f24", { x: 0, y: 0 }, { x: 662.9, y: 178.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f25", { x: 0, y: 0 }, { x: 985.9, y: 97.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f26", { x: 0, y: 0 }, { x: 1029.3, y: 265.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f27", { x: 0, y: 0 }, { x: 538.6, y: 125.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f28", { x: 0, y: 0 }, { x: 497.7, y: 226.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f29", { x: 0, y: 0 }, { x: 1079.3, y: 271.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f30", { x: 0, y: 0 }, { x: 494.8, y: 102, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f31", { x: 0, y: 0 }, { x: 1006, y: 220.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f32", { x: 0, y: 0 }, { x: 1011.7, y: 125.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f33", { x: 0, y: 0 }, { x: 732.7, y: 221.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f34", { x: 0, y: 0 }, { x: 1050.5, y: 180.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f35", { x: 0, y: 0 }, { x: 890.9, y: 274.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f36", { x: 0, y: 0 }, { x: 481, y: 211.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f37", { x: 0, y: 0 }, { x: 817.2, y: 145.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f38", { x: 0, y: 0 }, { x: 573.4, y: 90.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f39", { x: 0, y: 0 }, { x: 601.1, y: 148.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f40", { x: 0, y: 0 }, { x: 478, y: 284.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f41", { x: 0, y: 0 }, { x: 567.7, y: 241.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f42", { x: 0, y: 0 }, { x: 697.7, y: 100.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f43", { x: 0, y: 0 }, { x: 626.6, y: 81.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f44", { x: 0, y: 0 }, { x: 887.3, y: 200.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f45", { x: 0, y: 0 }, { x: 606.3, y: 136.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f46", { x: 0, y: 0 }, { x: 928.4, y: 78.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f47", { x: 0, y: 0 }, { x: 879.1, y: 138.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f48", { x: 0, y: 0 }, { x: 652.9, y: 248.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f49", { x: 0, y: 0 }, { x: 890.6, y: 141.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f50", { x: 0, y: 0 }, { x: 855.6, y: 193.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f51", { x: 0, y: 0 }, { x: 658.3, y: 219.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f52", { x: 0, y: 0 }, { x: 477.3, y: 220.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f53", { x: 0, y: 0 }, { x: 895.2, y: 256.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f54", { x: 0, y: 0 }, { x: 959.3, y: 103.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f55", { x: 0, y: 0 }, { x: 788.2, y: 113.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f56", { x: 0, y: 0 }, { x: 1009.7, y: 233.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f57", { x: 0, y: 0 }, { x: 1028.3, y: 200.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f58", { x: 0, y: 0 }, { x: 984.8, y: 74.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f59", { x: 0, y: 0 }, { x: 958.7, y: 270.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f60", { x: 0, y: 0 }, { x: 743.2, y: 212, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f61", { x: 0, y: 0 }, { x: 1021.3, y: 259.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f62", { x: 0, y: 0 }, { x: 878, y: 193.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f63", { x: 0, y: 0 }, { x: 573.3, y: 221.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f64", { x: 0, y: 0 }, { x: 566.8, y: 213.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f65", { x: 0, y: 0 }, { x: 694.7, y: 127.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f66", { x: 0, y: 0 }, { x: 761.6, y: 215.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f67", { x: 0, y: 0 }, { x: 479.2, y: 188, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f68", { x: 0, y: 0 }, { x: 966, y: 232.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f69", { x: 0, y: 0 }, { x: 1009.3, y: 271.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f70", { x: 0, y: 0 }, { x: 858.7, y: 197.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f71", { x: 0, y: 0 }, { x: 876.3, y: 220.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f72", { x: 0, y: 0 }, { x: 717.6, y: 268.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f73", { x: 0, y: 0 }, { x: 1028.7, y: 271, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f74", { x: 0, y: 0 }, { x: 890.6, y: 183.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f75", { x: 0, y: 0 }, { x: 679.8, y: 214.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f76", { x: 0, y: 0 }, { x: 541.8, y: 144, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f77", { x: 0, y: 0 }, { x: 515.1, y: 119.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f78", { x: 0, y: 0 }, { x: 642.6, y: 254.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f79", { x: 0, y: 0 }, { x: 669.9, y: 171.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f80", { x: 0, y: 0 }, { x: 693.8, y: 202.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f81", { x: 0, y: 0 }, { x: 1049.3, y: 250.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f82", { x: 0, y: 0 }, { x: 661, y: 112.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f83", { x: 0, y: 0 }, { x: 815.5, y: 198.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f84", { x: 0, y: 0 }, { x: 1046.6, y: 251, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f85", { x: 0, y: 0 }, { x: 929.9, y: 137, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f86", { x: 0, y: 0 }, { x: 580.2, y: 105.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f87", { x: 0, y: 0 }, { x: 784.9, y: 173.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f88", { x: 0, y: 0 }, { x: 896.4, y: 269.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f89", { x: 0, y: 0 }, { x: 667.5, y: 163, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f90", { x: 0, y: 0 }, { x: 685.9, y: 263, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f91", { x: 0, y: 0 }, { x: 738.3, y: 99.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f92", { x: 0, y: 0 }, { x: 485.2, y: 137.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f93", { x: 0, y: 0 }, { x: 863.4, y: 207.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f94", { x: 0, y: 0 }, { x: 648.7, y: 203.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f95", { x: 0, y: 0 }, { x: 1033, y: 159.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f96", { x: 0, y: 0 }, { x: 744.1, y: 110, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f97", { x: 0, y: 0 }, { x: 973.2, y: 247.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f98", { x: 0, y: 0 }, { x: 867.2, y: 103.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f99", { x: 0, y: 0 }, { x: 834.6, y: 228.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f100", { x: 0, y: 0 }, { x: 747.8, y: 131.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f101", { x: 0, y: 0 }, { x: 599.3, y: 138, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f102", { x: 0, y: 0 }, { x: 1015.9, y: 197.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f103", { x: 0, y: 0 }, { x: 1029, y: 247.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f104", { x: 0, y: 0 }, { x: 919.6, y: 106.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f105", { x: 0, y: 0 }, { x: 990.5, y: 124.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f106", { x: 0, y: 0 }, { x: 641.7, y: 90, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f107", { x: 0, y: 0 }, { x: 1065.6, y: 195.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f108", { x: 0, y: 0 }, { x: 766.3, y: 140.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f109", { x: 0, y: 0 }, { x: 710.1, y: 108.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f110", { x: 0, y: 0 }, { x: 1037.2, y: 173.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f111", { x: 0, y: 0 }, { x: 794.8, y: 221.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f112", { x: 0, y: 0 }, { x: 786.2, y: 274, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f113", { x: 0, y: 0 }, { x: 489.6, y: 114, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f114", { x: 0, y: 0 }, { x: 482.7, y: 170.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f115", { x: 0, y: 0 }, { x: 515.4, y: 71.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f116", { x: 0, y: 0 }, { x: 742.8, y: 101.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f117", { x: 0, y: 0 }, { x: 994.3, y: 146.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f118", { x: 0, y: 0 }, { x: 746.7, y: 95.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sf-f119", { x: 0, y: 0 }, { x: 479.7, y: 262.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f0", { x: 0, y: 0 }, { x: 2010.4, y: 1124.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f1", { x: 0, y: 0 }, { x: 2263.3, y: 424, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f2", { x: 0, y: 0 }, { x: 2453.9, y: 357, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f3", { x: 0, y: 0 }, { x: 2584.7, y: 574.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f4", { x: 0, y: 0 }, { x: 3542.2, y: 791.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f5", { x: 0, y: 0 }, { x: 2722.4, y: 956.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f6", { x: 0, y: 0 }, { x: 3282.7, y: 698.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f7", { x: 0, y: 0 }, { x: 1989.9, y: 375.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f8", { x: 0, y: 0 }, { x: 2799.9, y: 343.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f9", { x: 0, y: 0 }, { x: 3015, y: 991.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f10", { x: 0, y: 0 }, { x: 2432.6, y: 671.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f11", { x: 0, y: 0 }, { x: 2068.7, y: 539.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f12", { x: 0, y: 0 }, { x: 2246.1, y: 806.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f13", { x: 0, y: 0 }, { x: 3564.9, y: 649.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f14", { x: 0, y: 0 }, { x: 2516.5, y: 1116.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f15", { x: 0, y: 0 }, { x: 2128.5, y: 729.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f16", { x: 0, y: 0 }, { x: 2469.6, y: 1233.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f17", { x: 0, y: 0 }, { x: 3241, y: 1174, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f18", { x: 0, y: 0 }, { x: 2075.9, y: 1110.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f19", { x: 0, y: 0 }, { x: 3695.9, y: 846.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f20", { x: 0, y: 0 }, { x: 3171.9, y: 336.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f21", { x: 0, y: 0 }, { x: 3556.7, y: 976.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f22", { x: 0, y: 0 }, { x: 2165.4, y: 1170.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f23", { x: 0, y: 0 }, { x: 3001, y: 419.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f24", { x: 0, y: 0 }, { x: 2132.4, y: 453.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f25", { x: 0, y: 0 }, { x: 3359.6, y: 1122.6, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f26", { x: 0, y: 0 }, { x: 2445.6, y: 728.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f27", { x: 0, y: 0 }, { x: 3162.1, y: 344, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f28", { x: 0, y: 0 }, { x: 3590.3, y: 1039.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f29", { x: 0, y: 0 }, { x: 2256, y: 853.5, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f30", { x: 0, y: 0 }, { x: 2146, y: 1141.2, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f31", { x: 0, y: 0 }, { x: 2444.6, y: 519.7, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f32", { x: 0, y: 0 }, { x: 3267.3, y: 418.4, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f33", { x: 0, y: 0 }, { x: 3217.2, y: 416.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f34", { x: 0, y: 0 }, { x: 2577.9, y: 316.8, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f35", { x: 0, y: 0 }, { x: 2968.2, y: 428.1, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f36", { x: 0, y: 0 }, { x: 3512.8, y: 664.3, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f37", { x: 0, y: 0 }, { x: 3410.4, y: 888.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f38", { x: 0, y: 0 }, { x: 1623.8, y: 481.9, duration: 17.8, ease: "none" }, 0);
+    tl.fromTo("#wn-sn-f39", { x: 0, y: 0 }, { x: 2250.2, y: 569.4, duration: 17.8, ease: "none" }, 0);
+    tl.set(["#wn-risk", "#wn-t1", "#wn-t2", "#wn-t3", "#wn-white", "#wn-step", "#wn-lost"], { opacity: 0 }, 0);
+    tl.set("#wn-bpos", { x: 470, y: 660 }, 0);
+    tl.fromTo("#wn-risk", { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .25, ease: "back.out(1.6)", immediateRender: false }, 2.4);
+    tl.to("#wn-risk", { opacity: 0, duration: .2 }, 5.2);
+    // no trees · no hills · no landmarks: ghosts pop, get stamped and blown away
+    tl.fromTo("#wn-trees", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, 6.9);
+    tl.fromTo("#wn-x1", { opacity: 0, scale: 1.5, svgOrigin: "1290 540" }, { opacity: 1, scale: 1, svgOrigin: "1290 540", duration: .15, immediateRender: false }, 7.6);
+    tl.fromTo("#wn-t1", { opacity: 0 }, { opacity: 1, duration: .15, immediateRender: false }, 7.6);
+    tl.to(["#wn-trees", "#wn-x1", "#wn-t1"], { opacity: 0, x: 200, duration: .35, ease: "power2.in" }, 8.2);
+    tl.fromTo("#wn-hills", { opacity: 0 }, { opacity: 1, duration: .15, immediateRender: false }, 8.3);
+    tl.fromTo("#wn-x2", { opacity: 0, scale: 1.5, svgOrigin: "1400 520" }, { opacity: 1, scale: 1, svgOrigin: "1400 520", duration: .15, immediateRender: false }, 8.6);
+    tl.fromTo("#wn-t2", { opacity: 0 }, { opacity: 1, duration: .15, immediateRender: false }, 8.6);
+    tl.to("#wn-hills", { scaleY: .02, svgOrigin: "1350 660", duration: .4, ease: "power2.in" }, 9.0);
+    tl.to(["#wn-hills", "#wn-x2", "#wn-t2"], { opacity: 0, duration: .2 }, 9.4);
+    tl.fromTo("#wn-rose", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, 9.8);
+    tl.fromTo("#wn-t3", { opacity: 0 }, { opacity: 1, duration: .15, immediateRender: false }, 9.9);
+    tl.to("#wn-needle", { rotation: 900, svgOrigin: "1350 460", duration: 3.4, ease: "power1.inOut" }, 9.9);
+    tl.set("#wn-t3", { opacity: 0 }, 11.2);
+    tl.fromTo("#wn-white", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 11.2);
+    tl.to(["#wn-rose", "#wn-white"], { opacity: 0, duration: .3 }, 13.4);
+    // five steps out, and the hut is gone behind the snow
+    tl.to("#wn-bpos", { x: 540, duration: .55, ease: "power1.inOut" }, 13.8);
+    tl.set("#wn-step", { opacity: 1 }, 13.8); tl.call(() => { document.getElementById("wn-step").textContent = "STEP 1"; }, null, 13.8);
+    tl.to("#wn-bpos", { x: 610, duration: .55, ease: "power1.inOut" }, 14.4);
+    tl.set("#wn-step", { opacity: 1 }, 14.4); tl.call(() => { document.getElementById("wn-step").textContent = "STEP 2"; }, null, 14.4);
+    tl.to("#wn-bpos", { x: 680, duration: .55, ease: "power1.inOut" }, 15);
+    tl.set("#wn-step", { opacity: 1 }, 15); tl.call(() => { document.getElementById("wn-step").textContent = "STEP 3"; }, null, 15);
+    tl.to("#wn-bpos", { x: 750, duration: .55, ease: "power1.inOut" }, 15.7);
+    tl.set("#wn-step", { opacity: 1 }, 15.7); tl.call(() => { document.getElementById("wn-step").textContent = "STEP 4"; }, null, 15.7);
+    tl.to("#wn-bpos", { x: 820, duration: .55, ease: "power1.inOut" }, 16.3);
+    tl.set("#wn-step", { opacity: 1 }, 16.3); tl.call(() => { document.getElementById("wn-step").textContent = "STEP 5"; }, null, 16.3);
+    tl.to("#wn-by-legL", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 13.8);
+    tl.to("#wn-by-legR", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 13.8);
+    tl.to("#wn-by-armL", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 13.8);
+    tl.to("#wn-by-armR", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 13.8);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 13.8);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 14);
+    tl.to("#wn-by-legL", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 14.1);
+    tl.to("#wn-by-legR", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 14.1);
+    tl.to("#wn-by-armL", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 14.2);
+    tl.to("#wn-by-armR", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 14.2);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 14.1);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 14.3);
+    tl.to("#wn-by-legL", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 14.4);
+    tl.to("#wn-by-legR", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 14.4);
+    tl.to("#wn-by-armL", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 14.5);
+    tl.to("#wn-by-armR", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 14.5);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 14.4);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 14.6);
+    tl.to("#wn-by-legL", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 14.7);
+    tl.to("#wn-by-legR", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 14.7);
+    tl.to("#wn-by-armL", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 14.8);
+    tl.to("#wn-by-armR", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 14.8);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 14.7);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 14.9);
+    tl.to("#wn-by-legL", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 15);
+    tl.to("#wn-by-legR", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 15);
+    tl.to("#wn-by-armL", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 15.1);
+    tl.to("#wn-by-armR", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 15.1);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 15);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 15.2);
+    tl.to("#wn-by-legL", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 15.4);
+    tl.to("#wn-by-legR", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 15.4);
+    tl.to("#wn-by-armL", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 15.4);
+    tl.to("#wn-by-armR", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 15.4);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 15.4);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 15.5);
+    tl.to("#wn-by-legL", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 15.7);
+    tl.to("#wn-by-legR", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 15.7);
+    tl.to("#wn-by-armL", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 15.7);
+    tl.to("#wn-by-armR", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 15.7);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 15.7);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 15.8);
+    tl.to("#wn-by-legL", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 16);
+    tl.to("#wn-by-legR", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 16);
+    tl.to("#wn-by-armL", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 16);
+    tl.to("#wn-by-armR", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 16);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 16);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 16.1);
+    tl.to("#wn-by-legL", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 16.3);
+    tl.to("#wn-by-legR", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 16.3);
+    tl.to("#wn-by-armL", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 16.3);
+    tl.to("#wn-by-armR", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 16.3);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 16.3);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 16.4);
+    tl.to("#wn-by-legL", { rotation: 16, duration: 0.31, ease: "sine.inOut" }, 16.6);
+    tl.to("#wn-by-legR", { rotation: -16, duration: 0.31, ease: "sine.inOut" }, 16.6);
+    tl.to("#wn-by-armL", { rotation: -9.6, duration: 0.31, ease: "sine.inOut" }, 16.6);
+    tl.to("#wn-by-armR", { rotation: 9.6, duration: 0.31, ease: "sine.inOut" }, 16.6);
+    tl.to("#wn-by", { y: -4, duration: 0.2, ease: "sine.out" }, 16.6);
+    tl.to("#wn-by", { y: 0, duration: 0.2, ease: "sine.in" }, 16.7);
+    tl.to(["#wn-by-legL", "#wn-by-legR", "#wn-by-armL", "#wn-by-armR"], { rotation: 0, duration: 0.25, ease: "power2.out" }, 16.9);
+    tl.to("#wn-heavy", { opacity: 1, duration: 1.5 }, 14.4);
+    tl.to("#wn-fog", { opacity: 1, duration: 1.6 }, 14.8);
+    tl.to("#wn-hut", { opacity: 0, duration: 1.6, ease: "power1.in" }, 15.0);
+    tl.to("#wn-step", { opacity: 0, duration: .2 }, 17.0);
+    tl.fromTo("#wn-lost", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: .18, ease: "power2.in", immediateRender: false }, 15.9);
+    window.__timelines["nothing"] = tl;
+  </script>
+</template>

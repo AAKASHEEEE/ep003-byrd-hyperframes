@@ -1,0 +1,256 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #451A03; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #334155; }
+
+  </style>
+  <div id="root" data-composition-id="mind" data-width="1920" data-height="1080">
+
+    <div id="md-W" style="position:absolute; inset:0; background:#451A03;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="md-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="md-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="md-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="md-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="md-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="md-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <g transform="translate(-10 -40) scale(2.4)"><g id="md-room">
+    <rect width="520" height="320" fill="#5C3A21"/><line x1="0" y1="32" x2="520" y2="32" stroke="#451A03" stroke-width="2"/><line x1="0" y1="64" x2="520" y2="64" stroke="#451A03" stroke-width="2"/><line x1="0" y1="96" x2="520" y2="96" stroke="#451A03" stroke-width="2"/><line x1="0" y1="128" x2="520" y2="128" stroke="#451A03" stroke-width="2"/><line x1="0" y1="160" x2="520" y2="160" stroke="#451A03" stroke-width="2"/><line x1="0" y1="192" x2="520" y2="192" stroke="#451A03" stroke-width="2"/><line x1="0" y1="224" x2="520" y2="224" stroke="#451A03" stroke-width="2"/><line x1="0" y1="256" x2="520" y2="256" stroke="#451A03" stroke-width="2"/><line x1="0" y1="288" x2="520" y2="288" stroke="#451A03" stroke-width="2"/>
+    <rect width="520" height="12" fill="#451A03"/><rect y="314" width="520" height="12" fill="#451A03"/>
+    <g id="md-lampG"><line x1="150" y1="12" x2="150" y2="58" stroke="#1F2937" stroke-width="3"/>
+      <circle id="md-lampglow" cx="150" cy="72" r="70" fill="#F59E0B" opacity=".22" filter="url(#md-bloom)"/>
+      <rect x="140" y="58" width="20" height="26" rx="5" fill="#F59E0B"/><rect x="138" y="56" width="24" height="5" fill="#1F2937"/></g>
+    <rect x="18" y="0" width="6" height="320" fill="#B98A5A"/><rect x="48" y="0" width="6" height="320" fill="#B98A5A"/><rect x="18" y="34" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="74" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="114" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="154" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="194" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="234" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="274" width="36" height="6" rx="2" fill="#B98A5A"/>
+    <rect x="70" y="236" width="132" height="14" fill="#451A03"/><rect x="74" y="250" width="8" height="70" fill="#451A03"/><rect x="190" y="250" width="8" height="70" fill="#451A03"/>
+    <rect x="72" y="214" width="128" height="24" rx="12" fill="#A47148"/><path d="M84 220 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0" fill="none" stroke="#D4A373" stroke-width="2"/>
+    <rect x="76" y="206" width="34" height="14" rx="7" fill="#E7D7BC"/>
+    <rect x="256" y="0" width="12" height="222" fill="#94A3B8"/><rect x="252" y="150" width="20" height="8" fill="#64748B"/>
+    <rect x="230" y="222" width="64" height="9" fill="#111827"/>
+    <rect x="234" y="230" width="56" height="80" rx="6" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <circle id="md-stoveglow" cx="262" cy="262" r="46" fill="#F59E0B" opacity=".35" filter="url(#md-bloom)"/>
+    <rect x="246" y="250" width="32" height="22" rx="3" fill="#F59E0B"/><rect x="238" y="308" width="8" height="12" fill="#0B0F17"/><rect x="278" y="308" width="8" height="12" fill="#0B0F17"/>
+    <rect x="330" y="118" width="124" height="8" fill="#451A03"/>
+    <rect x="344" y="94" width="38" height="24" rx="2" fill="#6B4226"/><path d="M364 94 L364 84 L410 52 Q420 62 416 76 L370 92 Z" fill="#B08D3C"/>
+    <rect x="404" y="100" width="40" height="18" fill="#7F1D1D"/><line x1="408" y1="104" x2="440" y2="104" stroke="#FCA5A5" stroke-width="2"/>
+    <rect x="310" y="250" width="144" height="11" fill="#6B4226"/><rect id="md-tleg" x="316" y="261" width="9" height="59" fill="#6B4226"/><rect x="440" y="261" width="9" height="59" fill="#6B4226"/>
+    <rect x="318" y="240" width="30" height="10" rx="2" fill="#B08D3C"/><line x1="322" y1="236" x2="346" y2="232" stroke="#8A6D2F" stroke-width="4" stroke-linecap="round"/><circle cx="347" cy="231" r="5" fill="#14171F"/>
+    <rect x="356" y="196" width="58" height="54" rx="4" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <rect x="362" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/><rect x="376" y="182" width="9" height="16" rx="4" fill="#FDE68A" opacity=".55"/><rect x="390" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/>
+    <circle cx="372" cy="222" r="10" fill="#052e16"/><circle id="md-dial" cx="372" cy="222" r="10" fill="#22C55E" opacity=".2"/><circle cx="398" cy="224" r="5" fill="#94A3B8"/><circle cx="398" cy="238" r="4" fill="#94A3B8"/>
+    <rect x="420" y="226" width="30" height="24" rx="2" fill="#475569"/><circle cx="430" cy="238" r="7" fill="#E2E8F0"/><line x1="432" y1="238" x2="446" y2="232" stroke="#DC2626" stroke-width="2"/>
+    <rect x="462" y="280" width="52" height="40" rx="4" fill="#475569" stroke="#1F2937" stroke-width="3"/><circle cx="480" cy="300" r="13" fill="#334155" stroke="#1F2937" stroke-width="3"/><rect x="500" y="262" width="7" height="20" fill="#64748B"/>
+  </g><g id="md-sched"><rect x="80" y="80" width="56" height="70" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2"/><circle cx="108" cy="84" r="4" fill="#DC2626"/>
+      <line x1="86" y1="96" x2="130" y2="96" stroke="#94A3B8" stroke-width="2"/><line x1="86" y1="106" x2="130" y2="106" stroke="#94A3B8" stroke-width="2"/><line x1="86" y1="116" x2="130" y2="116" stroke="#94A3B8" stroke-width="2"/><line x1="86" y1="126" x2="130" y2="126" stroke="#94A3B8" stroke-width="2"/><line x1="86" y1="136" x2="130" y2="136" stroke="#94A3B8" stroke-width="2"/></g><g id="md-disc"><ellipse cx="363" cy="92" rx="18" ry="5" fill="#111827"/><line x1="349" y1="92" x2="377" y2="92" stroke="#475569" stroke-width="2"/></g>
+        <g transform="translate(222 113.3) scale(.78)">
+    <g id="md-by">
+      
+      <g id="md-by-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="md-by-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="md-by-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="md-by-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="md-by-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#334155"/>
+         <g clip-path="url(#md-torso)"><g stroke="#2A3646" stroke-width="2"><line x1="70" y1="118" x2="70" y2="196"/><line x1="80" y1="118" x2="80" y2="196"/><line x1="90" y1="118" x2="90" y2="196"/><line x1="100" y1="118" x2="100" y2="196"/><line x1="110" y1="118" x2="110" y2="196"/><line x1="120" y1="118" x2="120" y2="196"/><line x1="130" y1="118" x2="130" y2="196"/></g>
+           <rect x="60" y="184" width="80" height="16" fill="#2A3646"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="78" y="90" width="44" height="18" rx="9" fill="#475569" stroke="#14171F" stroke-width="3"/></g>
+      
+      <g id="md-by-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="md-by-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="md-by-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="md-by-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#md-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#md-glow)"/>
+         </g>
+         <g id="md-by-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="md-by-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="md-by-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="md-by-frost" opacity="0"></g>
+        
+        <g id="md-by-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="md-by-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#md-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <g id="md-by-book" opacity="0"><rect x="68" y="128" width="64" height="40" rx="3" fill="#7F1D1D" stroke="#2B1A0C" stroke-width="3"/><rect x="72" y="131" width="27" height="34" fill="#F8FAFC"/><rect x="101" y="131" width="27" height="34" fill="#F8FAFC"/>
+      <line x1="76" y1="138" x2="95" y2="138" stroke="#94A3B8" stroke-width="2"/><line x1="105" y1="138" x2="124" y2="138" stroke="#94A3B8" stroke-width="2"/><line x1="76" y1="146" x2="95" y2="146" stroke="#94A3B8" stroke-width="2"/><line x1="105" y1="146" x2="124" y2="146" stroke="#94A3B8" stroke-width="2"/><line x1="76" y1="154" x2="95" y2="154" stroke="#94A3B8" stroke-width="2"/><line x1="105" y1="154" x2="124" y2="154" stroke="#94A3B8" stroke-width="2"/></g><circle id="md-by-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g></g>
+      <text id="md-note0" x="950" y="128" font-family="Inter, sans-serif" font-size="54" fill="#F59E0B" opacity="0">♪</text><text id="md-note1" x="980" y="128" font-family="Inter, sans-serif" font-size="54" fill="#F59E0B" opacity="0">♫</text><text id="md-note2" x="1010" y="128" font-family="Inter, sans-serif" font-size="54" fill="#F59E0B" opacity="0">♪</text><text id="md-note3" x="1040" y="128" font-family="Inter, sans-serif" font-size="54" fill="#F59E0B" opacity="0">♫</text>
+    </svg></div>
+    <div id="md-press" style="position:absolute; inset:0; background:radial-gradient(ellipse at 50% 50%, rgba(3,5,8,0) 45%, rgba(3,5,8,.92) 85%);"></div>
+    <div id="md-enemy" class="ui tag" style="left:560px; top:120px;">THE DARKNESS INSIDE: A DIFFERENT ENEMY</div>
+    <div id="md-t1" class="ui tag" style="left:158px; top:344px;">1. SCHEDULE ✓</div><div id="md-t2" class="ui tag" style="left:350px; top:224px;">2. BOOKS ✓</div><div id="md-t3" class="ui tag" style="left:710px; top:8px;">3. PHONOGRAPH ✓</div>
+    <div id="md-flipHd" class="ui k-lab" style="left:460px; width:1000px; top:120px;"><div style="background:rgba(11,16,30,.92); border:2px solid #F59E0B; font-size:30px;">EACH DAY: ITS OWN SUBJECT TO THINK ABOUT</div></div>
+    <div id="md-d0" class="ui" style="left:1150px; top:200px; width:500px; height:110px; border-radius:16px; background:#F8FAFC; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black', sans-serif; font-size:36px; color:#111827; box-shadow:0 12px 30px rgba(0,0,0,.5);">DAY 1 · ONE SUBJECT</div><div id="md-d1" class="ui" style="left:1150px; top:200px; width:500px; height:110px; border-radius:16px; background:#F8FAFC; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black', sans-serif; font-size:36px; color:#111827; box-shadow:0 12px 30px rgba(0,0,0,.5);">DAY 2 · A NEW SUBJECT</div><div id="md-d2" class="ui" style="left:1150px; top:200px; width:500px; height:110px; border-radius:16px; background:#F8FAFC; display:flex; align-items:center; justify-content:center; font-family:'Archivo Black', sans-serif; font-size:36px; color:#111827; box-shadow:0 12px 30px rgba(0,0,0,.5);">DAY 3 · ANOTHER ONE</div>
+    <div id="md-src" class="ui ui-cite" style="left:192px; top:960px;"><b>SOURCE</b>Richard E. Byrd, “Alone” (1938)</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#md-by-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#md-by-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#md-by-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#md-by-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#md-by-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#md-by-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#md-by-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#md-by-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#md-by", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#md-by-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 0.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 1.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 2.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 3.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 4.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 5.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 6.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 7.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 8.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 9.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 10.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 11.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 12.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 13.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 14.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 15.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 16.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 17.3);
+    tl.to("#md-by-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 18.3);
+    tl.to("#md-by-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 19.3);
+    tl.to("#md-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 1.4);
+    tl.to("#md-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 1.5);
+    tl.to("#md-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 4.6);
+    tl.to("#md-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 4.7);
+    tl.to("#md-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 7.8);
+    tl.to("#md-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 7.9);
+    tl.to("#md-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 11);
+    tl.to("#md-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 11.1);
+    tl.to("#md-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 14.2);
+    tl.to("#md-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 14.3);
+    tl.to("#md-by-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 17.4);
+    tl.to("#md-by-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 17.5);
+    tl.set(["#md-enemy", "#md-t1", "#md-t2", "#md-t3", "#md-flipHd", "#md-d0", "#md-d1", "#md-d2", "#md-src"], { opacity: 0 }, 0);
+    // the darkness presses in on the walls
+    tl.fromTo("#md-press", { opacity: .4 }, { opacity: 1, duration: 1.0, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false }, 0.3);
+    tl.fromTo("#md-enemy", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 1.9);
+    tl.to("#md-enemy", { opacity: 0, duration: .25 }, 6.6);
+    tl.to("#md-press", { opacity: .45, duration: .6 }, 4.4);
+    // three defences
+    tl.fromTo("#md-sched", { opacity: .4 }, { opacity: 1, duration: .2, immediateRender: false }, 6.9);
+    tl.fromTo("#md-t1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 6.95);
+    tl.set("#md-by-book", { opacity: 1 }, 8.3);
+    tl.set("#md-by-armL", { rotation: -28 }, 8.3); tl.set("#md-by-armR", { rotation: 28 }, 8.3);
+    tl.fromTo("#md-t2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 8.35);
+    tl.fromTo("#md-t3", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 9.65);
+    tl.to("#md-disc", { scaleX: -1, svgOrigin: "363 92", duration: .3, repeat: 30, yoyo: true, ease: "none" }, 9.7);
+    tl.fromTo("#md-note0", { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: -60, y: -30, duration: 1.4, ease: "sine.out", immediateRender: false }, 9.8); tl.to("#md-note0", { opacity: 0, duration: .6 }, 11.2);
+    tl.fromTo("#md-note1", { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: -100, y: -10, duration: 1.4, ease: "sine.out", immediateRender: false }, 10.3); tl.to("#md-note1", { opacity: 0, duration: .6 }, 11.6);
+    tl.fromTo("#md-note2", { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: -140, y: 10, duration: 1.4, ease: "sine.out", immediateRender: false }, 10.7); tl.to("#md-note2", { opacity: 0, duration: .6 }, 12.1);
+    tl.fromTo("#md-note3", { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: -180, y: 30, duration: 1.4, ease: "sine.out", immediateRender: false }, 11.2); tl.to("#md-note3", { opacity: 0, duration: .6 }, 12.5);
+    // keep the mind steady: one subject a day
+    tl.to(["#md-t1", "#md-t2", "#md-t3"], { opacity: 0, duration: .3 }, 12.0);
+    tl.to("#md-W", { scale: 1.18, transformOrigin: "37% 51.9%", duration: 6.0, ease: "sine.inOut" }, 12.1);
+    tl.fromTo("#md-flipHd", { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .25, ease: "back.out(1.6)", immediateRender: false }, 15.3);
+    tl.fromTo("#md-d0", { opacity: 0, rotationX: -90, transformOrigin: "50% 0%" }, { opacity: 1, rotationX: 0, duration: .3, ease: "power2.out", immediateRender: false }, 15.4); tl.set("#md-d0", { opacity: 0 }, 16.7);
+    tl.fromTo("#md-d1", { opacity: 0, rotationX: -90, transformOrigin: "50% 0%" }, { opacity: 1, rotationX: 0, duration: .3, ease: "power2.out", immediateRender: false }, 16.7); tl.set("#md-d1", { opacity: 0 }, 18);
+    tl.fromTo("#md-d2", { opacity: 0, rotationX: -90, transformOrigin: "50% 0%" }, { opacity: 1, rotationX: 0, duration: .3, ease: "power2.out", immediateRender: false }, 18);
+    tl.fromTo("#md-src", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 16.6);
+    window.__timelines["mind"] = tl;
+  </script>
+</template>

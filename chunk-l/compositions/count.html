@@ -1,0 +1,103 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #0B101E; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #64748B; }
+
+  </style>
+  <div id="root" data-composition-id="count" data-width="1920" data-height="1080">
+
+    <div style="position:absolute; inset:0; 
+    background-color: #0B101E;
+    background-image:
+      linear-gradient(rgba(0,245,212,.13) 2px, transparent 2px), linear-gradient(90deg, rgba(0,245,212,.13) 2px, transparent 2px),
+      linear-gradient(rgba(0,245,212,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,212,.06) 1px, transparent 1px);
+    background-size: 240px 240px, 240px 240px, 60px 60px, 60px 60px;"></div>
+    <div id="ct-h" class="ui" style="left:0; right:0; top:120px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:60px; color:#fff;">COUNT IT UP</div>
+    <div id="ct-c0" class="ui" style="left:99px; top:250px; width:330px; height:600px; border-radius:20px; background:rgba(11,16,30,.95); border:3px solid #334155; overflow:hidden;">
+      <div style="position:absolute; left:24px; top:20px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#64748B;">1</div>
+      <svg width="330" height="260" viewBox="0 0 330 260" style="position:absolute; left:0; top:60px;"><g><path d="M60 110 L165 60 L270 110 L165 160 Z" fill="#B98A5A" stroke="#5C3A21" stroke-width="4"/><path d="M60 110 L60 170 L165 220 L165 160 Z" fill="#8C6A4A" stroke="#5C3A21" stroke-width="4"/><path d="M270 110 L270 170 L165 220 L165 160 Z" fill="#6B4226" stroke="#5C3A21" stroke-width="4"/></g></svg>
+      <div style="position:absolute; left:24px; right:24px; top:360px; text-align:center; white-space:normal; font-family:'Archivo Black', sans-serif; font-size:44px; line-height:1.1; color:#fff;">9 × 13 FT</div>
+      <div style="position:absolute; left:24px; right:24px; top:470px; text-align:center; white-space:normal; font-family:Inter, sans-serif; font-weight:800; font-size:30px; line-height:1.2; color:#94A3B8;">THE HUT</div></div><div id="ct-c1" class="ui" style="left:447px; top:250px; width:330px; height:600px; border-radius:20px; background:rgba(11,16,30,.95); border:3px solid #334155; overflow:hidden;">
+      <div style="position:absolute; left:24px; top:20px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#64748B;">2</div>
+      <svg width="330" height="260" viewBox="0 0 330 260" style="position:absolute; left:0; top:60px;"><g><circle cx="50" cy="140" r="16" fill="#F59E0B"/><circle cx="280" cy="140" r="16" fill="#00F5D4"/><path d="M70 140 L262 140" stroke="#94A3B8" stroke-width="8" stroke-dasharray="18 12"/></g></svg>
+      <div style="position:absolute; left:24px; right:24px; top:360px; text-align:center; white-space:normal; font-family:'Archivo Black', sans-serif; font-size:44px; line-height:1.1; color:#fff;">123 MILES</div>
+      <div style="position:absolute; left:24px; right:24px; top:470px; text-align:center; white-space:normal; font-family:Inter, sans-serif; font-weight:800; font-size:30px; line-height:1.2; color:#94A3B8;">FROM HELP</div></div><div id="ct-c2" class="ui" style="left:795px; top:250px; width:330px; height:600px; border-radius:20px; background:rgba(11,16,30,.95); border:3px solid #334155; overflow:hidden;">
+      <div style="position:absolute; left:24px; top:20px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#64748B;">3</div>
+      <svg width="330" height="260" viewBox="0 0 330 260" style="position:absolute; left:0; top:60px;"><g><circle cx="165" cy="140" r="46" fill="#FACC15" opacity=".35"/><line x1="165" y1="140" x2="239" y2="140" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="217.3" y2="192.3" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="165" y2="214" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="112.7" y2="192.3" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="91" y2="140" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="112.7" y2="87.7" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="165" y2="66" stroke="#FACC15" stroke-width="5" opacity=".35"/><line x1="165" y1="140" x2="217.3" y2="87.7" stroke="#FACC15" stroke-width="5" opacity=".35"/><circle cx="165" cy="140" r="82" fill="none" stroke="#DC2626" stroke-width="10"/><line x1="107" y1="198" x2="223" y2="82" stroke="#DC2626" stroke-width="10"/></g></svg>
+      <div style="position:absolute; left:24px; right:24px; top:360px; text-align:center; white-space:normal; font-family:'Archivo Black', sans-serif; font-size:44px; line-height:1.1; color:#fff;">MONTHS</div>
+      <div style="position:absolute; left:24px; right:24px; top:470px; text-align:center; white-space:normal; font-family:Inter, sans-serif; font-weight:800; font-size:30px; line-height:1.2; color:#94A3B8;">WITHOUT A SUNRISE</div></div><div id="ct-c3" class="ui" style="left:1143px; top:250px; width:330px; height:600px; border-radius:20px; background:rgba(11,16,30,.95); border:3px solid #334155; overflow:hidden;">
+      <div style="position:absolute; left:24px; top:20px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#64748B;">4</div>
+      <svg width="330" height="260" viewBox="0 0 330 260" style="position:absolute; left:0; top:60px;"><g><g><rect x="52" y="110" width="96" height="44" rx="6" fill="#57534E"/><rect x="80" y="86" width="40" height="28" rx="4" fill="#78716C"/><circle cx="74" cy="160" r="12" fill="#1C1917"/><circle cx="128" cy="160" r="14" fill="#1C1917"/><path d="M70 70 l60 60 M130 70 l-60 60" stroke="#DC2626" stroke-width="9" stroke-linecap="round"/></g><g><rect x="182" y="110" width="96" height="44" rx="6" fill="#57534E"/><rect x="210" y="86" width="40" height="28" rx="4" fill="#78716C"/><circle cx="204" cy="160" r="12" fill="#1C1917"/><circle cx="258" cy="160" r="14" fill="#1C1917"/><path d="M200 70 l60 60 M260 70 l-60 60" stroke="#DC2626" stroke-width="9" stroke-linecap="round"/></g></g></svg>
+      <div style="position:absolute; left:24px; right:24px; top:360px; text-align:center; white-space:normal; font-family:'Archivo Black', sans-serif; font-size:44px; line-height:1.1; color:#fff;">2 FAILED</div>
+      <div style="position:absolute; left:24px; right:24px; top:470px; text-align:center; white-space:normal; font-family:Inter, sans-serif; font-weight:800; font-size:30px; line-height:1.2; color:#94A3B8;">RESCUE ATTEMPTS</div></div><div id="ct-c4" class="ui" style="left:1491px; top:250px; width:330px; height:600px; border-radius:20px; background:rgba(11,16,30,.95); border:5px solid #FF7A00; overflow:hidden; box-shadow:0 0 50px rgba(255,122,0,.35);">
+      <div style="position:absolute; left:24px; top:20px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#64748B;">5</div>
+      <svg width="330" height="260" viewBox="0 0 330 260" style="position:absolute; left:0; top:60px;"><g><text id="ct-n" x="165" y="170" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="110" fill="#FF7A00">0</text><text x="165" y="215" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="34" fill="#FDBA74">DAYS</text></g></svg>
+      <div style="position:absolute; left:24px; right:24px; top:360px; text-align:center; white-space:normal; font-family:'Archivo Black', sans-serif; font-size:44px; line-height:1.1; color:#FDBA74;">4+ MONTHS</div>
+      <div style="position:absolute; left:24px; right:24px; top:470px; text-align:center; white-space:normal; font-family:Inter, sans-serif; font-weight:800; font-size:30px; line-height:1.2; color:#94A3B8;">ALONE</div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set(["#ct-h", "#ct-c0", "#ct-c1", "#ct-c2", "#ct-c3", "#ct-c4"], { opacity: 0 }, 0);
+    tl.fromTo("#ct-h", { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .25, ease: "back.out(1.8)", immediateRender: false }, 0.12);
+    tl.fromTo("#ct-c0", { opacity: 0, scaleX: .2, transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, duration: .3, ease: "back.out(1.5)", immediateRender: false }, 1.22);
+    tl.fromTo("#ct-c1", { opacity: 0, scaleX: .2, transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, duration: .3, ease: "back.out(1.5)", immediateRender: false }, 3.7);
+    tl.fromTo("#ct-c2", { opacity: 0, scaleX: .2, transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, duration: .3, ease: "back.out(1.5)", immediateRender: false }, 6.28);
+    tl.fromTo("#ct-c3", { opacity: 0, scaleX: .2, transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, duration: .3, ease: "back.out(1.5)", immediateRender: false }, 8.18);
+    tl.fromTo("#ct-c4", { opacity: 0, scaleX: .2, transformOrigin: "0% 50%" }, { opacity: 1, scaleX: 1, duration: .3, ease: "back.out(1.5)", immediateRender: false }, 10.27);
+    { const o = { v: 0 }; tl.fromTo(o, { v: 0 }, { v: 136, duration: 1.6, ease: "power2.out", onUpdate: () => { const v = o.v; document.getElementById("ct-n").textContent = Math.round(v); } }, 10.4); }
+    tl.to("#ct-c4", { scale: 1.05, duration: .2, yoyo: true, repeat: 1 }, 12.0);
+    window.__timelines["count"] = tl;
+  </script>
+</template>

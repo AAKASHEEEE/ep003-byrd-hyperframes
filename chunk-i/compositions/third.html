@@ -1,0 +1,723 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #0B101E; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #64748B; }
+
+  </style>
+  <div id="root" data-composition-id="third" data-width="1920" data-height="1080">
+
+    <div id="th-B" style="position:absolute; inset:0; 
+    background-color: #0B101E;
+    background-image:
+      linear-gradient(rgba(0,245,212,.13) 2px, transparent 2px), linear-gradient(90deg, rgba(0,245,212,.13) 2px, transparent 2px),
+      linear-gradient(rgba(0,245,212,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,212,.06) 1px, transparent 1px);
+    background-size: 240px 240px, 240px 240px, 60px 60px, 60px 60px;"><svg class="stage" viewBox="0 0 1920 1080"><line x1="282" y1="590" x2="1638" y2="590" stroke="#475569" stroke-width="6" stroke-dasharray="18 14"/></svg>
+  <div id="th-m0" class="e-mono" style="left:192px; top:400px; color:#00F5D4; border-color:#00F5D4;">1</div><div id="th-m1" class="e-mono" style="left:418px; top:400px; color:#00F5D4; border-color:#00F5D4;">2</div><div id="th-m2" class="e-mono" style="left:644px; top:400px; color:#00F5D4; border-color:#00F5D4;">3</div><div id="th-m3" class="e-mono" style="left:870px; top:400px; color:#00F5D4; border-color:#00F5D4;">4</div><div id="th-m4" class="e-mono" style="left:1096px; top:400px; color:#00F5D4; border-color:#00F5D4;">5</div><div id="th-m5" class="e-mono" style="left:1322px; top:400px;">6</div><div id="th-m6" class="e-mono" style="left:1548px; top:400px;">7</div></div>
+    <div id="th-M" style="position:absolute; inset:0;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="th-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="th-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="th-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="th-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="th-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="th-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <rect width="1920" height="1080" fill="#050811"/><circle cx="0" cy="0" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="389" cy="113" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="778" cy="226" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1167" cy="339" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1556" cy="452" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="25" cy="5" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="414" cy="118" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="803" cy="231" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1192" cy="344" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1581" cy="457" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="50" cy="10" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="439" cy="123" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="828" cy="236" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="1217" cy="349" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1606" cy="462" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="75" cy="15" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="464" cy="128" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="853" cy="241" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1242" cy="354" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="1631" cy="467" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="100" cy="20" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="489" cy="133" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="878" cy="246" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="1267" cy="359" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="1656" cy="472" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="125" cy="25" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="514" cy="138" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="903" cy="251" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1292" cy="364" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="1681" cy="477" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="150" cy="30" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="539" cy="143" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="928" cy="256" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1317" cy="369" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1706" cy="482" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="175" cy="35" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="564" cy="148" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="953" cy="261" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1342" cy="374" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1731" cy="487" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="200" cy="40" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="589" cy="153" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="978" cy="266" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="1367" cy="379" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1756" cy="492" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="225" cy="45" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="614" cy="158" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="1003" cy="271" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="1392" cy="384" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="1781" cy="497" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><rect x="0" y="640" width="1920" height="440" fill="#1E293B"/><rect x="0" y="637" width="1920" height="6" fill="#94A3B8"/><circle cx="960" cy="600" r="420" fill="#F59E0B" opacity=".08" filter="url(#th-bloom)"/><g transform="translate(400 322) scale(1.2)">
+    <g id="th-po">
+      
+      <g id="th-po-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-po-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-po-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-po-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#3E2B22" stroke="#14171F" stroke-width="4"/><circle cx="100" cy="64" r="41" fill="#A47148"/>
+         <circle cx="100" cy="64" r="41.5" fill="none" stroke="#A47148" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/><circle cx="100" cy="64" r="37" fill="#8C6A4A"/>
+      <g id="th-po-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#5C4033"/>
+         <g clip-path="url(#th-torso)"><rect x="60" y="184" width="80" height="16" fill="#A47148"/><rect x="60" y="150" width="80" height="7" fill="#2B1A0C"/>
+         <line x1="100" y1="104" x2="100" y2="182" stroke="#3E2B22" stroke-width="3"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="th-po-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-po-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      <g id="th-po-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="th-po-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#th-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#th-glow)"/>
+         </g>
+         <g id="th-po-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="th-po-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="th-po-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="th-po-frost" opacity="0"></g>
+        <rect x="72" y="30" width="56" height="12" rx="6" fill="#64748B" stroke="#14171F" stroke-width="2.5"/><circle cx="88" cy="36" r="5" fill="#94A3B8"/><circle cx="112" cy="36" r="5" fill="#94A3B8"/>
+        
+        <g fill="none" stroke="#E5E7EB" stroke-width="2.6"><circle cx="88" cy="62" r="13"/><circle cx="112" cy="62" r="13"/><path d="M101 60 Q100 57 99 60"/><line x1="75" y1="60" x2="62" y2="56"/><line x1="125" y1="60" x2="138" y2="56"/></g>
+        <g id="th-po-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="th-po-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#th-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      
+    </g></g><g transform="translate(840 322) scale(1.2)">
+    <g id="th-de">
+      
+      <g id="th-de-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-de-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-de-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-de-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#2D3748" stroke="#14171F" stroke-width="4"/><circle cx="100" cy="64" r="41" fill="#A47148"/>
+         <circle cx="100" cy="64" r="41.5" fill="none" stroke="#A47148" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/><circle cx="100" cy="64" r="37" fill="#8C6A4A"/>
+      <g id="th-de-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#4A5568"/>
+         <g clip-path="url(#th-torso)"><rect x="60" y="184" width="80" height="16" fill="#A47148"/><rect x="60" y="150" width="80" height="7" fill="#2B1A0C"/>
+         <line x1="100" y1="104" x2="100" y2="182" stroke="#2D3748" stroke-width="3"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="th-de-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-de-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      <g id="th-de-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="th-de-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#th-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#th-glow)"/>
+         </g>
+         <g id="th-de-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="th-de-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="th-de-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="th-de-frost" opacity="0"></g>
+        <rect x="72" y="30" width="56" height="12" rx="6" fill="#64748B" stroke="#14171F" stroke-width="2.5"/><circle cx="88" cy="36" r="5" fill="#94A3B8"/><circle cx="112" cy="36" r="5" fill="#94A3B8"/>
+        
+        
+        <g id="th-de-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="th-de-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#th-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      
+    </g></g><g transform="translate(1280 322) scale(1.2)">
+    <g id="th-wa">
+      
+      <g id="th-wa-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-wa-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-wa-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-wa-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#4A2108" stroke="#14171F" stroke-width="4"/><circle cx="100" cy="64" r="41" fill="#C9A27E"/>
+         <circle cx="100" cy="64" r="41.5" fill="none" stroke="#C9A27E" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/><circle cx="100" cy="64" r="37" fill="#8C6A4A"/>
+      <g id="th-wa-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#78350F"/>
+         <g clip-path="url(#th-torso)"><rect x="60" y="184" width="80" height="16" fill="#C9A27E"/><rect x="60" y="150" width="80" height="7" fill="#2B1A0C"/>
+         <line x1="100" y1="104" x2="100" y2="182" stroke="#4A2108" stroke-width="3"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="th-wa-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-wa-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      <g id="th-wa-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="th-wa-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#th-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#th-glow)"/>
+         </g>
+         <g id="th-wa-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="th-wa-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="th-wa-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="th-wa-frost" opacity="0"></g>
+        <rect x="72" y="30" width="56" height="12" rx="6" fill="#64748B" stroke="#14171F" stroke-width="2.5"/><circle cx="88" cy="36" r="5" fill="#94A3B8"/><circle cx="112" cy="36" r="5" fill="#94A3B8"/>
+        
+        
+        <g id="th-wa-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="th-wa-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#th-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      
+    </g></g></svg>
+      <div id="th-c0" class="ui" style="left:315px; top:190px; width:410px; padding:14px 0 16px; border-radius:16px; background:rgba(11,16,30,.95); border:3px solid #00F5D4; text-align:center;">
+      <div style="font-family:'Archivo Black', sans-serif; font-size:28px; line-height:1.15; color:#fff;">1. DR. THOMAS POULTER</div><div style="margin-top:6px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#00F5D4;">LEADER & SCIENTIST</div></div><div id="th-c1" class="ui" style="left:755px; top:190px; width:410px; padding:14px 0 16px; border-radius:16px; background:rgba(11,16,30,.95); border:3px solid #00F5D4; text-align:center;">
+      <div style="font-family:'Archivo Black', sans-serif; font-size:28px; line-height:1.15; color:#fff;">2. E. J. "PETE" DEMAS</div><div style="margin-top:6px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#00F5D4;">DRIVER & MECHANIC</div></div><div id="th-c2" class="ui" style="left:1195px; top:190px; width:410px; padding:14px 0 16px; border-radius:16px; background:rgba(11,16,30,.95); border:3px solid #00F5D4; text-align:center;">
+      <div style="font-family:'Archivo Black', sans-serif; font-size:28px; line-height:1.15; color:#fff;">3. AMORY "BUD" WAITE</div><div style="margin-top:6px; font-family:Inter, sans-serif; font-weight:800; font-size:28px; color:#00F5D4;">RADIO OPERATOR</div></div>
+      <div id="th-three" class="ui" style="left:0; right:0; top:860px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:44px; color:#fff;">THE THIRD TRY · THREE MEN</div></div>
+    <div id="th-P" style="position:absolute; inset:0; 
+    background-color: #0B101E;
+    background-image:
+      linear-gradient(rgba(0,245,212,.13) 2px, transparent 2px), linear-gradient(90deg, rgba(0,245,212,.13) 2px, transparent 2px),
+      linear-gradient(rgba(0,245,212,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,212,.06) 1px, transparent 1px);
+    background-size: 240px 240px, 240px 240px, 60px 60px, 60px 60px;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="thP-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="thP-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="thP-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="thP-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="thP-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="thP-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <line x1="120" y1="700" x2="1800" y2="700" stroke="#00F5D4" stroke-width="3" stroke-dasharray="14 10" opacity=".6"/>
+      <g transform="translate(900 700) scale(2)"><g><line x1="-36" y1="-20" x2="6" y2="-20" stroke="#57534E" stroke-width="5"/>
+  <path d="M-250 -4 L-40 -4 Q-26 -4 -26 -18" fill="none" stroke="#A8A29E" stroke-width="5"/><rect x="-240" y="-26" width="200" height="16" rx="3" fill="#78350F"/>
+  <rect x="-232" y="-70" width="56" height="44" rx="3" fill="#B45309" stroke="#451A03" stroke-width="3"/><line x1="-232" y1="-48" x2="-176" y2="-48" stroke="#451A03" stroke-width="2"/><rect x="-168" y="-70" width="56" height="44" rx="3" fill="#B45309" stroke="#451A03" stroke-width="3"/><line x1="-168" y1="-48" x2="-112" y2="-48" stroke="#451A03" stroke-width="2"/><rect x="-104" y="-70" width="56" height="44" rx="3" fill="#B45309" stroke="#451A03" stroke-width="3"/><line x1="-104" y1="-48" x2="-48" y2="-48" stroke="#451A03" stroke-width="2"/></g><g id="th-bp">
+    <path d="M6 -44 Q6 -60 22 -60 L150 -60 Q166 -60 166 -44 L166 -16 Q166 0 150 0 L22 0 Q6 0 6 -16 Z" fill="#1C1917"/>
+    <g id="th-bp-bogies" fill="#57534E" stroke="#1C1917" stroke-width="3"><circle cx="34" cy="-22" r="14"/><circle cx="66" cy="-22" r="14"/><circle cx="98" cy="-22" r="14"/><circle cx="130" cy="-22" r="14"/></g>
+    <circle cx="22" cy="-40" r="12" fill="#44403C"/><circle cx="150" cy="-40" r="12" fill="#44403C"/>
+    <rect x="4" y="-104" width="96" height="44" rx="4" fill="#44403C"/><path d="M4 -104 Q52 -128 100 -104" fill="#57534E"/>
+    <rect x="100" y="-150" width="96" height="90" rx="6" fill="#57534E" stroke="#292524" stroke-width="3"/>
+    <rect x="106" y="-142" width="84" height="38" rx="4" fill="#FDE68A" opacity=".28"/>
+    <rect x="196" y="-112" width="96" height="52" rx="6" fill="#78716C" stroke="#292524" stroke-width="3"/>
+    <rect x="286" y="-114" width="14" height="56" rx="2" fill="#57534E"/><line x1="289" y1="-108" x2="289" y2="-62" stroke="#292524" stroke-width="2"/><line x1="293" y1="-108" x2="293" y2="-62" stroke="#292524" stroke-width="2"/><line x1="297" y1="-108" x2="297" y2="-62" stroke="#292524" stroke-width="2"/>
+    <circle cx="298" cy="-68" r="8" fill="#FDE68A"/>
+    <circle cx="252" cy="-26" r="26" fill="#1C1917"/><circle cx="252" cy="-26" r="9" fill="#78716C"/>
+    <path d="M226 -60 Q252 -76 278 -60" fill="none" stroke="#292524" stroke-width="6"/>
+  </g></g>
+      <g id="th-k1" fill="none" stroke="#00F5D4" stroke-width="4"><path d="M940 726 L940 746 L1188 746 L1188 726"/></g>
+      <g id="th-k2" fill="none" stroke="#00F5D4" stroke-width="4"><circle cx="1404" cy="648" r="60"/></g>
+      <g id="th-k3" fill="none" stroke="#00F5D4" stroke-width="4"><path d="M420 532 L420 500 L820 500 L820 532"/></g></svg>
+      <div class="ui" style="left:0; right:0; top:196px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:56px; color:#fff;">CITROËN HALF-TRACK</div>
+      <div id="th-l1" class="ui tag" style="left:680px; top:770px;">REAR: CATERPILLAR TRACKS</div><div id="th-l2" class="ui tag" style="left:1300px; top:770px;">FRONT: STEERING WHEELS</div><div id="th-l3" class="ui tag" style="left:420px; top:410px;">SLED: FUEL & SUPPLIES</div>
+      <div id="th-cite" class="ui ui-cite" style="left:192px; top:960px;"><b>SOURCE</b>Richard E. Byrd, "Alone" (1938)</div></div>
+    <div id="th-D" style="position:absolute; inset:0; overflow:hidden;"><div id="th-cam" style="position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="thD-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="thD-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="thD-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="thD-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="thD-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="thD-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <rect width="1920" height="1080" fill="#050811"/><circle cx="0" cy="0" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="389" cy="113" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="778" cy="226" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1167" cy="339" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1556" cy="452" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="25" cy="5" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="414" cy="118" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="803" cy="231" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1192" cy="344" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1581" cy="457" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="50" cy="10" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="439" cy="123" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="828" cy="236" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="1217" cy="349" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1606" cy="462" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="75" cy="15" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="464" cy="128" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="853" cy="241" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1242" cy="354" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="1631" cy="467" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="100" cy="20" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="489" cy="133" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="878" cy="246" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="1267" cy="359" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="1656" cy="472" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="125" cy="25" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="514" cy="138" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="903" cy="251" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="1292" cy="364" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="1681" cy="477" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="150" cy="30" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="539" cy="143" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="928" cy="256" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="1317" cy="369" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1706" cy="482" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="175" cy="35" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="564" cy="148" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="953" cy="261" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="1342" cy="374" r="2.2" fill="#E2E8F0" opacity="0.6"/><circle cx="1731" cy="487" r="1" fill="#E2E8F0" opacity="0.75"/><circle cx="200" cy="40" r="1.6" fill="#E2E8F0" opacity="0.3"/><circle cx="589" cy="153" r="2.2" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="978" cy="266" r="1" fill="#E2E8F0" opacity="0.6"/><circle cx="1367" cy="379" r="1.6" fill="#E2E8F0" opacity="0.75"/><circle cx="1756" cy="492" r="2.2" fill="#E2E8F0" opacity="0.3"/><circle cx="225" cy="45" r="1" fill="#E2E8F0" opacity="0.44999999999999996"/><circle cx="614" cy="158" r="1.6" fill="#E2E8F0" opacity="0.6"/><circle cx="1003" cy="271" r="2.2" fill="#E2E8F0" opacity="0.75"/><circle cx="1392" cy="384" r="1" fill="#E2E8F0" opacity="0.3"/><circle cx="1781" cy="497" r="1.6" fill="#E2E8F0" opacity="0.44999999999999996"/><rect x="0" y="640" width="1920" height="440" fill="#1E293B"/><rect x="0" y="637" width="1920" height="6" fill="#94A3B8"/><g id="th-flags"><g><line x1="0" y1="640" x2="0" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M0 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="420" y1="640" x2="420" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M420 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="840" y1="640" x2="840" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M840 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="1260" y1="640" x2="1260" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M1260 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="1680" y1="640" x2="1680" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M1680 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="2100" y1="640" x2="2100" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M2100 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="2520" y1="640" x2="2520" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M2520 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="2940" y1="640" x2="2940" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M2940 550 l34 10 l-34 10 z" fill="#DC2626"/></g><g><line x1="3360" y1="640" x2="3360" y2="550" stroke="#94A3B8" stroke-width="5"/><path d="M3360 550 l34 10 l-34 10 z" fill="#DC2626"/></g></g>
+      <g transform="translate(640 640) scale(1.1)"><g id="th-tr"><g id="th-bob"><g><line x1="-36" y1="-20" x2="6" y2="-20" stroke="#57534E" stroke-width="5"/>
+  <path d="M-250 -4 L-40 -4 Q-26 -4 -26 -18" fill="none" stroke="#A8A29E" stroke-width="5"/><rect x="-240" y="-26" width="200" height="16" rx="3" fill="#78350F"/>
+  <rect x="-232" y="-70" width="56" height="44" rx="3" fill="#B45309" stroke="#451A03" stroke-width="3"/><line x1="-232" y1="-48" x2="-176" y2="-48" stroke="#451A03" stroke-width="2"/><rect x="-168" y="-70" width="56" height="44" rx="3" fill="#B45309" stroke="#451A03" stroke-width="3"/><line x1="-168" y1="-48" x2="-112" y2="-48" stroke="#451A03" stroke-width="2"/><rect x="-104" y="-70" width="56" height="44" rx="3" fill="#B45309" stroke="#451A03" stroke-width="3"/><line x1="-104" y1="-48" x2="-48" y2="-48" stroke="#451A03" stroke-width="2"/></g><g id="th-ht"><defs><linearGradient id="th-ht-cone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FDE68A" stop-opacity=".55"/><stop offset="1" stop-color="#FDE68A" stop-opacity="0"/></linearGradient></defs>
+    <polygon id="th-ht-beam" points="300,-74 820,-190 820,30 300,-62" fill="url(#th-ht-cone)" style="mix-blend-mode:screen"/>
+    <path d="M6 -44 Q6 -60 22 -60 L150 -60 Q166 -60 166 -44 L166 -16 Q166 0 150 0 L22 0 Q6 0 6 -16 Z" fill="#1C1917"/>
+    <g id="th-ht-bogies" fill="#57534E" stroke="#1C1917" stroke-width="3"><circle cx="34" cy="-22" r="14"/><circle cx="66" cy="-22" r="14"/><circle cx="98" cy="-22" r="14"/><circle cx="130" cy="-22" r="14"/></g>
+    <circle cx="22" cy="-40" r="12" fill="#44403C"/><circle cx="150" cy="-40" r="12" fill="#44403C"/>
+    <rect x="4" y="-104" width="96" height="44" rx="4" fill="#44403C"/><path d="M4 -104 Q52 -128 100 -104" fill="#57534E"/>
+    <rect x="100" y="-150" width="96" height="90" rx="6" fill="#57534E" stroke="#292524" stroke-width="3"/>
+    <rect x="106" y="-142" width="84" height="38" rx="4" fill="#FDE68A" opacity=".28"/><g><circle cx="118" cy="-118" r="12" fill="#14171F"/><ellipse cx="114" cy="-120" rx="2.6" ry="3.6" fill="#fff"/><ellipse cx="122" cy="-120" rx="2.6" ry="3.6" fill="#fff"/><rect x="106" y="-131" width="24" height="5" rx="2" fill="#64748B"/></g><g><circle cx="146" cy="-118" r="12" fill="#14171F"/><ellipse cx="142" cy="-120" rx="2.6" ry="3.6" fill="#fff"/><ellipse cx="150" cy="-120" rx="2.6" ry="3.6" fill="#fff"/><rect x="134" y="-131" width="24" height="5" rx="2" fill="#64748B"/></g>
+    <rect x="196" y="-112" width="96" height="52" rx="6" fill="#78716C" stroke="#292524" stroke-width="3"/>
+    <rect x="286" y="-114" width="14" height="56" rx="2" fill="#57534E"/><line x1="289" y1="-108" x2="289" y2="-62" stroke="#292524" stroke-width="2"/><line x1="293" y1="-108" x2="293" y2="-62" stroke="#292524" stroke-width="2"/><line x1="297" y1="-108" x2="297" y2="-62" stroke="#292524" stroke-width="2"/>
+    <circle cx="298" cy="-68" r="8" fill="#FDE68A"/>
+    <circle cx="252" cy="-26" r="26" fill="#1C1917"/><circle cx="252" cy="-26" r="9" fill="#78716C"/>
+    <path d="M226 -60 Q252 -76 278 -60" fill="none" stroke="#292524" stroke-width="6"/>
+  </g><g><path d="M200 -78 L286 -78" fill="none" stroke="#64748B" stroke-width="5" stroke-linecap="round"/>
+      <g id="th-ice" opacity="0"><path d="M206 -78 L280 -78" stroke="#7DD3FC" stroke-width="10" stroke-linecap="round"/><polygon points="216,-90 221,-78 216,-66 211,-78" fill="#E0F2FE"/><polygon points="240,-90 245,-78 240,-66 235,-78" fill="#E0F2FE"/><polygon points="264,-90 269,-78 264,-66 259,-78" fill="#E0F2FE"/></g></g><g transform="translate(246 -78)"><polygon class="th-ch" points="0,-6 5,0 0,6 -5,0" fill="#BAE6FD" opacity="0"/></g><g transform="translate(252 -78)"><polygon class="th-ch" points="0,-6 5,0 0,6 -5,0" fill="#BAE6FD" opacity="0"/></g><g transform="translate(258 -78)"><polygon class="th-ch" points="0,-6 5,0 0,6 -5,0" fill="#BAE6FD" opacity="0"/></g><g transform="translate(264 -78)"><polygon class="th-ch" points="0,-6 5,0 0,6 -5,0" fill="#BAE6FD" opacity="0"/></g><g transform="translate(270 -78)"><polygon class="th-ch" points="0,-6 5,0 0,6 -5,0" fill="#BAE6FD" opacity="0"/></g></g></g>
+        <g id="th-dem" opacity="0"><g transform="translate(181 -145.7) scale(.55)">
+    <g id="th-dk">
+      
+      <g id="th-dk-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-dk-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="th-dk-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-dk-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      
+      <circle cx="100" cy="64" r="47" fill="#2D3748" stroke="#14171F" stroke-width="4"/><circle cx="100" cy="64" r="41" fill="#A47148"/>
+         <circle cx="100" cy="64" r="41.5" fill="none" stroke="#A47148" stroke-width="7" stroke-dasharray="1.5 5" stroke-linecap="round"/><circle cx="100" cy="64" r="37" fill="#8C6A4A"/>
+      <g id="th-dk-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#4A5568"/>
+         <g clip-path="url(#thD-torso)"><rect x="60" y="184" width="80" height="16" fill="#A47148"/><rect x="60" y="150" width="80" height="7" fill="#2B1A0C"/>
+         <line x1="100" y1="104" x2="100" y2="182" stroke="#2D3748" stroke-width="3"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/></g>
+      
+      <g id="th-dk-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="th-dk-foreR">
+          <g><rect x="150" y="174" width="30" height="7" rx="3" fill="#94A3B8" stroke="#334155" stroke-width="1.5"/><path d="M180 171 l8 0 l0 13 l-8 0" fill="none" stroke="#94A3B8" stroke-width="4"/></g>
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="7.5" fill="#3B2414"/>
+          
+        </g>
+      </g>
+      <g id="th-dk-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="th-dk-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#thD-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#thD-glow)"/>
+         </g>
+         <g id="th-dk-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="th-dk-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="th-dk-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="th-dk-frost" opacity="0"></g>
+        <rect x="72" y="30" width="56" height="12" rx="6" fill="#64748B" stroke="#14171F" stroke-width="2.5"/><circle cx="88" cy="36" r="5" fill="#94A3B8"/><circle cx="112" cy="36" r="5" fill="#94A3B8"/>
+        
+        
+        <g id="th-dk-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="th-dk-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#thD-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      
+    </g></g></g></g>
+      <g><circle id="th-sn-f0" cx="1066" cy="789.9" r="4.6" fill="#fff" opacity="0.5"/><circle id="th-sn-f1" cx="1120.2" cy="445.4" r="2.9" fill="#fff" opacity="0.7"/><circle id="th-sn-f2" cx="1472.3" cy="418" r="4.1" fill="#fff" opacity="0.6"/><circle id="th-sn-f3" cx="937.4" cy="954.3" r="4.8" fill="#fff" opacity="0.5"/><circle id="th-sn-f4" cx="-111.9" cy="109.2" r="4.8" fill="#fff" opacity="0.5"/><circle id="th-sn-f5" cx="1444.2" cy="978.8" r="2.2" fill="#fff" opacity="0.6"/><circle id="th-sn-f6" cx="1215.8" cy="605.6" r="3.2" fill="#fff" opacity="0.8"/><circle id="th-sn-f7" cx="1114.5" cy="7.4" r="4.3" fill="#fff" opacity="0.8"/><circle id="th-sn-f8" cx="-62" cy="806.5" r="1.9" fill="#fff" opacity="0.9"/><circle id="th-sn-f9" cx="675.8" cy="248" r="4.1" fill="#fff" opacity="0.8"/><circle id="th-sn-f10" cx="1488.9" cy="377.6" r="2.6" fill="#fff" opacity="0.6"/><circle id="th-sn-f11" cx="-133.4" cy="558.5" r="4.9" fill="#fff" opacity="0.8"/><circle id="th-sn-f12" cx="1545.6" cy="602.1" r="3.1" fill="#fff" opacity="0.5"/><circle id="th-sn-f13" cx="670.7" cy="239.8" r="3.6" fill="#fff" opacity="0.5"/><circle id="th-sn-f14" cx="554.7" cy="990.8" r="2.7" fill="#fff" opacity="0.4"/><circle id="th-sn-f15" cx="279.9" cy="874.8" r="2.1" fill="#fff" opacity="0.5"/><circle id="th-sn-f16" cx="1607.6" cy="-34.4" r="3.1" fill="#fff" opacity="0.7"/><circle id="th-sn-f17" cx="-83.6" cy="465.1" r="3.1" fill="#fff" opacity="0.5"/><circle id="th-sn-f18" cx="267.8" cy="206.5" r="2.8" fill="#fff" opacity="0.9"/><circle id="th-sn-f19" cx="1877.1" cy="664.9" r="3.2" fill="#fff" opacity="0.4"/><circle id="th-sn-f20" cx="747" cy="872.8" r="2.2" fill="#fff" opacity="0.8"/><circle id="th-sn-f21" cx="332.1" cy="656.5" r="4.6" fill="#fff" opacity="0.6"/><circle id="th-sn-f22" cx="1814.7" cy="13.1" r="4.2" fill="#fff" opacity="0.6"/><circle id="th-sn-f23" cx="566.2" cy="678.2" r="2.1" fill="#fff" opacity="0.6"/><circle id="th-sn-f24" cx="1982.8" cy="656.3" r="4.8" fill="#fff" opacity="0.8"/><circle id="th-sn-f25" cx="531.1" cy="933.4" r="2.9" fill="#fff" opacity="0.6"/><circle id="th-sn-f26" cx="871.1" cy="1005.5" r="2.5" fill="#fff" opacity="0.7"/><circle id="th-sn-f27" cx="1084.4" cy="457.6" r="4" fill="#fff" opacity="0.8"/><circle id="th-sn-f28" cx="1206.4" cy="846.3" r="2.5" fill="#fff" opacity="0.8"/><circle id="th-sn-f29" cx="7.9" cy="1109.7" r="3.5" fill="#fff" opacity="0.5"/><circle id="th-sn-f30" cx="1353.5" cy="5.7" r="3.3" fill="#fff" opacity="0.7"/><circle id="th-sn-f31" cx="1459" cy="530.9" r="2.4" fill="#fff" opacity="0.6"/><circle id="th-sn-f32" cx="1772.1" cy="733.6" r="2.3" fill="#fff" opacity="0.7"/><circle id="th-sn-f33" cx="1481.4" cy="392.6" r="2" fill="#fff" opacity="0.7"/><circle id="th-sn-f34" cx="993" cy="-36" r="4.2" fill="#fff" opacity="0.5"/><circle id="th-sn-f35" cx="884.6" cy="897.8" r="4.9" fill="#fff" opacity="0.4"/><circle id="th-sn-f36" cx="63.4" cy="613" r="2.1" fill="#fff" opacity="0.4"/><circle id="th-sn-f37" cx="1949.7" cy="249.6" r="2.6" fill="#fff" opacity="0.5"/><circle id="th-sn-f38" cx="979.5" cy="694.9" r="4.4" fill="#fff" opacity="0.4"/><circle id="th-sn-f39" cx="1209.8" cy="438.5" r="4.8" fill="#fff" opacity="0.6"/><circle id="th-sn-f40" cx="1265.2" cy="914.3" r="2.3" fill="#fff" opacity="0.8"/><circle id="th-sn-f41" cx="1138.8" cy="457" r="2.9" fill="#fff" opacity="0.6"/><circle id="th-sn-f42" cx="1371.6" cy="940.9" r="1.8" fill="#fff" opacity="0.7"/><circle id="th-sn-f43" cx="1939.5" cy="43.9" r="2.2" fill="#fff" opacity="0.7"/><circle id="th-sn-f44" cx="1615.4" cy="56.2" r="4.5" fill="#fff" opacity="0.6"/><circle id="th-sn-f45" cx="1904.7" cy="141.6" r="4.7" fill="#fff" opacity="0.6"/><circle id="th-sn-f46" cx="1846.6" cy="258.9" r="3.3" fill="#fff" opacity="0.6"/><circle id="th-sn-f47" cx="521.4" cy="122.7" r="3.6" fill="#fff" opacity="0.6"/><circle id="th-sn-f48" cx="1144.8" cy="306.2" r="3.5" fill="#fff" opacity="0.5"/><circle id="th-sn-f49" cx="771.7" cy="90.4" r="4.5" fill="#fff" opacity="0.4"/><circle id="th-sn-f50" cx="1618.2" cy="595.9" r="4.5" fill="#fff" opacity="0.5"/><circle id="th-sn-f51" cx="1543.7" cy="-42.1" r="4.6" fill="#fff" opacity="0.5"/><circle id="th-sn-f52" cx="2004.8" cy="992.9" r="2.2" fill="#fff" opacity="0.4"/><circle id="th-sn-f53" cx="217.7" cy="747.7" r="2.2" fill="#fff" opacity="0.8"/><circle id="th-sn-f54" cx="1317.1" cy="1064" r="2.1" fill="#fff" opacity="0.8"/><circle id="th-sn-f55" cx="170.8" cy="895.4" r="4.2" fill="#fff" opacity="0.7"/><circle id="th-sn-f56" cx="938.7" cy="489" r="3.2" fill="#fff" opacity="0.4"/><circle id="th-sn-f57" cx="1786.6" cy="1022.6" r="4.2" fill="#fff" opacity="0.9"/><circle id="th-sn-f58" cx="1338.8" cy="235.5" r="4.2" fill="#fff" opacity="0.5"/><circle id="th-sn-f59" cx="615.6" cy="529.7" r="2.5" fill="#fff" opacity="0.8"/><circle id="th-sn-f60" cx="1411.7" cy="635.3" r="2.5" fill="#fff" opacity="0.4"/><circle id="th-sn-f61" cx="205.2" cy="562.4" r="2.8" fill="#fff" opacity="0.7"/><circle id="th-sn-f62" cx="459.6" cy="1092.9" r="3.5" fill="#fff" opacity="0.7"/><circle id="th-sn-f63" cx="1424.7" cy="22.7" r="4.2" fill="#fff" opacity="0.8"/><circle id="th-sn-f64" cx="436.8" cy="565" r="2.5" fill="#fff" opacity="0.4"/><circle id="th-sn-f65" cx="1263.7" cy="727.4" r="4.3" fill="#fff" opacity="0.5"/><circle id="th-sn-f66" cx="321.3" cy="901.7" r="1.9" fill="#fff" opacity="0.7"/><circle id="th-sn-f67" cx="1258.3" cy="225.9" r="3.3" fill="#fff" opacity="0.5"/><circle id="th-sn-f68" cx="181.7" cy="1084" r="1.7" fill="#fff" opacity="0.8"/><circle id="th-sn-f69" cx="581" cy="229.1" r="4.4" fill="#fff" opacity="0.6"/></g></svg></div>
+      <div id="th-nav" class="ui tag" style="left:192px; top:196px;">NAVIGATING BY COMPASS + THE OLD TRAIL FLAGS</div><div id="th-south" class="ui tag" style="left:192px; top:266px;">CREEPING SOUTH THROUGH THE POLAR NIGHT</div>
+      <div id="th-chip" class="ui tag" style="left:192px; top:336px;">STOPPING AGAIN AND AGAIN: CHIPPING ICE OUT OF THE FUEL LINE</div></div>
+    <div id="th-dock" class="ui k-dock"><span class="n">PART 6</span>LIGHTS IN THE DARK</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#th-po-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#th-po-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#th-po-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#th-po-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#th-po-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#th-po-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#th-po-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#th-po-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#th-po", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#th-de-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#th-de-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#th-de-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#th-de-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#th-de-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#th-de-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#th-de-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#th-de-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#th-de", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#th-wa-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#th-wa-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#th-wa-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#th-wa-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#th-wa-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#th-wa-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#th-wa-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#th-wa-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#th-wa", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#th-dk-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#th-dk-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#th-dk-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#th-dk-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#th-dk-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#th-dk-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#th-dk-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#th-dk", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#th-po-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#th-po-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 3.6);
+    tl.to("#th-po-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 4.6);
+    tl.to("#th-po-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 5.6);
+    tl.to("#th-po-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 6.6);
+    tl.to("#th-po-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 7.6);
+    tl.to("#th-po-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 8.6);
+    tl.to("#th-po-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 9.6);
+    tl.to("#th-po-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 10.6);
+    tl.to("#th-po-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 11.6);
+    tl.to("#th-po-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 12.6);
+    tl.to("#th-po-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 13.6);
+    tl.to("#th-po-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 14.6);
+    tl.to("#th-po-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 4.7);
+    tl.to("#th-po-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 4.8);
+    tl.to("#th-po-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 7.8);
+    tl.to("#th-po-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 7.9);
+    tl.to("#th-po-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 10.9);
+    tl.to("#th-po-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 11);
+    tl.to("#th-po-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 14);
+    tl.to("#th-po-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 14.1);
+    tl.set("#th-de-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#th-de-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 3.8);
+    tl.to("#th-de-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 4.8);
+    tl.to("#th-de-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 5.8);
+    tl.to("#th-de-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 6.8);
+    tl.to("#th-de-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 7.8);
+    tl.to("#th-de-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 8.8);
+    tl.to("#th-de-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 9.8);
+    tl.to("#th-de-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 10.8);
+    tl.to("#th-de-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 11.8);
+    tl.to("#th-de-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 12.8);
+    tl.to("#th-de-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 13.8);
+    tl.to("#th-de-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 14.8);
+    tl.to("#th-de-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 4.9);
+    tl.to("#th-de-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 5);
+    tl.to("#th-de-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 7.6);
+    tl.to("#th-de-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 7.7);
+    tl.to("#th-de-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 10.3);
+    tl.to("#th-de-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 10.4);
+    tl.to("#th-de-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 13);
+    tl.to("#th-de-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 13.1);
+    tl.set("#th-wa-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#th-wa-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 4);
+    tl.to("#th-wa-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 5);
+    tl.to("#th-wa-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 6);
+    tl.to("#th-wa-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 7);
+    tl.to("#th-wa-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 8);
+    tl.to("#th-wa-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 9);
+    tl.to("#th-wa-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 10);
+    tl.to("#th-wa-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 11);
+    tl.to("#th-wa-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 12);
+    tl.to("#th-wa-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 13);
+    tl.to("#th-wa-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 14);
+    tl.to("#th-wa-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 15);
+    tl.to("#th-wa-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 5.1);
+    tl.to("#th-wa-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 5.2);
+    tl.to("#th-wa-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 8);
+    tl.to("#th-wa-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 8.1);
+    tl.to("#th-wa-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 10.9);
+    tl.to("#th-wa-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 11);
+    tl.to("#th-wa-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 13.8);
+    tl.to("#th-wa-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 13.9);
+    tl.set(["#th-M", "#th-P", "#th-D", "#th-dock", "#th-c0", "#th-c1", "#th-c2", "#th-three", "#th-l1", "#th-l2", "#th-l3", "#th-k1", "#th-k2", "#th-k3", "#th-cite", "#th-nav", "#th-south", "#th-chip"], { opacity: 0 }, 0);
+    // Part six: card 6 lights and docks
+    tl.to("#th-m5", { color: "#00F5D4", borderColor: "#00F5D4", boxShadow: "0 0 40px #00F5D4", duration: .15 }, 0.2);
+    tl.to("#th-m5", { scale: 1.25, duration: .25, ease: "back.out(2)" }, 0.35);
+    tl.to("#th-m5", { x: -1382, y: -330, scale: .25, opacity: 0, duration: .45, ease: "power3.in" }, 1.05);
+    tl.fromTo("#th-dock", { opacity: 0, scale: .6, x: -20 }, { opacity: 1, scale: 1.08, x: 0, duration: .17, ease: "power2.out", immediateRender: false }, 1.48);
+    tl.to("#th-dock", { scale: 1, duration: .1 }, 1.65);
+    // the three men
+    tl.set("#th-M", { opacity: 1 }, 3.6); tl.set("#th-B", { opacity: 0 }, 3.6);
+    tl.fromTo("#th-three", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 5.0);
+    tl.fromTo("#th-c0", { opacity: 0, scale: .6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: .25, ease: "back.out(1.7)", immediateRender: false }, 6.8);
+    tl.fromTo("#th-c1", { opacity: 0, scale: .6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: .25, ease: "back.out(1.7)", immediateRender: false }, 11.35);
+    tl.fromTo("#th-c2", { opacity: 0, scale: .6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: .25, ease: "back.out(1.7)", immediateRender: false }, 13);
+    tl.to("#th-po-armR", { rotation: -40, duration: .3, yoyo: true, repeat: 1 }, 6.9);
+    tl.to("#th-de-armR", { rotation: -40, duration: .3, yoyo: true, repeat: 1 }, 11.4);
+    tl.to("#th-wa-armR", { rotation: -40, duration: .3, yoyo: true, repeat: 1 }, 13.05);
+    // the machine
+    tl.set("#th-P", { opacity: 1 }, 15.6); tl.set("#th-M", { opacity: 0 }, 15.6);
+    tl.fromTo("#th-k1", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, 18.1);
+    tl.fromTo("#th-l1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 18.15);
+    tl.fromTo("#th-k2", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, 19.4);
+    tl.fromTo("#th-l2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 19.45);
+    tl.fromTo("#th-k3", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, 20.9);
+    tl.fromTo("#th-l3", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 20.95);
+    tl.fromTo("#th-cite", { opacity: 0 }, { opacity: 1, duration: .3, immediateRender: false }, 21.2);
+    // the night drive: flags slide past, one headlight cone
+    tl.set("#th-D", { opacity: 1 }, 23.2); tl.set("#th-P", { opacity: 0 }, 23.2);
+    tl.fromTo("#th-sn-f0", { x: 0, y: 0 }, { x: -1086.3, y: 116.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f1", { x: 0, y: 0 }, { x: -931, y: 345.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f2", { x: 0, y: 0 }, { x: -859.3, y: 364.5, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f3", { x: 0, y: 0 }, { x: -1002.1, y: 400.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f4", { x: 0, y: 0 }, { x: -1132.7, y: 309.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f5", { x: 0, y: 0 }, { x: -662.7, y: 359.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f6", { x: 0, y: 0 }, { x: -627.3, y: 169.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f7", { x: 0, y: 0 }, { x: -737.9, y: 275.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f8", { x: 0, y: 0 }, { x: -1179.2, y: 369.8, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f9", { x: 0, y: 0 }, { x: -1212, y: 154.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f10", { x: 0, y: 0 }, { x: -1086.7, y: 391.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f11", { x: 0, y: 0 }, { x: -1200.6, y: 145, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f12", { x: 0, y: 0 }, { x: -703.4, y: 341.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f13", { x: 0, y: 0 }, { x: -1154.2, y: 190.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f14", { x: 0, y: 0 }, { x: -1083.5, y: 371.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f15", { x: 0, y: 0 }, { x: -1164.9, y: 169.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f16", { x: 0, y: 0 }, { x: -763.4, y: 248.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f17", { x: 0, y: 0 }, { x: -824.5, y: 112.8, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f18", { x: 0, y: 0 }, { x: -800.2, y: 257.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f19", { x: 0, y: 0 }, { x: -627.8, y: 191.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f20", { x: 0, y: 0 }, { x: -684.1, y: 189.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f21", { x: 0, y: 0 }, { x: -1237.5, y: 217.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f22", { x: 0, y: 0 }, { x: -1281.1, y: 104.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f23", { x: 0, y: 0 }, { x: -1212.7, y: 175.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f24", { x: 0, y: 0 }, { x: -718.5, y: 390.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f25", { x: 0, y: 0 }, { x: -1215.5, y: 343.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f26", { x: 0, y: 0 }, { x: -1156.1, y: 234.9, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f27", { x: 0, y: 0 }, { x: -1062.7, y: 339.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f28", { x: 0, y: 0 }, { x: -1085.2, y: 106.9, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f29", { x: 0, y: 0 }, { x: -1033.5, y: 409.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f30", { x: 0, y: 0 }, { x: -944.7, y: 404.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f31", { x: 0, y: 0 }, { x: -1259.7, y: 184.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f32", { x: 0, y: 0 }, { x: -1211.7, y: 175.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f33", { x: 0, y: 0 }, { x: -725.5, y: 319.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f34", { x: 0, y: 0 }, { x: -594, y: 272.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f35", { x: 0, y: 0 }, { x: -772.5, y: 371.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f36", { x: 0, y: 0 }, { x: -712.1, y: 317.8, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f37", { x: 0, y: 0 }, { x: -811.8, y: 181.5, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f38", { x: 0, y: 0 }, { x: -867.9, y: 321.8, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f39", { x: 0, y: 0 }, { x: -1226, y: 262.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f40", { x: 0, y: 0 }, { x: -923.7, y: 247.2, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f41", { x: 0, y: 0 }, { x: -666.2, y: 397.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f42", { x: 0, y: 0 }, { x: -802.2, y: 313.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f43", { x: 0, y: 0 }, { x: -776.3, y: 121.5, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f44", { x: 0, y: 0 }, { x: -633.4, y: 332.4, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f45", { x: 0, y: 0 }, { x: -902.4, y: 117.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f46", { x: 0, y: 0 }, { x: -902.3, y: 397.5, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f47", { x: 0, y: 0 }, { x: -1245.5, y: 104.8, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f48", { x: 0, y: 0 }, { x: -1195.2, y: 342.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f49", { x: 0, y: 0 }, { x: -774.8, y: 261, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f50", { x: 0, y: 0 }, { x: -926.3, y: 287, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f51", { x: 0, y: 0 }, { x: -656.6, y: 231.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f52", { x: 0, y: 0 }, { x: -1069.1, y: 382.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f53", { x: 0, y: 0 }, { x: -1280.5, y: 352.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f54", { x: 0, y: 0 }, { x: -622.1, y: 103.5, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f55", { x: 0, y: 0 }, { x: -1238.8, y: 183.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f56", { x: 0, y: 0 }, { x: -1106.8, y: 130.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f57", { x: 0, y: 0 }, { x: -884.7, y: 118, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f58", { x: 0, y: 0 }, { x: -901.5, y: 174.9, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f59", { x: 0, y: 0 }, { x: -1055.4, y: 214.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f60", { x: 0, y: 0 }, { x: -1248.1, y: 370.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f61", { x: 0, y: 0 }, { x: -809.5, y: 303.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f62", { x: 0, y: 0 }, { x: -1250.1, y: 391.5, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f63", { x: 0, y: 0 }, { x: -1214.2, y: 296, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f64", { x: 0, y: 0 }, { x: -649, y: 290.3, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f65", { x: 0, y: 0 }, { x: -788.1, y: 250.1, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f66", { x: 0, y: 0 }, { x: -562.4, y: 358.8, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f67", { x: 0, y: 0 }, { x: -701.5, y: 219.6, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f68", { x: 0, y: 0 }, { x: -802.2, y: 352.7, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-sn-f69", { x: 0, y: 0 }, { x: -1116, y: 148, duration: 11, ease: "none" }, 23.2);
+    tl.fromTo("#th-flags", { x: 1800 }, { x: 400, duration: 5.9, ease: "none", immediateRender: false }, 23.2);
+    tl.to("#th-flags", { x: 160, duration: 1.0, ease: "power2.out" }, 29.1);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 23.2);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 23.4);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 23.6);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 23.8);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 24);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 24.3);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 24.5);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 24.7);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 24.9);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 25.1);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 25.3);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 25.5);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 25.7);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 25.9);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 26.1);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 26.4);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 26.6);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 26.8);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 27);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 27.2);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 27.4);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 27.6);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 27.8);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 28);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 28.2);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 28.5);
+    tl.to("#th-bob", { y: -2.5, duration: .1, ease: "none" }, 28.7);
+    tl.to("#th-bob", { y: 0, duration: .1, ease: "none" }, 28.9);
+    tl.fromTo("#th-nav", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 23.3);
+    tl.fromTo("#th-south", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 26.9);
+    // stop: ice in the fuel line; Demas kneels at the hood and chips it out
+    tl.to("#th-ice", { opacity: 1, duration: .3 }, 29.3);
+    tl.set("#th-dem", { opacity: 1 }, 30.0);
+    tl.set("#th-dk", { rotation: 14, svgOrigin: "100 265" }, 30.0);
+    tl.set("#th-dk-armR", { rotation: -100 }, 30.0);
+    tl.set("#th-cam", { scale: 1, x: 0, y: 0, transformOrigin: "0 0" }, 0);
+    tl.to("#th-cam", { scale: 2.2, x: -1053, y: -678.6, duration: .9, ease: "power2.inOut" }, 29.2);
+    tl.to("#th-cam", { scale: 1, x: 0, y: 0, duration: .7, ease: "power2.inOut" }, 32.9);
+    tl.to("#th-dk-foreR", { rotation: -24, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 30.2);
+    tl.to("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 30.4);
+    tl.to("#th-dk-foreR", { rotation: -24, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 30.6);
+    tl.to("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 30.9);
+    tl.to("#th-dk-foreR", { rotation: -24, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 31.1);
+    tl.to("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 31.3);
+    tl.to("#th-dk-foreR", { rotation: -24, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 31.5);
+    tl.to("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 31.7);
+    tl.to("#th-dk-foreR", { rotation: -24, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 32);
+    tl.to("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 32.2);
+    tl.to("#th-dk-foreR", { rotation: -24, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 32.4);
+    tl.to("#th-dk-foreR", { rotation: 0, svgOrigin: "142 147", duration: .11, ease: "power1.in" }, 32.6);
+    tl.fromTo(".th-ch", { opacity: 0, x: 0, y: 0 }, { opacity: 1, x: (i) => [-18, 10, -6, 16, -12][i], y: -30, duration: .4, stagger: .35, immediateRender: false }, 30.4);
+    tl.to("#th-ice", { opacity: 0, duration: 1.6 }, 30.6);
+    tl.fromTo("#th-chip", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .25, immediateRender: false }, 29.2);
+    tl.to(".th-ch", { opacity: 0, duration: .3 }, 32.4);
+    // and on again
+    tl.set("#th-dem", { opacity: 0 }, 33.0);
+    tl.to("#th-flags", { x: -60, duration: 0.8, ease: "power1.in" }, 32.9);
+    window.__timelines["third"] = tl;
+  </script>
+</template>

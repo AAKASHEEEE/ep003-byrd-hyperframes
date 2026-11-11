@@ -1,0 +1,386 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #000; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #334155; }
+
+  </style>
+  <div id="root" data-composition-id="floor" data-width="1920" data-height="1080">
+
+    <div id="fl-W" style="position:absolute; inset:0; background:#451A03;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="fl-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="fl-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="fl-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="fl-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="fl-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="fl-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath></defs>
+      <g transform="translate(388 188) scale(2.2)"><g id="fl-room">
+    <rect width="520" height="320" fill="#5C3A21"/><line x1="0" y1="32" x2="520" y2="32" stroke="#451A03" stroke-width="2"/><line x1="0" y1="64" x2="520" y2="64" stroke="#451A03" stroke-width="2"/><line x1="0" y1="96" x2="520" y2="96" stroke="#451A03" stroke-width="2"/><line x1="0" y1="128" x2="520" y2="128" stroke="#451A03" stroke-width="2"/><line x1="0" y1="160" x2="520" y2="160" stroke="#451A03" stroke-width="2"/><line x1="0" y1="192" x2="520" y2="192" stroke="#451A03" stroke-width="2"/><line x1="0" y1="224" x2="520" y2="224" stroke="#451A03" stroke-width="2"/><line x1="0" y1="256" x2="520" y2="256" stroke="#451A03" stroke-width="2"/><line x1="0" y1="288" x2="520" y2="288" stroke="#451A03" stroke-width="2"/>
+    <rect width="520" height="12" fill="#451A03"/><rect y="314" width="520" height="12" fill="#451A03"/>
+    <g id="fl-lampG"><line x1="150" y1="12" x2="150" y2="58" stroke="#1F2937" stroke-width="3"/>
+      <circle id="fl-lampglow" cx="150" cy="72" r="70" fill="#F59E0B" opacity=".22" filter="url(#fl-bloom)"/>
+      <rect x="140" y="58" width="20" height="26" rx="5" fill="#F59E0B"/><rect x="138" y="56" width="24" height="5" fill="#1F2937"/></g>
+    <rect x="18" y="0" width="6" height="320" fill="#B98A5A"/><rect x="48" y="0" width="6" height="320" fill="#B98A5A"/><rect x="18" y="34" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="74" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="114" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="154" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="194" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="234" width="36" height="6" rx="2" fill="#B98A5A"/><rect x="18" y="274" width="36" height="6" rx="2" fill="#B98A5A"/>
+    <rect x="70" y="236" width="132" height="14" fill="#451A03"/><rect x="74" y="250" width="8" height="70" fill="#451A03"/><rect x="190" y="250" width="8" height="70" fill="#451A03"/>
+    <rect x="72" y="214" width="128" height="24" rx="12" fill="#A47148"/><path d="M84 220 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0 q6 -5 12 0" fill="none" stroke="#D4A373" stroke-width="2"/>
+    <rect x="76" y="206" width="34" height="14" rx="7" fill="#E7D7BC"/>
+    <rect x="256" y="0" width="12" height="222" fill="#94A3B8"/><rect x="252" y="150" width="20" height="8" fill="#64748B"/>
+    <rect x="230" y="222" width="64" height="9" fill="#111827"/>
+    <rect x="234" y="230" width="56" height="80" rx="6" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <circle id="fl-stoveglow" cx="262" cy="262" r="46" fill="#F59E0B" opacity=".35" filter="url(#fl-bloom)"/>
+    <rect x="246" y="250" width="32" height="22" rx="3" fill="#F59E0B"/><rect x="238" y="308" width="8" height="12" fill="#0B0F17"/><rect x="278" y="308" width="8" height="12" fill="#0B0F17"/>
+    <rect x="330" y="118" width="124" height="8" fill="#451A03"/>
+    <rect x="344" y="94" width="38" height="24" rx="2" fill="#6B4226"/><path d="M364 94 L364 84 L410 52 Q420 62 416 76 L370 92 Z" fill="#B08D3C"/>
+    <rect x="404" y="100" width="40" height="18" fill="#7F1D1D"/><line x1="408" y1="104" x2="440" y2="104" stroke="#FCA5A5" stroke-width="2"/>
+    <rect x="310" y="250" width="144" height="11" fill="#6B4226"/><rect id="fl-tleg" x="316" y="261" width="9" height="59" fill="#6B4226"/><rect x="440" y="261" width="9" height="59" fill="#6B4226"/>
+    <rect x="318" y="240" width="30" height="10" rx="2" fill="#B08D3C"/><line x1="322" y1="236" x2="346" y2="232" stroke="#8A6D2F" stroke-width="4" stroke-linecap="round"/><circle cx="347" cy="231" r="5" fill="#14171F"/>
+    <rect x="356" y="196" width="58" height="54" rx="4" fill="#1F2937" stroke="#0B0F17" stroke-width="3"/>
+    <rect x="362" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/><rect x="376" y="182" width="9" height="16" rx="4" fill="#FDE68A" opacity=".55"/><rect x="390" y="184" width="9" height="14" rx="4" fill="#FDE68A" opacity=".55"/>
+    <circle cx="372" cy="222" r="10" fill="#052e16"/><circle id="fl-dial" cx="372" cy="222" r="10" fill="#22C55E" opacity=".2"/><circle cx="398" cy="224" r="5" fill="#94A3B8"/><circle cx="398" cy="238" r="4" fill="#94A3B8"/>
+    <rect x="420" y="226" width="30" height="24" rx="2" fill="#475569"/><circle cx="430" cy="238" r="7" fill="#E2E8F0"/><line x1="432" y1="238" x2="446" y2="232" stroke="#DC2626" stroke-width="2"/>
+    <rect x="462" y="280" width="52" height="40" rx="4" fill="#475569" stroke="#1F2937" stroke-width="3"/><circle cx="480" cy="300" r="13" fill="#334155" stroke="#1F2937" stroke-width="3"/><rect x="500" y="262" width="7" height="20" fill="#64748B"/>
+  </g><g id="fl-gen"><rect x="462" y="280" width="52" height="40" rx="4" fill="#475569" stroke="#1F2937" stroke-width="3"/><circle cx="480" cy="300" r="13" fill="#334155" stroke="#1F2937" stroke-width="3"/>
+  <rect x="500" y="262" width="7" height="20" fill="#64748B"/><g id="fl-sw"><rect x="498" y="290" width="6" height="16" rx="2" fill="#DC2626"/></g></g>
+        <g id="fl-haze" opacity=".7"><circle class="fl-hz" cx="200" cy="120" r="60" fill="#7E22CE" opacity=".45" filter="url(#fl-soft)"/><circle class="fl-hz" cx="297" cy="173" r="80" fill="#64748B" opacity=".45" filter="url(#fl-soft)"/><circle class="fl-hz" cx="394" cy="226" r="100" fill="#7E22CE" opacity=".45" filter="url(#fl-soft)"/><circle class="fl-hz" cx="491" cy="279" r="60" fill="#64748B" opacity=".45" filter="url(#fl-soft)"/><circle class="fl-hz" cx="288" cy="172" r="80" fill="#7E22CE" opacity=".45" filter="url(#fl-soft)"/><circle class="fl-hz" cx="385" cy="225" r="100" fill="#64748B" opacity=".45" filter="url(#fl-soft)"/></g><g id="fl-crawl"><g transform="translate(262 288.8) rotate(90) scale(0.78) translate(-100 -265)">
+    <g id="fl-by">
+      
+      <g id="fl-by-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="fl-by-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="fl-by-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="fl-by-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="fl-by-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#334155"/>
+         <g clip-path="url(#fl-torso)"><g stroke="#2A3646" stroke-width="2"><line x1="70" y1="118" x2="70" y2="196"/><line x1="80" y1="118" x2="80" y2="196"/><line x1="90" y1="118" x2="90" y2="196"/><line x1="100" y1="118" x2="100" y2="196"/><line x1="110" y1="118" x2="110" y2="196"/><line x1="120" y1="118" x2="120" y2="196"/><line x1="130" y1="118" x2="130" y2="196"/></g>
+           <rect x="60" y="184" width="80" height="16" fill="#2A3646"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="78" y="90" width="44" height="18" rx="9" fill="#475569" stroke="#14171F" stroke-width="3"/></g>
+      
+      <g id="fl-by-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="fl-by-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="fl-by-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="fl-by-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#fl-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#fl-glow)"/>
+         </g>
+         <g id="fl-by-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="fl-by-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="fl-by-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="fl-by-frost" opacity="0"></g>
+        
+        <g id="fl-by-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="fl-by-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#fl-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="fl-by-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g></g><g id="fl-bunk" opacity="0"><g transform="translate(200 222) rotate(-90) scale(.52) translate(-100 -265)">
+    <g id="fl-b2">
+      
+      <g id="fl-b2-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="fl-b2-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="fl-b2-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="fl-b2-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="fl-b2-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#334155"/>
+         <g clip-path="url(#fl-torso)"><g stroke="#2A3646" stroke-width="2"><line x1="70" y1="118" x2="70" y2="196"/><line x1="80" y1="118" x2="80" y2="196"/><line x1="90" y1="118" x2="90" y2="196"/><line x1="100" y1="118" x2="100" y2="196"/><line x1="110" y1="118" x2="110" y2="196"/><line x1="120" y1="118" x2="120" y2="196"/><line x1="130" y1="118" x2="130" y2="196"/></g>
+           <rect x="60" y="184" width="80" height="16" fill="#2A3646"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="78" y="90" width="44" height="18" rx="9" fill="#475569" stroke="#14171F" stroke-width="3"/></g>
+      
+      <g id="fl-b2-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="fl-b2-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="fl-b2-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="fl-b2-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#fl-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#fl-glow)"/>
+         </g>
+         <g id="fl-b2-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="fl-b2-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="fl-b2-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="fl-b2-frost" opacity="0"></g>
+        
+        <g id="fl-b2-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="fl-b2-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#fl-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="fl-b2-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g>
+      <rect x="106" y="204" width="96" height="34" rx="14" fill="#A47148" stroke="#8C6A4A" stroke-width="2"/><path d="M114 210 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0" fill="none" stroke="#D4A373" stroke-width="2"/></g></g>
+    </svg></div>
+    <div id="fl-lidT" style="position:absolute; left:0; top:0; width:1920px; height:540px; background:#000;"></div>
+    <div id="fl-lidB" style="position:absolute; left:0; top:540px; width:1920px; height:540px; background:#000;"></div>
+    <div id="fl-off" class="ui tag" style="left:1356px; top:707.2px;">GENERATOR: OFF</div>
+    <div id="fl-weak" class="ui" style="left:192px; top:108px;"><div class="ui-pill" style="position:relative;"><div class="dot"></div><span>TOO WEAK TO STAND</span></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#fl-by-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#fl-by-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#fl-by-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#fl-by-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#fl-by-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#fl-by-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#fl-by-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#fl-by-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#fl-by", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#fl-b2-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#fl-b2-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#fl-b2-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#fl-b2-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#fl-b2-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#fl-b2-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#fl-b2-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#fl-b2-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#fl-b2", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set(["#fl-off", "#fl-weak"], { opacity: 0 }, 0);
+    tl.set("#fl-by-lids", { scaleY: .6 }, 0.02); tl.set("#fl-b2-lids", { scaleY: .5 }, 0.02);
+    // eyelids open (blink twice)
+    tl.to("#fl-lidT", { y: -380, duration: .35, ease: "power2.out" }, 0.1); tl.to("#fl-lidB", { y: 380, duration: .35, ease: "power2.out" }, 0.1);
+    tl.to("#fl-lidT", { y: -200, duration: .15 }, 0.5); tl.to("#fl-lidB", { y: 200, duration: .15 }, 0.5);
+    tl.to("#fl-lidT", { y: -560, duration: .3 }, 0.7); tl.to("#fl-lidB", { y: 560, duration: .3 }, 0.7);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 0);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 0.2);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 0.4);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 0.7);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 0.9);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 1.1);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 1.3);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 1.5);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 1.8);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 2);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 2.2);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 2.4);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 2.6);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 2.9);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 3.1);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 3.3);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 3.5);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 3.7);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 4);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 4.2);
+    tl.to("#fl-gen", { x: -0.8, duration: .08, ease: "none" }, 4.4);
+    tl.to("#fl-gen", { x: 0.8, duration: .08, ease: "none" }, 4.6);
+    // he came to right beside the engine: drags himself the last few inches and reaches for the switch
+    tl.to("#fl-crawl", { rotation: -28, svgOrigin: "262 288.8", duration: .8, ease: "power2.out" }, 1.9);
+    tl.to("#fl-crawl", { x: 8, duration: .5, ease: "power1.inOut" }, 2.8); tl.to("#fl-crawl", { x: 16, duration: .5, ease: "power1.inOut" }, 3.5);
+    tl.to("#fl-by-armL", { rotation: -50, duration: .4, ease: "sine.inOut" }, 1.9);
+    tl.to("#fl-by-armL", { rotation: -70, duration: .4, ease: "sine.inOut" }, 2.5);
+    tl.to("#fl-by-armL", { rotation: -50, duration: .4, ease: "sine.inOut" }, 3.1);
+    tl.to("#fl-by-armL", { rotation: -70, duration: .4, ease: "sine.inOut" }, 3.7);
+    tl.to("#fl-by-armR", { rotation: -150, duration: .5, ease: "power2.out" }, 3.9); tl.to("#fl-by-foreR", { rotation: -30, duration: .5 }, 3.9);
+    // the switch flips OFF, the engine stops
+    tl.to("#fl-sw", { rotation: 90, svgOrigin: "501 298", duration: .12 }, 4.9);
+    tl.fromTo("#fl-off", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .22, immediateRender: false }, 4.95);
+    tl.to("#fl-haze", { opacity: .35, duration: 4.0 }, 5.0);
+    // then into the sleeping bag
+    tl.to("#fl-off", { opacity: 0, duration: .2 }, 5.7);
+    tl.to(["#fl-by-armR", "#fl-by-foreR", "#fl-by-armL"], { rotation: 0, duration: .3 }, 5.6); tl.to("#fl-crawl", { rotation: 0, svgOrigin: "262 288.8", duration: .4 }, 5.6);
+    tl.to("#fl-crawl", { x: -60, duration: 0.9, ease: "power1.inOut" }, 5.9);
+    tl.set("#fl-crawl", { opacity: 0 }, 6.7); tl.set("#fl-bunk", { opacity: 1 }, 6.7);
+    tl.to("#fl-b2", { x: 0.7, duration: 0.05, ease: "none" }, 6.8);
+    tl.to("#fl-b2", { x: 0.5, duration: 0.05, ease: "none" }, 6.9);
+    tl.to("#fl-b2", { x: 0.9, duration: 0.05, ease: "none" }, 6.9);
+    tl.to("#fl-b2", { x: 0.4, duration: 0.05, ease: "none" }, 7);
+    tl.to("#fl-b2", { x: 1.1, duration: 0.05, ease: "none" }, 7);
+    tl.to("#fl-b2", { x: 0.5, duration: 0.05, ease: "none" }, 7);
+    tl.to("#fl-b2", { x: 0.1, duration: 0.05, ease: "none" }, 7.1);
+    tl.to("#fl-b2", { x: 0.8, duration: 0.05, ease: "none" }, 7.1);
+    tl.to("#fl-b2", { x: -1.3, duration: 0.05, ease: "none" }, 7.2);
+    tl.to("#fl-b2", { x: 1.2, duration: 0.05, ease: "none" }, 7.2);
+    tl.to("#fl-b2", { x: 1.3, duration: 0.05, ease: "none" }, 7.3);
+    tl.to("#fl-b2", { x: -1.5, duration: 0.05, ease: "none" }, 7.3);
+    tl.to("#fl-b2", { x: -0.6, duration: 0.05, ease: "none" }, 7.4);
+    tl.to("#fl-b2", { x: 1.1, duration: 0.05, ease: "none" }, 7.4);
+    tl.to("#fl-b2", { x: 0.2, duration: 0.05, ease: "none" }, 7.5);
+    tl.to("#fl-b2", { x: 1.4, duration: 0.05, ease: "none" }, 7.5);
+    tl.to("#fl-b2", { x: 0.4, duration: 0.05, ease: "none" }, 7.6);
+    tl.to("#fl-b2", { x: -1, duration: 0.05, ease: "none" }, 7.6);
+    tl.to("#fl-b2", { x: 0, duration: 0.05, ease: "none" }, 7.7);
+    tl.to("#fl-b2", { x: 1.1, duration: 0.05, ease: "none" }, 7.7);
+    tl.to("#fl-b2", { x: 1.3, duration: 0.05, ease: "none" }, 7.8);
+    tl.to("#fl-b2", { x: 1.2, duration: 0.05, ease: "none" }, 7.8);
+    tl.to("#fl-b2", { x: -0.1, duration: 0.05, ease: "none" }, 7.9);
+    tl.to("#fl-b2", { x: -1.4, duration: 0.05, ease: "none" }, 7.9);
+    tl.to("#fl-b2", { x: -1.1, duration: 0.05, ease: "none" }, 8);
+    tl.to("#fl-b2", { x: -1.3, duration: 0.05, ease: "none" }, 8);
+    tl.to("#fl-b2", { x: -0.8, duration: 0.05, ease: "none" }, 8.1);
+    tl.to("#fl-b2", { x: 0.9, duration: 0.05, ease: "none" }, 8.1);
+    tl.to("#fl-b2", { x: 1.3, duration: 0.05, ease: "none" }, 8.2);
+    tl.to("#fl-b2", { x: -0.8, duration: 0.05, ease: "none" }, 8.2);
+    tl.to("#fl-b2", { x: -0.7, duration: 0.05, ease: "none" }, 8.3);
+    tl.to("#fl-b2", { x: -0.6, duration: 0.05, ease: "none" }, 8.4);
+    tl.to("#fl-b2", { x: -0.4, duration: 0.05, ease: "none" }, 8.4);
+    tl.to("#fl-b2", { x: 1, duration: 0.05, ease: "none" }, 8.5);
+    tl.to("#fl-b2", { x: 0.3, duration: 0.05, ease: "none" }, 8.5);
+    tl.to("#fl-b2", { x: -0.1, duration: 0.05, ease: "none" }, 8.6);
+    tl.to("#fl-b2", { x: -0.6, duration: 0.05, ease: "none" }, 8.6);
+    tl.to("#fl-b2", { x: 0.5, duration: 0.05, ease: "none" }, 8.7);
+    tl.to("#fl-b2", { x: 0.4, duration: 0.05, ease: "none" }, 8.7);
+    tl.to("#fl-b2", { x: -0.5, duration: 0.05, ease: "none" }, 8.8);
+    tl.to("#fl-b2", { x: 1.1, duration: 0.05, ease: "none" }, 8.8);
+    tl.to("#fl-b2", { x: -0.4, duration: 0.05, ease: "none" }, 8.9);
+    tl.to("#fl-b2", { x: 1.4, duration: 0.05, ease: "none" }, 8.9);
+    tl.to("#fl-b2", { x: -1.1, duration: 0.05, ease: "none" }, 9);
+    tl.to("#fl-b2", { x: -1.1, duration: 0.05, ease: "none" }, 9);
+    tl.to("#fl-b2", { x: 1.3, duration: 0.05, ease: "none" }, 9.1);
+    tl.to("#fl-b2", { x: -0.7, duration: 0.05, ease: "none" }, 9.1);
+    tl.to("#fl-b2", { x: -1.5, duration: 0.05, ease: "none" }, 9.2);
+    tl.to("#fl-b2", { x: -0.7, duration: 0.05, ease: "none" }, 9.2);
+    tl.to("#fl-b2", { x: -0.8, duration: 0.05, ease: "none" }, 9.3);
+    tl.to("#fl-b2", { x: 0, duration: 0.05, ease: "none" }, 9.3);
+    tl.to("#fl-b2", { x: -0.4, duration: 0.05, ease: "none" }, 9.4);
+    tl.to("#fl-b2", { x: -0.5, duration: 0.05, ease: "none" }, 9.4);
+    tl.to("#fl-b2", { x: -0.7, duration: 0.05, ease: "none" }, 9.5);
+    tl.to("#fl-b2", { x: -0.6, duration: 0.05, ease: "none" }, 9.5);
+    tl.to("#fl-b2", { x: -1.1, duration: 0.05, ease: "none" }, 9.6);
+    tl.to("#fl-b2", { x: 0, duration: 0.05, ease: "none" }, 9.6);
+    tl.to("#fl-b2", { x: 1.1, duration: 0.05, ease: "none" }, 9.7);
+    tl.to("#fl-b2", { x: -1.2, duration: 0.05, ease: "none" }, 9.7);
+    tl.to("#fl-b2", { x: -0.7, duration: 0.05, ease: "none" }, 9.8);
+    tl.to("#fl-b2", { x: -1.4, duration: 0.05, ease: "none" }, 9.8);
+    tl.to("#fl-b2", { x: 0.8, duration: 0.05, ease: "none" }, 9.9);
+    tl.to("#fl-b2", { x: -1.4, duration: 0.05, ease: "none" }, 9.9);
+    tl.to("#fl-b2", { x: -0.8, duration: 0.05, ease: "none" }, 10);
+    tl.to("#fl-b2", { x: 0, duration: 0.1 }, 10);
+    tl.fromTo("#fl-weak", { opacity: 0, scale: .6, x: -20 }, { opacity: 1, scale: 1, x: 0, duration: .25, ease: "back.out(1.6)", immediateRender: false }, 8.1);
+    window.__timelines["floor"] = tl;
+  </script>
+</template>

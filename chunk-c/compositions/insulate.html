@@ -1,0 +1,487 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #0B101E; }
+    #root svg.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    
+  .ui { position: absolute; font-family: Inter, sans-serif; color: #F8FAFC; white-space: nowrap; }
+  .ui-pill { display: flex; align-items: center; gap: 18px; height: 80px; padding: 0 34px 0 28px;
+    border-radius: 40px; background: rgba(17,24,39,.9); border: 2px solid #F59E0B;
+    font-weight: 800; font-size: 30px; letter-spacing: .08em; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+  .ui-pill .num { font-family: "Archivo Black", sans-serif; font-size: 44px; letter-spacing: 0; color: #fff; }
+  .ui-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #00F5D4; box-shadow: 0 0 16px #00F5D4; }
+  .ui-badge { width: 340px; border-radius: 18px; overflow: hidden; background: rgba(17,24,39,.95);
+    box-shadow: 0 14px 44px rgba(0,0,0,.5); text-align: center; }
+  .ui-badge .hd { background: #DC2626; color: #fff; font-weight: 800; font-size: 30px; letter-spacing: .16em; padding: 12px 0 10px; }
+  .ui-badge .bd { color: #fff; font-family: "Archivo Black", sans-serif; font-size: 56px; padding: 14px 0 18px; }
+  .ui-cite { display: flex; align-items: center; gap: 16px; height: 60px; padding: 0 30px; border-radius: 30px;
+    background: rgba(17,24,39,.9); border: 2px solid #334155; font-size: 28px; color: #CBD5E1; }
+  .ui-cite b { color: #F59E0B; letter-spacing: .14em; font-size: 28px; font-weight: 800; }
+  .ui-tag { display: flex; align-items: center; height: 60px; padding: 0 26px; border-radius: 12px;
+    background: rgba(17,24,39,.9); font-weight: 800; font-size: 30px; letter-spacing: .1em; }
+  .ui-title { font-family: "Archivo Black", sans-serif; color: #fff; letter-spacing: .01em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+  .ui-warn { display: flex; align-items: center; gap: 18px; height: 84px; padding: 0 38px; border-radius: 42px;
+    background: #DC2626; color: #fff; font-weight: 800; font-size: 36px; letter-spacing: .08em;
+    box-shadow: 0 0 0 4px rgba(220,38,38,.35), 0 14px 40px rgba(0,0,0,.5); }
+
+    
+  .tag { position: absolute; display: flex; align-items: center; height: 60px; padding: 0 22px 0 16px; border-radius: 10px;
+    background: rgba(17,24,39,.92); border-left: 8px solid #FF7A00; font-family: Inter, sans-serif; font-weight: 800;
+    font-size: 30px; letter-spacing: .08em; color: #F8FAFC; white-space: nowrap; }
+  .nt { position: absolute; width: 420px; padding: 10px 0 12px; border-radius: 12px; background: rgba(17,24,39,.94); border-top: 6px solid #FF7A00;
+    text-align: center; font-family: "Archivo Black", sans-serif; font-size: 28px; color: #fff; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+  .nt small { display: block; font-family: Inter, sans-serif; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #00F5D4; }
+  .k-card { position: absolute; left: 860px; top: 300px; width: 200px; height: 480px; border-radius: 22px; background: #111A2E; border: 4px solid #00F5D4;
+    box-shadow: 0 0 40px #00F5D4; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 160px; color: #00F5D4; }
+  .k-dock { position: absolute; left: 192px; top: 108px; display: flex; align-items: center; gap: 14px; height: 66px; padding: 0 26px 0 12px; border-radius: 14px;
+    background: rgba(17,24,39,.94); border-left: 10px solid #FF7A00; font-family: "Archivo Black", sans-serif; font-size: 32px; color: #fff; white-space: nowrap; }
+  .k-dock .n { padding: 2px 12px; border-radius: 8px; background: #DC2626; }
+  .k-box { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+  .k-box > div { padding: 22px 46px; border-radius: 18px; background: rgba(11,16,30,.94); border: 2px solid #334155;
+    font-family: "Archivo Black", sans-serif; font-size: 54px; color: #fff; text-align: center; line-height: 1.15; }
+  .k-lab { position: absolute; display: flex; justify-content: center; }
+  .k-lab > div { padding: 14px 30px; border-radius: 40px; font-family: "Archivo Black", sans-serif; font-size: 34px; color: #fff; white-space: nowrap; }
+  .k-ok { background: #15803D; } .k-bad { background: #991B1B; } .k-ice { background: #075985; }
+  .e-card { position: absolute; width: 560px; height: 400px; border-radius: 22px; background: rgba(11,16,30,.95); border: 5px solid #475569;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); font-family: "Archivo Black", sans-serif; color: #fff; text-align: center; }
+  .e-card .k { margin-top: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .16em; color: #94A3B8; }
+  .e-card .t { margin-top: 10px; font-size: 52px; line-height: 1.1; }
+  .e-card .w { position: absolute; left: 0; right: 0; bottom: 30px; font-family: Inter, sans-serif; font-weight: 800; font-size: 30px; letter-spacing: .06em; }
+  .e-stamp { position: absolute; display: flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 16px; border: 6px solid; font-family: "Archivo Black", sans-serif;
+    font-size: 54px; letter-spacing: .02em; background: rgba(11,16,30,.9); white-space: nowrap; }
+  .e-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo Black", sans-serif; color: #fff; }
+  .e-sus { position: absolute; width: 380px; height: 500px; border-radius: 22px; background: #111A2E; border: 4px solid #334155; overflow: hidden; }
+  .e-sus .n { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 40px; color: #fff; }
+  .e-mono { position: absolute; width: 180px; height: 380px; border-radius: 18px; background: #111A2E; border: 4px solid #334155;
+    display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 110px; color: #334155; }
+
+  </style>
+  <div id="root" data-composition-id="insulate" data-width="1920" data-height="1080">
+
+    <div style="position:absolute; inset:0; 
+    background-color: #0B101E;
+    background-image:
+      linear-gradient(rgba(0,245,212,.13) 2px, transparent 2px), linear-gradient(90deg, rgba(0,245,212,.13) 2px, transparent 2px),
+      linear-gradient(rgba(0,245,212,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,212,.06) 1px, transparent 1px);
+    background-size: 240px 240px, 240px 240px, 60px 60px, 60px 60px;"></div>
+    <div id="ins-lens" style="position:absolute; left:0; top:0; width:1920px; height:1080px;"><svg class="stage" viewBox="0 0 1920 1080"><defs>
+    <filter id="ins-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ins-glowBig" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ins-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="ins-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="25"/></filter>
+    <linearGradient id="ins-parka" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FF8C24"/><stop offset=".55" stop-color="#FF7A00"/><stop offset="1" stop-color="#E85D04"/>
+    </linearGradient>
+    <clipPath id="ins-torso"><rect x="60" y="98" width="80" height="100" rx="28"/></clipPath>
+      <clipPath id="ins-lc"><circle cx="960" cy="660" r="250"/></clipPath></defs>
+      <circle cx="960" cy="660" r="258" fill="none" stroke="#00F5D4" stroke-width="8"/>
+      <g clip-path="url(#ins-lc)"><rect x="700" y="400" width="520" height="520" fill="#E2E8F0"/>
+        <g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="706" y1="440" x2="774" y2="440"/><line x1="723" y1="411" x2="757" y2="469"/><line x1="723" y1="469" x2="757" y2="411"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="843" y1="529" x2="911" y2="529"/><line x1="860" y1="500" x2="894" y2="558"/><line x1="860" y1="558" x2="894" y2="500"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="980" y1="618" x2="1048" y2="618"/><line x1="997" y1="589" x2="1031" y2="647"/><line x1="997" y1="647" x2="1031" y2="589"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="1117" y1="707" x2="1185" y2="707"/><line x1="1134" y1="678" x2="1168" y2="736"/><line x1="1134" y1="736" x2="1168" y2="678"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="814" y1="796" x2="882" y2="796"/><line x1="831" y1="767" x2="865" y2="825"/><line x1="831" y1="825" x2="865" y2="767"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="951" y1="445" x2="1019" y2="445"/><line x1="968" y1="416" x2="1002" y2="474"/><line x1="968" y1="474" x2="1002" y2="416"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="1088" y1="534" x2="1156" y2="534"/><line x1="1105" y1="505" x2="1139" y2="563"/><line x1="1105" y1="563" x2="1139" y2="505"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="785" y1="623" x2="853" y2="623"/><line x1="802" y1="594" x2="836" y2="652"/><line x1="802" y1="652" x2="836" y2="594"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="922" y1="712" x2="990" y2="712"/><line x1="939" y1="683" x2="973" y2="741"/><line x1="939" y1="741" x2="973" y2="683"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="1059" y1="801" x2="1127" y2="801"/><line x1="1076" y1="772" x2="1110" y2="830"/><line x1="1076" y1="830" x2="1110" y2="772"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="756" y1="450" x2="824" y2="450"/><line x1="773" y1="421" x2="807" y2="479"/><line x1="773" y1="479" x2="807" y2="421"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="893" y1="539" x2="961" y2="539"/><line x1="910" y1="510" x2="944" y2="568"/><line x1="910" y1="568" x2="944" y2="510"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="1030" y1="628" x2="1098" y2="628"/><line x1="1047" y1="599" x2="1081" y2="657"/><line x1="1047" y1="657" x2="1081" y2="599"/></g><g stroke="#94A3B8" stroke-width="5" stroke-linecap="round"><line x1="727" y1="717" x2="795" y2="717"/><line x1="744" y1="688" x2="778" y2="746"/><line x1="744" y1="746" x2="778" y2="688"/></g>
+        <g id="ins-air"><circle cx="760" cy="470" r="12" fill="#7DD3FC" opacity=".55"/><circle cx="873" cy="621" r="18" fill="#7DD3FC" opacity=".55"/><circle cx="986" cy="772" r="24" fill="#7DD3FC" opacity=".55"/><circle cx="1099" cy="543" r="12" fill="#7DD3FC" opacity=".55"/><circle cx="812" cy="694" r="18" fill="#7DD3FC" opacity=".55"/><circle cx="925" cy="845" r="24" fill="#7DD3FC" opacity=".55"/><circle cx="1038" cy="616" r="12" fill="#7DD3FC" opacity=".55"/><circle cx="1151" cy="767" r="18" fill="#7DD3FC" opacity=".55"/><circle cx="864" cy="538" r="24" fill="#7DD3FC" opacity=".55"/><circle cx="977" cy="689" r="12" fill="#7DD3FC" opacity=".55"/><circle cx="1090" cy="840" r="18" fill="#7DD3FC" opacity=".55"/><circle cx="803" cy="611" r="24" fill="#7DD3FC" opacity=".55"/><circle cx="916" cy="762" r="12" fill="#7DD3FC" opacity=".55"/><circle cx="1029" cy="533" r="18" fill="#7DD3FC" opacity=".55"/><circle cx="1142" cy="684" r="24" fill="#7DD3FC" opacity=".55"/><circle cx="855" cy="835" r="12" fill="#7DD3FC" opacity=".55"/></g></g></svg>
+      <div class="ui" style="left:1240px; top:620px; font-family:Inter, sans-serif; font-weight:800; font-size:30px; color:#7DD3FC;">● TRAPPED AIR</div></div>
+    <div id="ins-L" style="position:absolute; left:192px; top:270px; width:752px; height:640px; border-radius:20px; overflow:hidden; border:4px solid #DC2626;">
+      <svg width="752" height="640" viewBox="0 0 752 640" style="position:absolute; left:0; top:0;"><rect width="752" height="640" fill="#0F172A"/><rect y="400" width="752" height="240" fill="#CBD5E1"/>
+      <g id="ins-lglow"><rect x="240" y="230" width="270" height="170" fill="#F59E0B" opacity=".35" filter="url(#ins-soft)"/></g>
+      <rect x="240" y="230" width="270" height="170" fill="#5C3A21" stroke="#451A03" stroke-width="5"/><line x1="240" y1="272" x2="510" y2="272" stroke="#451A03" stroke-width="2"/><line x1="240" y1="314" x2="510" y2="314" stroke="#451A03" stroke-width="2"/><line x1="240" y1="356" x2="510" y2="356" stroke="#451A03" stroke-width="2"/>
+      <g transform="translate(320 254.3) scale(.55)">
+    <g id="ins-bl">
+      
+      <g id="ins-bl-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ins-bl-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ins-bl-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ins-bl-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="ins-bl-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#334155"/>
+         <g clip-path="url(#ins-torso)"><g stroke="#2A3646" stroke-width="2"><line x1="70" y1="118" x2="70" y2="196"/><line x1="80" y1="118" x2="80" y2="196"/><line x1="90" y1="118" x2="90" y2="196"/><line x1="100" y1="118" x2="100" y2="196"/><line x1="110" y1="118" x2="110" y2="196"/><line x1="120" y1="118" x2="120" y2="196"/><line x1="130" y1="118" x2="130" y2="196"/></g>
+           <rect x="60" y="184" width="80" height="16" fill="#2A3646"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="78" y="90" width="44" height="18" rx="9" fill="#475569" stroke="#14171F" stroke-width="3"/></g>
+      
+      <g id="ins-bl-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ins-bl-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="ins-bl-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="ins-bl-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ins-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ins-glow)"/>
+         </g>
+         <g id="ins-bl-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="ins-bl-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="ins-bl-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="ins-bl-frost" opacity="0"></g>
+        
+        <g id="ins-bl-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="ins-bl-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#ins-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="ins-bl-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g>
+      <g transform="translate(480 250)"><rect x="-8" y="0" width="16" height="110" rx="8" fill="#1E293B" stroke="#94A3B8" stroke-width="3"/><circle cx="0" cy="116" r="13" fill="#DC2626"/><rect id="ins-merc" x="-4" y="20" width="8" height="92" fill="#DC2626"/></g>
+      <g id="ins-heat"><path d="M520 300 q20 -12 40 0 t40 0 t40 0" fill="none" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/><path d="M526 340 q20 -12 40 0 t40 0 t40 0" fill="none" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/><path d="M532 380 q20 -12 40 0 t40 0 t40 0" fill="none" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/></g><g id="ins-wl"><path d="M-200 140 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="40,131 58,140 40,149" fill="#BAE6FD"/><path d="M-27 186 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="213,177 231,186 213,195" fill="#BAE6FD"/><path d="M146 232 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="386,223 404,232 386,241" fill="#BAE6FD"/><path d="M-101 278 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="139,269 157,278 139,287" fill="#BAE6FD"/><path d="M72 324 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="312,315 330,324 312,333" fill="#BAE6FD"/><path d="M-175 370 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="65,361 83,370 65,379" fill="#BAE6FD"/><path d="M-2 416 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="238,407 256,416 238,425" fill="#BAE6FD"/></g></svg>
+      <div class="tag" style="position:absolute; left:24px; top:22px; border-left-color:#DC2626;">ABOVE SURFACE: EXPOSED TO WIND</div></div><div id="ins-R" style="position:absolute; left:976px; top:270px; width:752px; height:640px; border-radius:20px; overflow:hidden; border:4px solid #10B981;">
+      <svg width="752" height="640" viewBox="0 0 752 640" style="position:absolute; left:0; top:0;"><rect width="752" height="640" fill="#0F172A"/><rect y="260" width="752" height="380" fill="#8193AD"/><rect y="260" width="752" height="8" fill="#F8FAFC"/>
+      <path d="M0 330 Q376 318 752 330" fill="none" stroke="#9AAAC2" stroke-width="3"/><path d="M0 390 Q376 378 752 390" fill="none" stroke="#9AAAC2" stroke-width="3"/><path d="M0 450 Q376 438 752 450" fill="none" stroke="#9AAAC2" stroke-width="3"/><path d="M0 510 Q376 498 752 510" fill="none" stroke="#9AAAC2" stroke-width="3"/><path d="M0 570 Q376 558 752 570" fill="none" stroke="#9AAAC2" stroke-width="3"/>
+      <rect id="ins-ring" x="220" y="300" width="310" height="210" rx="16" fill="none" stroke="#00F5D4" stroke-width="8" opacity=".9" filter="url(#ins-glow)"/>
+      <rect x="230" y="310" width="290" height="190" fill="#334155"/><rect x="240" y="320" width="270" height="170" fill="#5C3A21" stroke="#451A03" stroke-width="5"/><line x1="240" y1="362" x2="510" y2="362" stroke="#451A03" stroke-width="2"/><line x1="240" y1="404" x2="510" y2="404" stroke="#451A03" stroke-width="2"/><line x1="240" y1="446" x2="510" y2="446" stroke="#451A03" stroke-width="2"/>
+      <rect x="240" y="320" width="270" height="170" fill="#F59E0B" opacity=".18"/>
+      <g transform="translate(320 344.3) scale(.55)">
+    <g id="ins-br">
+      
+      <g id="ins-br-legL">
+        
+        <line x1="88" y1="192" x2="84" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="72" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ins-br-legR">
+        
+        <line x1="112" y1="192" x2="116" y2="256" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <rect x="104" y="252" width="25" height="12" rx="6" fill="#334155" stroke="#14171F" stroke-width="3"/>
+      </g>
+      
+      <g id="ins-br-armL">
+        
+        <line x1="72" y1="116" x2="58" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ins-br-foreL">
+          
+          
+          <line x1="58" y1="147" x2="44" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="44" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      
+      
+      <g id="ins-br-torso"><rect x="60" y="98" width="80" height="100" rx="28" fill="#334155"/>
+         <g clip-path="url(#ins-torso)"><g stroke="#2A3646" stroke-width="2"><line x1="70" y1="118" x2="70" y2="196"/><line x1="80" y1="118" x2="80" y2="196"/><line x1="90" y1="118" x2="90" y2="196"/><line x1="100" y1="118" x2="100" y2="196"/><line x1="110" y1="118" x2="110" y2="196"/><line x1="120" y1="118" x2="120" y2="196"/><line x1="130" y1="118" x2="130" y2="196"/></g>
+           <rect x="60" y="184" width="80" height="16" fill="#2A3646"/></g>
+         <rect x="60" y="98" width="80" height="100" rx="28" fill="none" stroke="#14171F" stroke-width="4"/><rect x="78" y="90" width="44" height="18" rx="9" fill="#475569" stroke="#14171F" stroke-width="3"/></g>
+      
+      <g id="ins-br-armR">
+        
+        <line x1="128" y1="116" x2="142" y2="147" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+        <g id="ins-br-foreR">
+          
+          
+          <line x1="142" y1="147" x2="156" y2="178" stroke="#14171F" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="156" cy="178" r="6" fill="#14171F"/>
+          
+        </g>
+      </g>
+      <g id="ins-br-head">
+        <circle cx="100" cy="64" r="33" fill="#14171F"/>
+         <path d="M77 50 A28 28 0 0 1 99 36" fill="none" stroke="#2C3344" stroke-width="4" stroke-linecap="round"/>
+        <g id="ins-br-eyes">
+           <ellipse cx="88" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ins-glow)"/>
+           <ellipse cx="112" cy="62" rx="8.5" ry="11.5" fill="#fff" filter="url(#ins-glow)"/>
+         </g>
+         <g id="ins-br-pupils">
+           <circle cx="89.5" cy="64" r="3.6" fill="#14171F"/>
+           <circle cx="113.5" cy="64" r="3.6" fill="#14171F"/>
+         </g>
+         <rect id="ins-br-lids" x="74" y="47" width="52" height="30" fill="#14171F"/>
+         <g id="ins-br-mouth" opacity="0">
+           <ellipse cx="100" cy="86" rx="5" ry="6.5" fill="#05070B" stroke="#fff" stroke-width="2.2"/>
+         </g>
+        <g id="ins-br-frost" opacity="0"></g>
+        
+        <g id="ins-br-ache" opacity="0" fill="none" stroke-linecap="round">
+          <circle cx="68" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="68" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+          <circle cx="132" cy="56" r="7" stroke="#F59E0B" stroke-width="3"/><circle cx="132" cy="56" r="13" stroke="#DC2626" stroke-width="2.5"/>
+        </g>
+      </g>
+      <g id="ins-br-rim" opacity="0" fill="none" stroke="#FFC46B" stroke-linecap="round" filter="url(#ins-glow)">
+           <path d="M126 28 A47 47 0 0 1 146 80" stroke-width="5"/>
+           <path d="M139 118 V180" stroke-width="5"/>
+           <path d="M133 64 A33 33 0 0 1 128 82" stroke-width="3" opacity=".7"/>
+         </g>
+      <circle id="ins-br-puff" cx="122" cy="86" r="9" fill="#F8FAFC" opacity="0"/>
+    </g></g>
+      <g id="ins-wr"><path d="M-200 60 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="40,51 58,60 40,69" fill="#BAE6FD"/><path d="M-27 106 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="213,97 231,106 213,115" fill="#BAE6FD"/><path d="M146 152 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="386,143 404,152 386,161" fill="#BAE6FD"/><path d="M-101 198 q40 -16 80 0 t80 0 t80 0" fill="none" stroke="#BAE6FD" stroke-width="6" stroke-linecap="round" opacity=".85"/><polygon points="139,189 157,198 139,207" fill="#BAE6FD"/></g></svg>
+      <div class="tag" style="position:absolute; left:24px; top:22px; border-left-color:#10B981;">BELOW SURFACE: SNOW BLANKET</div></div>
+    <div id="ins-nL" class="ui" style="left:216px; width:704px; top:826px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:32px; color:#FCA5A5; background:rgba(11,16,30,.88); border-radius:14px; padding:10px 0;">✕ HEAT STRIPPED IN MINUTES</div><div id="ins-nR" class="ui" style="left:1000px; width:704px; top:826px; text-align:center; font-family:'Archivo Black', sans-serif; font-size:32px; color:#6EE7B7; background:rgba(11,16,30,.88); border-radius:14px; padding:10px 0;">✓ STEADY TEMPERATURE</div>
+    <div id="ins-why" class="ui k-box" style="top:150px;"><div>WHY BURY A <span style="color:#F59E0B;">HOUSE</span>?</div></div>
+    <div id="ins-ok" class="ui k-lab" style="left:360px; width:1200px; top:150px;"><div class="k-ok">✓ SNOW = TRAPPED AIR · A NATURAL INSULATOR</div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.set("#ins-bl-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#ins-bl-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#ins-bl-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#ins-bl-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#ins-bl-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#ins-bl-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#ins-bl-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#ins-bl-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#ins-bl", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#ins-br-lids", { scaleY: 0, svgOrigin: "100 47" }, 0);
+    tl.set("#ins-br-armL", { rotation: 0, svgOrigin: "72 116" }, 0);
+    tl.set("#ins-br-armR", { rotation: 0, svgOrigin: "128 116" }, 0);
+    tl.set("#ins-br-foreL", { rotation: 0, svgOrigin: "58 147" }, 0);
+    tl.set("#ins-br-foreR", { rotation: 0, svgOrigin: "142 147" }, 0);
+    tl.set("#ins-br-legL", { rotation: 0, svgOrigin: "88 192" }, 0);
+    tl.set("#ins-br-legR", { rotation: 0, svgOrigin: "112 192" }, 0);
+    tl.set("#ins-br-head", { rotation: 0, svgOrigin: "100 96" }, 0);
+    tl.set("#ins-br", { x: 0, y: 0, rotation: 0, scaleY: 1, svgOrigin: "100 265" }, 0);
+    tl.set("#ins-br-torso", { scaleY: 1, svgOrigin: "100 198" }, 0);
+    tl.to("#ins-br-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 11);
+    tl.to("#ins-br-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 12);
+    tl.to("#ins-br-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 13);
+    tl.to("#ins-br-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 14);
+    tl.to("#ins-br-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 15);
+    tl.to("#ins-br-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 16);
+    tl.to("#ins-br-torso", { scaleY: 1.02, duration: 1, ease: "sine.inOut" }, 17);
+    tl.to("#ins-br-torso", { scaleY: 1, duration: 1, ease: "sine.inOut" }, 18);
+    tl.to("#ins-br-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 12.1);
+    tl.to("#ins-br-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 12.2);
+    tl.to("#ins-br-lids", { scaleY: 1, duration: 0.06, ease: "power2.in" }, 15.1);
+    tl.to("#ins-br-lids", { scaleY: 0, duration: 0.09, ease: "power2.out" }, 15.2);
+    tl.set(["#ins-lens", "#ins-L", "#ins-R", "#ins-nL", "#ins-nR", "#ins-ok"], { opacity: 0 }, 0);
+    tl.fromTo("#ins-why", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: .2, ease: "power2.in", immediateRender: false }, 0.2);
+    tl.to("#ins-why", { scale: 1.08, duration: 2.0, ease: "sine.inOut" }, 0.5);
+    // "Because snow is one of the best insulators": the answer + a macro lens of trapped air
+    tl.set("#ins-why", { opacity: 0 }, 2.45);
+    tl.fromTo("#ins-ok", { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .25, ease: "back.out(1.6)", immediateRender: false }, 2.45);
+    tl.fromTo("#ins-lens", { opacity: 0, scale: .6, transformOrigin: "50% 61%" }, { opacity: 1, scale: 1, duration: .35, ease: "back.out(1.4)", immediateRender: false }, 2.7);
+    tl.to("#ins-air", { opacity: .3, duration: .5, yoyo: true, repeat: 5, ease: "sine.inOut" }, 3.2);
+    // split: above vs below
+    tl.set(["#ins-lens", "#ins-ok"], { opacity: 0 }, 6.05);
+    tl.fromTo("#ins-L", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: .3, ease: "power2.out", immediateRender: false }, 6.05);
+    tl.fromTo("#ins-wl", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 7.4);
+    tl.fromTo("#ins-wl", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 8.8);
+    tl.fromTo("#ins-wl", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 10.2);
+    tl.fromTo("#ins-wl", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 11.6);
+    tl.fromTo("#ins-heat", { x: 0, opacity: 1 }, { x: 260, opacity: 0, duration: 1.4, ease: "power1.in", immediateRender: false }, 7.6);
+    tl.fromTo("#ins-heat", { x: 0, opacity: 1 }, { x: 260, opacity: 0, duration: 1.4, ease: "power1.in", immediateRender: false }, 9);
+    tl.fromTo("#ins-heat", { x: 0, opacity: 1 }, { x: 260, opacity: 0, duration: 1.4, ease: "power1.in", immediateRender: false }, 10.4);
+    tl.fromTo("#ins-heat", { x: 0, opacity: 1 }, { x: 260, opacity: 0, duration: 1.4, ease: "power1.in", immediateRender: false }, 11.8);
+    tl.to("#ins-merc", { attr: { y: 100, height: 12 }, duration: 2.6, ease: "power2.in" }, 7.6);
+    tl.to("#ins-lglow", { opacity: 0, duration: 2.6 }, 7.6);
+    tl.to("#ins-bl", { x: 2.8, duration: 0.05, ease: "none" }, 8.6);
+    tl.to("#ins-bl", { x: -1.8, duration: 0.05, ease: "none" }, 8.7);
+    tl.to("#ins-bl", { x: -1.8, duration: 0.05, ease: "none" }, 8.7);
+    tl.to("#ins-bl", { x: 0, duration: 0.05, ease: "none" }, 8.8);
+    tl.to("#ins-bl", { x: -1.4, duration: 0.05, ease: "none" }, 8.8);
+    tl.to("#ins-bl", { x: 2.5, duration: 0.05, ease: "none" }, 8.9);
+    tl.to("#ins-bl", { x: -2.4, duration: 0.05, ease: "none" }, 8.9);
+    tl.to("#ins-bl", { x: -2.9, duration: 0.05, ease: "none" }, 9);
+    tl.to("#ins-bl", { x: -1.3, duration: 0.05, ease: "none" }, 9);
+    tl.to("#ins-bl", { x: 1, duration: 0.05, ease: "none" }, 9.1);
+    tl.to("#ins-bl", { x: -2.2, duration: 0.05, ease: "none" }, 9.1);
+    tl.to("#ins-bl", { x: 2.1, duration: 0.05, ease: "none" }, 9.2);
+    tl.to("#ins-bl", { x: 1.7, duration: 0.05, ease: "none" }, 9.2);
+    tl.to("#ins-bl", { x: -0.6, duration: 0.05, ease: "none" }, 9.3);
+    tl.to("#ins-bl", { x: -2.7, duration: 0.05, ease: "none" }, 9.3);
+    tl.to("#ins-bl", { x: 2.2, duration: 0.05, ease: "none" }, 9.4);
+    tl.to("#ins-bl", { x: -2.2, duration: 0.05, ease: "none" }, 9.4);
+    tl.to("#ins-bl", { x: -2.6, duration: 0.05, ease: "none" }, 9.5);
+    tl.to("#ins-bl", { x: -2.5, duration: 0.05, ease: "none" }, 9.5);
+    tl.to("#ins-bl", { x: 0.8, duration: 0.05, ease: "none" }, 9.6);
+    tl.to("#ins-bl", { x: 0.6, duration: 0.05, ease: "none" }, 9.6);
+    tl.to("#ins-bl", { x: -2.4, duration: 0.05, ease: "none" }, 9.7);
+    tl.to("#ins-bl", { x: -0.7, duration: 0.05, ease: "none" }, 9.7);
+    tl.to("#ins-bl", { x: -2.1, duration: 0.05, ease: "none" }, 9.8);
+    tl.to("#ins-bl", { x: 1.2, duration: 0.05, ease: "none" }, 9.8);
+    tl.to("#ins-bl", { x: -1.4, duration: 0.05, ease: "none" }, 9.9);
+    tl.to("#ins-bl", { x: 0, duration: 0.05, ease: "none" }, 9.9);
+    tl.to("#ins-bl", { x: -2.9, duration: 0.05, ease: "none" }, 10);
+    tl.to("#ins-bl", { x: 2, duration: 0.05, ease: "none" }, 10);
+    tl.to("#ins-bl", { x: 1.9, duration: 0.05, ease: "none" }, 10.1);
+    tl.to("#ins-bl", { x: -1.4, duration: 0.05, ease: "none" }, 10.1);
+    tl.to("#ins-bl", { x: -0.3, duration: 0.05, ease: "none" }, 10.2);
+    tl.to("#ins-bl", { x: 1.9, duration: 0.05, ease: "none" }, 10.2);
+    tl.to("#ins-bl", { x: 1.6, duration: 0.05, ease: "none" }, 10.3);
+    tl.to("#ins-bl", { x: -0.6, duration: 0.05, ease: "none" }, 10.3);
+    tl.to("#ins-bl", { x: 2.4, duration: 0.05, ease: "none" }, 10.4);
+    tl.to("#ins-bl", { x: 0.5, duration: 0.05, ease: "none" }, 10.4);
+    tl.to("#ins-bl", { x: -2.3, duration: 0.05, ease: "none" }, 10.5);
+    tl.to("#ins-bl", { x: 3, duration: 0.05, ease: "none" }, 10.5);
+    tl.to("#ins-bl", { x: 2.4, duration: 0.05, ease: "none" }, 10.6);
+    tl.to("#ins-bl", { x: -2.2, duration: 0.05, ease: "none" }, 10.6);
+    tl.to("#ins-bl", { x: -0.6, duration: 0.05, ease: "none" }, 10.7);
+    tl.to("#ins-bl", { x: -3, duration: 0.05, ease: "none" }, 10.7);
+    tl.to("#ins-bl", { x: -0.6, duration: 0.05, ease: "none" }, 10.8);
+    tl.to("#ins-bl", { x: 0.5, duration: 0.05, ease: "none" }, 10.8);
+    tl.to("#ins-bl", { x: 1.2, duration: 0.05, ease: "none" }, 10.9);
+    tl.to("#ins-bl", { x: 0.8, duration: 0.05, ease: "none" }, 10.9);
+    tl.to("#ins-bl", { x: 0.4, duration: 0.05, ease: "none" }, 11);
+    tl.to("#ins-bl", { x: 1.1, duration: 0.05, ease: "none" }, 11);
+    tl.to("#ins-bl", { x: 0.7, duration: 0.05, ease: "none" }, 11.1);
+    tl.to("#ins-bl", { x: -1.1, duration: 0.05, ease: "none" }, 11.1);
+    tl.to("#ins-bl", { x: -2.4, duration: 0.05, ease: "none" }, 11.2);
+    tl.to("#ins-bl", { x: 0.8, duration: 0.05, ease: "none" }, 11.2);
+    tl.to("#ins-bl", { x: 0.3, duration: 0.05, ease: "none" }, 11.3);
+    tl.to("#ins-bl", { x: -0.8, duration: 0.05, ease: "none" }, 11.3);
+    tl.to("#ins-bl", { x: 1.1, duration: 0.05, ease: "none" }, 11.4);
+    tl.to("#ins-bl", { x: -1.9, duration: 0.05, ease: "none" }, 11.4);
+    tl.to("#ins-bl", { x: 1.5, duration: 0.05, ease: "none" }, 11.5);
+    tl.to("#ins-bl", { x: -0.1, duration: 0.05, ease: "none" }, 11.5);
+    tl.to("#ins-bl", { x: -2, duration: 0.05, ease: "none" }, 11.6);
+    tl.to("#ins-bl", { x: -0.5, duration: 0.05, ease: "none" }, 11.6);
+    tl.to("#ins-bl", { x: -2.5, duration: 0.05, ease: "none" }, 11.7);
+    tl.to("#ins-bl", { x: -1.4, duration: 0.05, ease: "none" }, 11.7);
+    tl.to("#ins-bl", { x: 0.8, duration: 0.05, ease: "none" }, 11.8);
+    tl.to("#ins-bl", { x: -0.2, duration: 0.05, ease: "none" }, 11.8);
+    tl.to("#ins-bl", { x: 1.9, duration: 0.05, ease: "none" }, 11.9);
+    tl.to("#ins-bl", { x: 0.8, duration: 0.05, ease: "none" }, 11.9);
+    tl.to("#ins-bl", { x: -2.8, duration: 0.05, ease: "none" }, 12);
+    tl.to("#ins-bl", { x: -2.7, duration: 0.05, ease: "none" }, 12);
+    tl.to("#ins-bl", { x: -0.2, duration: 0.05, ease: "none" }, 12.1);
+    tl.to("#ins-bl", { x: -2.4, duration: 0.05, ease: "none" }, 12.1);
+    tl.to("#ins-bl", { x: 2.5, duration: 0.05, ease: "none" }, 12.2);
+    tl.to("#ins-bl", { x: 2.4, duration: 0.05, ease: "none" }, 12.2);
+    tl.to("#ins-bl", { x: -2.3, duration: 0.05, ease: "none" }, 12.3);
+    tl.to("#ins-bl", { x: 0.7, duration: 0.05, ease: "none" }, 12.3);
+    tl.to("#ins-bl", { x: 1.8, duration: 0.05, ease: "none" }, 12.4);
+    tl.to("#ins-bl", { x: -0.3, duration: 0.05, ease: "none" }, 12.4);
+    tl.to("#ins-bl", { x: -2.1, duration: 0.05, ease: "none" }, 12.5);
+    tl.to("#ins-bl", { x: 1.4, duration: 0.05, ease: "none" }, 12.5);
+    tl.to("#ins-bl", { x: -1.5, duration: 0.05, ease: "none" }, 12.6);
+    tl.to("#ins-bl", { x: 2, duration: 0.05, ease: "none" }, 12.6);
+    tl.to("#ins-bl", { x: 0.1, duration: 0.05, ease: "none" }, 12.7);
+    tl.to("#ins-bl", { x: -1.6, duration: 0.05, ease: "none" }, 12.7);
+    tl.to("#ins-bl", { x: -2.8, duration: 0.05, ease: "none" }, 12.8);
+    tl.to("#ins-bl", { x: -1.3, duration: 0.05, ease: "none" }, 12.8);
+    tl.to("#ins-bl", { x: -0.4, duration: 0.05, ease: "none" }, 12.9);
+    tl.to("#ins-bl", { x: -1, duration: 0.05, ease: "none" }, 12.9);
+    tl.to("#ins-bl", { x: -1.9, duration: 0.05, ease: "none" }, 13);
+    tl.to("#ins-bl", { x: 1.8, duration: 0.05, ease: "none" }, 13);
+    tl.to("#ins-bl", { x: -2.1, duration: 0.05, ease: "none" }, 13.1);
+    tl.to("#ins-bl", { x: 2.1, duration: 0.05, ease: "none" }, 13.1);
+    tl.to("#ins-bl", { x: -2.4, duration: 0.05, ease: "none" }, 13.2);
+    tl.to("#ins-bl", { x: -0.1, duration: 0.05, ease: "none" }, 13.2);
+    tl.to("#ins-bl", { x: -2.1, duration: 0.05, ease: "none" }, 13.3);
+    tl.to("#ins-bl", { x: 0.1, duration: 0.05, ease: "none" }, 13.3);
+    tl.to("#ins-bl", { x: 1.5, duration: 0.05, ease: "none" }, 13.4);
+    tl.to("#ins-bl", { x: 0.6, duration: 0.05, ease: "none" }, 13.4);
+    tl.to("#ins-bl", { x: 0.1, duration: 0.05, ease: "none" }, 13.5);
+    tl.to("#ins-bl", { x: 2.3, duration: 0.05, ease: "none" }, 13.5);
+    tl.to("#ins-bl", { x: -1, duration: 0.05, ease: "none" }, 13.6);
+    tl.to("#ins-bl", { x: -0.5, duration: 0.05, ease: "none" }, 13.6);
+    tl.to("#ins-bl", { x: 0, duration: 0.05, ease: "none" }, 13.7);
+    tl.to("#ins-bl", { x: 2.6, duration: 0.05, ease: "none" }, 13.7);
+    tl.to("#ins-bl", { x: 0.7, duration: 0.05, ease: "none" }, 13.8);
+    tl.to("#ins-bl", { x: -0.9, duration: 0.05, ease: "none" }, 13.8);
+    tl.to("#ins-bl", { x: -2.7, duration: 0.05, ease: "none" }, 13.9);
+    tl.to("#ins-bl", { x: -1, duration: 0.05, ease: "none" }, 13.9);
+    tl.to("#ins-bl", { x: 0.2, duration: 0.05, ease: "none" }, 14);
+    tl.to("#ins-bl", { x: 1.1, duration: 0.05, ease: "none" }, 14);
+    tl.to("#ins-bl", { x: 0, duration: 0.05, ease: "none" }, 14.1);
+    tl.to("#ins-bl", { x: 0.3, duration: 0.05, ease: "none" }, 14.1);
+    tl.to("#ins-bl", { x: 0.7, duration: 0.05, ease: "none" }, 14.2);
+    tl.to("#ins-bl", { x: 2.9, duration: 0.05, ease: "none" }, 14.2);
+    tl.to("#ins-bl", { x: 1.1, duration: 0.05, ease: "none" }, 14.3);
+    tl.to("#ins-bl", { x: -2.2, duration: 0.05, ease: "none" }, 14.3);
+    tl.to("#ins-bl", { x: 0, duration: 0.05, ease: "none" }, 14.4);
+    tl.to("#ins-bl", { x: -2, duration: 0.05, ease: "none" }, 14.4);
+    tl.to("#ins-bl", { x: 2.1, duration: 0.05, ease: "none" }, 14.5);
+    tl.to("#ins-bl", { x: -2, duration: 0.05, ease: "none" }, 14.5);
+    tl.to("#ins-bl", { x: -2.5, duration: 0.05, ease: "none" }, 14.6);
+    tl.to("#ins-bl", { x: -1.4, duration: 0.05, ease: "none" }, 14.6);
+    tl.to("#ins-bl", { x: -2.3, duration: 0.05, ease: "none" }, 14.7);
+    tl.to("#ins-bl", { x: 2.7, duration: 0.05, ease: "none" }, 14.7);
+    tl.to("#ins-bl", { x: 0.8, duration: 0.05, ease: "none" }, 14.8);
+    tl.to("#ins-bl", { x: -0.2, duration: 0.05, ease: "none" }, 14.8);
+    tl.to("#ins-bl", { x: -2.1, duration: 0.05, ease: "none" }, 14.9);
+    tl.to("#ins-bl", { x: -2.3, duration: 0.05, ease: "none" }, 14.9);
+    tl.to("#ins-bl", { x: 1.3, duration: 0.05, ease: "none" }, 15);
+    tl.to("#ins-bl", { x: -0.2, duration: 0.05, ease: "none" }, 15);
+    tl.to("#ins-bl", { x: 1.2, duration: 0.05, ease: "none" }, 15.1);
+    tl.to("#ins-bl", { x: 2.6, duration: 0.05, ease: "none" }, 15.1);
+    tl.to("#ins-bl", { x: -1.6, duration: 0.05, ease: "none" }, 15.2);
+    tl.to("#ins-bl", { x: 0.3, duration: 0.05, ease: "none" }, 15.2);
+    tl.to("#ins-bl", { x: 0.1, duration: 0.05, ease: "none" }, 15.3);
+    tl.to("#ins-bl", { x: 2.8, duration: 0.05, ease: "none" }, 15.3);
+    tl.to("#ins-bl", { x: -0.3, duration: 0.05, ease: "none" }, 15.4);
+    tl.to("#ins-bl", { x: -1.4, duration: 0.05, ease: "none" }, 15.4);
+    tl.to("#ins-bl", { x: 2.5, duration: 0.05, ease: "none" }, 15.5);
+    tl.to("#ins-bl", { x: 0, duration: 0.05, ease: "none" }, 15.5);
+    tl.to("#ins-bl", { x: 2.7, duration: 0.05, ease: "none" }, 15.6);
+    tl.to("#ins-bl", { x: -0.8, duration: 0.05, ease: "none" }, 15.6);
+    tl.to("#ins-bl", { x: -1.6, duration: 0.05, ease: "none" }, 15.7);
+    tl.to("#ins-bl", { x: -1.9, duration: 0.05, ease: "none" }, 15.7);
+    tl.to("#ins-bl", { x: 2.1, duration: 0.05, ease: "none" }, 15.8);
+    tl.to("#ins-bl", { x: -0.8, duration: 0.05, ease: "none" }, 15.8);
+    tl.to("#ins-bl", { x: -0.2, duration: 0.05, ease: "none" }, 15.9);
+    tl.to("#ins-bl", { x: -0.3, duration: 0.05, ease: "none" }, 15.9);
+    tl.to("#ins-bl", { x: 3, duration: 0.05, ease: "none" }, 16);
+    tl.to("#ins-bl", { x: -0.6, duration: 0.05, ease: "none" }, 16);
+    tl.to("#ins-bl", { x: -2.2, duration: 0.05, ease: "none" }, 16.1);
+    tl.to("#ins-bl", { x: -2.9, duration: 0.05, ease: "none" }, 16.1);
+    tl.to("#ins-bl", { x: 2.5, duration: 0.05, ease: "none" }, 16.2);
+    tl.to("#ins-bl", { x: 2.4, duration: 0.05, ease: "none" }, 16.2);
+    tl.to("#ins-bl", { x: -1.5, duration: 0.05, ease: "none" }, 16.3);
+    tl.to("#ins-bl", { x: 1.6, duration: 0.05, ease: "none" }, 16.3);
+    tl.to("#ins-bl", { x: 2.4, duration: 0.05, ease: "none" }, 16.4);
+    tl.to("#ins-bl", { x: -2.3, duration: 0.05, ease: "none" }, 16.4);
+    tl.to("#ins-bl", { x: -0.2, duration: 0.05, ease: "none" }, 16.5);
+    tl.to("#ins-bl", { x: -0.8, duration: 0.05, ease: "none" }, 16.5);
+    tl.to("#ins-bl", { x: -0.4, duration: 0.05, ease: "none" }, 16.6);
+    tl.to("#ins-bl", { x: 0.4, duration: 0.05, ease: "none" }, 16.6);
+    tl.to("#ins-bl", { x: -2.5, duration: 0.05, ease: "none" }, 16.7);
+    tl.to("#ins-bl", { x: 1.6, duration: 0.05, ease: "none" }, 16.7);
+    tl.to("#ins-bl", { x: 0.1, duration: 0.05, ease: "none" }, 16.8);
+    tl.to("#ins-bl", { x: -1.3, duration: 0.05, ease: "none" }, 16.8);
+    tl.to("#ins-bl", { x: 1.8, duration: 0.05, ease: "none" }, 16.9);
+    tl.to("#ins-bl", { x: 0.2, duration: 0.05, ease: "none" }, 16.9);
+    tl.to("#ins-bl", { x: -0.4, duration: 0.05, ease: "none" }, 17);
+    tl.to("#ins-bl", { x: -2, duration: 0.05, ease: "none" }, 17);
+    tl.to("#ins-bl", { x: -1.6, duration: 0.05, ease: "none" }, 17.1);
+    tl.to("#ins-bl", { x: 0.7, duration: 0.05, ease: "none" }, 17.1);
+    tl.to("#ins-bl", { x: 1.7, duration: 0.05, ease: "none" }, 17.2);
+    tl.to("#ins-bl", { x: 0, duration: 0.1 }, 17.2);
+    tl.fromTo("#ins-nL", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 9.0);
+    tl.fromTo("#ins-R", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: .3, ease: "power2.out", immediateRender: false }, 10.86);
+    tl.fromTo("#ins-wr", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 11.2);
+    tl.fromTo("#ins-wr", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 12.6);
+    tl.fromTo("#ins-wr", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 14);
+    tl.fromTo("#ins-wr", { x: -220 }, { x: 760, duration: 1.4, ease: "none", immediateRender: false }, 15.4);
+    tl.to("#ins-ring", { opacity: .45, duration: .6, yoyo: true, repeat: 5, ease: "sine.inOut" }, 12.0);
+    tl.fromTo("#ins-nR", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .25, immediateRender: false }, 14.5);
+    window.__timelines["insulate"] = tl;
+  </script>
+</template>
